@@ -100,22 +100,29 @@ MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
   this.appendMessage(nick, stanza);
 }
 
-MucUi.fn.sendTopicNotification = function(nick, topic) {
+MucUi.fn.sendTopicNotification = function(nick, topic, printNotification) {
   var newStr = nick+" changed room topic to: "+topic;
-  this.appendNotification(newStr, gui.notifications.topic);
+
+  if (printNotification) {
+    this.appendNotification(newStr, gui.notifications.topic);
+  }
+
   this.topicDiv.text(topic);
 }
 
+MucUi.fn.topicHistoryHandler = function(from, topic) {
+  var nick = Strophe.getResourceFromJid(from);
+  this.sendTopicNotification(nick, topic, false);
+}
+
 MucUi.fn.topicHandler = function(topic) {
-  console.log("TOPIC HANDLER");
   var that = this;
   topic.replace(/(.+) has set the subject to: (.+)/gi, function(topic, grp1, grp2) {
-    that.sendTopicNotification(grp1, grp2);
+    that.sendTopicNotification(grp1, grp2, true);
   });
 }
 
 MucUi.fn.topicChangeHandler = function(from, topic) {
   var nick = Strophe.getResourceFromJid(from);
-  console.log("TOPIC CHANGE HANDLER "+nick+" "+topic);
-  this.sendTopicNotification(nick, topic);
+  this.sendTopicNotification(nick, topic, true);
 }

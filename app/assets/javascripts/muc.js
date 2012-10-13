@@ -25,7 +25,7 @@ Muc.fn.createMucHandler = function() {
   connection.addHandler(this.leaveHandler(this.ui, muc), null, "presence", null, null, null);
   connection.addHandler(this.messageHandler(this.ui, muc), null, "message", "groupchat", null, null);
   connection.addHandler(this.historyHandler(this.ui, muc), null, "message", "groupchat", null, null);
-  connection.addHandler(this.topicHandler(this.ui, muc), null, "message", "groupchat", null, null);
+  connection.addHandler(this.topicHistoryHandler(this.ui, muc), null, "message", "groupchat", null, null);
   connection.addHandler(this.topicChangeHandler(this.ui, muc), null, "message", "groupchat", null, null);
   
   //if (options.handle_leave) {
@@ -134,14 +134,13 @@ Muc.fn.historyHandler = function(ui, muc) {
   };
 }
 
-Muc.fn.topicHandler = function(ui, muc) {
+Muc.fn.topicHistoryHandler = function(ui, muc) {
   return function (stanza) {
     var $stanza = $(stanza);
     if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
       var body = $stanza.find("body");
-      if (body.length > 0 && $stanza.find("delay").length == 0 && $stanza.find("subject").length > 0) {
-        console.log("::::::: TOPICHANDLER BROTHER");
-        ui.topicHandler(Strophe.getText(body[0]));
+      if (body.length == 0 && $stanza.find("delay").length > 0 && $stanza.find("subject").length > 0) {
+        ui.topicHistoryHandler($stanza.attr("from"), $stanza.find("subject").text());
       }
     }
 
@@ -155,7 +154,6 @@ Muc.fn.topicChangeHandler = function(ui, muc) {
     if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
       var body = $stanza.find("body");
       if (body.length == 0 && $stanza.find("delay").length == 0 && $stanza.find("subject").length > 0) {
-        console.log("::::::::: AQUI");
         ui.topicChangeHandler($stanza.attr("from"), $stanza.find("subject").text());
       }
     }
