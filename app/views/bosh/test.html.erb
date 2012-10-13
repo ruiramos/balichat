@@ -1,6 +1,9 @@
 <div class="row-fluid">
   <div class="span2">
-    menu esquerda
+    <div class="filterts box" id="filters-amizade">
+      <h3>Filters</h3>
+      <div class="box-content">...</div>
+    </div>  
   </div>
 
   <div class="span8">
@@ -23,12 +26,46 @@
       </table>
     </div>
   </div>
-
   <div class="span2">
-    <div class="user-list" id="user-list-amizade">
-      menu direita
+
+    <div class="user-list box" id="user-list-amizade">
+      <h3>Users</h3>
+      <ul id="users" class="box-content">
+        <li class="concierge">
+          <img src="/assets/concierge32.png" class="online-user img-rounded img-polaroid">
+          <span class="concierge">Concierge</span>
+          <img src="/assets/info.png" class="pull-right info">          
+        </li>
+        <li style="clear:both">
+          <img src="/assets/avatar1-32.png" class="online-user img-rounded img-polaroid">
+          <span class="user-name online-user">Tiago Pinto</span>
+          <img src="/assets/info.png" class="pull-right info">          
+        </li>
+        <li>
+          <img src="/assets/avatar2-32.png" class="online-user img-rounded img-polaroid">
+          <span class="user-name online-user">Rui Ramos</span>
+          <img src="/assets/info.png" class="pull-right info">
+        </li>
+        <li>
+          <img src="/assets/avatar3-32.png" class="offline-user img-rounded img-polaroid">
+          <span class="user-name offline-user">Ricardo Pinto</span>
+          <img src="/assets/info.png" class="pull-right info">
+        </li>
+      </ul>
     </div>
+
+    <div class="search box" id="search-amizade">
+      <h3>Search</h3>
+      <input type="text" name="search-box" value="" placeholder="" class="box-content">
+    </div>
+
+    <div class="timeline box" id="timeline-amizade">
+      <h3>Timeline</h3>
+    </div>
+  
+
   </div>
+
 </div>
 
 <script type="text/javascript">

@@ -1,3 +1,35 @@
+/*
+Bem vindos ao BaliCSS!
+*/
+
+/* Nav Bar */
+#header .navbar-inner { padding-top:25px; border:0; }
+#header ul {margin-left:25px;}
+#header .nav > li.active a { background: white; color:black; text-shadow:0 0 0 rgba(0, 0, 0, 0); box-shadow:0 0 0; /*box-shadow: inset -2px -2px 1 rgba(0, 0, 0, 0.1);*/}
+#header .nav > li.active a:hover { background: white; color:black;border-color:white }
+
+#header .nav > li a { border-radius:0 0 0 0; padding:10px 40px 10px 10px}
+#header .nav > li a:hover {background:#333;border-color:#333;}
+
+#header .nav-tabs { border-bottom:0;}
+
+/* Box */
+.box {margin:16px 0 32px;}
+.box h3 { font-size:0.85em; text-transform: uppercase; color:#666; padding: 0px; margin: 0; border-bottom:1px solid #ccc; line-height: 16px }
+.box ul {list-style: none; margin:0; padding:0;}
+.box .box-content {margin-top:4px;}
+
+/* Users */
+span.offline-user {color:#bbb;}
+#users li {padding:3px;}
+#users li img {margin-right:4px;}
+#users li:hover {background:#f1f1f1;}
+#users img.info {margin-top:12px;}
+#users img.online-user {background-color:#56CF4B; border-color:#31BE39;}
+#users img.offline-user {background-color:#aaa; border-color:#999;}
+
+
+
 div.container-main {margin-top:50px}
 
 div.scroll-pane {height:400px;overflow:auto;overflow-x:hidden}
