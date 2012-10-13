@@ -14,4 +14,6 @@
 //= require jquery_ujs
 //= require bootstrap.min
 //= require strophe.min
+//= require strophe.muc
+//= require linkify
 //= require_tree .

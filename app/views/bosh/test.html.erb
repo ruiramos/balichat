@@ -28,20 +28,10 @@
 </div>
 
 <script type="text/javascript">
+  var jabber = null;
+
   $(document).ready(function () {
-    // create the connection and attach it
-    //connection = new Strophe.Connection(BOSH_SERVICE);
-
-    //connection.rawInput = function (data) {
-    //  console.log('RAW_IN: ' + data);
-    //};
-//
-    //connection.rawOutput = function (data) {
-    //  console.log('SENT: ' + data);
-    //};
-
-    // uncomment for extra debugging
-    // Strophe.log = function (lvl, msg) { console.log(msg); };
-    //connection.attach(ATTACH_JID, ATTACH_SID, ATTACH_RID, onAttach);
+    jabber = new Jabber();
+    jabber.connect('<%= @jid %>', '<%= @sid %>', '<%= @rid %>');
   });
 </script>
