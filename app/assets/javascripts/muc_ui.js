@@ -3,6 +3,7 @@ var MucUi = function(connection, jid, nick) {
   var that = this;
   var handlers = {};
   var roster = $('#user-list-'+Strophe.getNodeFromJid(jid));
+  this.topicDiv = $('#muc-'+Strophe.getNodeFromJid(jid)+' h2.topic');
 
   var scrollDiv = $('#muc-'+Strophe.getNodeFromJid(jid));
   this.api = scrollDiv.data('jsp');
@@ -91,7 +92,7 @@ MucUi.fn.leaveHandler = function(stanza, muc, nick, text) {
   this.appendNotification(nick + " left the room.", gui.notifications.leave);
 }
 
-MucUi.fn.messageHandler = function (stanza, muc, nick, message) {
+MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
   //if (options.detect_focus && !muc.window_focused) {
   //  muc.unread_messages++;
   //  document.title = " ("+muc.unread_messages+") " + original_title;
@@ -99,10 +100,21 @@ MucUi.fn.messageHandler = function (stanza, muc, nick, message) {
   this.appendMessage(nick, stanza);
 }
 
-MucUi.fn.topicHandler = function (stanza, muc, nick, message) {
-  //if (options.detect_focus && !muc.window_focused) {
-  //  muc.unread_messages++;
-  //  document.title = " ("+muc.unread_messages+") " + original_title;
-  //}
-  this.appendNotification(message, gui.notifications.topic);
+MucUi.fn.sendTopicNotification = function(nick, topic) {
+  var newStr = nick+" changed room topic to: "+topic;
+  that.appendNotification(newStr, gui.notifications.topic);
+  that.topicDiv.text(topic);
+}
+
+MucUi.fn.topicHandler = function(topic) {
+  console.log("TOPIC HANDLER");
+  var that = this;
+  topic.replace(/(.+) has set the subject to: (.+)/gi, function(topic, grp1, grp2) {
+    that.sendTopicNotification(grp1, grp2);
+  });
+}
+
+MucUi.fn.topicChangeHandler = function(nick, topic) {
+  console.log("TOPIC CHANGE HANDLER");
+  that.sendTopicNotification(nick, topic);
 }

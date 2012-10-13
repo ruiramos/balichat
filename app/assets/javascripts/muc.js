@@ -23,7 +23,9 @@ Muc.fn.createMucHandler = function() {
   
   connection.addHandler(this.joinHandler(this.ui, muc), null, "presence", null, null, null);
   connection.addHandler(this.messageHandler(this.ui, muc), null, "message", "groupchat", null, null);
+  connection.addHandler(this.historyHandler(this.ui, muc), null, "message", "groupchat", null, null);
   connection.addHandler(this.topicHandler(this.ui, muc), null, "message", "groupchat", null, null);
+  connection.addHandler(this.topicChangeHandler(this.ui, muc), null, "message", "groupchat", null, null);
   connection.addHandler(this.leaveHandler(this.ui, muc), null, "presence", null, null, null);
 
   //if (options.handle_leave) {
@@ -118,19 +120,13 @@ Muc.fn.messageHandler = function(ui, muc) {
   };
 }
 
-//<message xmlns='jabber:client' from='amizade@conference.pylon.local' to='teste@pylon.local/web' type='groupchat'>
-//<subject>dwad</subject>
-//<body>RIKO has set the subject to: dwad</body>
-//</message>
-
-Muc.fn.topicHandler = function(ui, muc) {
-  console.log("TOPIC HANDLER!");
+Muc.fn.historyHandler = function(ui, muc) {
   return function (stanza) {
     var $stanza = $(stanza);
     if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
       var body = $stanza.find("body");
-      if (body.length > 0 && $stanza.find("delay").length == 0 && $stanza.find("subject").length > 0) {
-        ui.topicHandler(stanza, muc, Strophe.getResourceFromJid($stanza.attr("from")), Strophe.getText(body[0]));
+      if (body.length > 0 && $stanza.find("delay").length > 0) {
+        // TODO: for now we will just ignore history messages
       }
     }
 
@@ -138,12 +134,29 @@ Muc.fn.topicHandler = function(ui, muc) {
   };
 }
 
-Muc.fn.new_history_handler = function(muc, callback) {
+Muc.fn.topicHandler = function(ui, muc) {
   return function (stanza) {
-    if (stanza.getAttribute("type") == "groupchat" && Strophe.getBareJidFromJid(stanza.getAttribute("from")) == muc.jid) {
-      var body = stanza.getElementsByTagName("body");
-      if (body.length > 0 && stanza.getElementsByTagName("delay").length > 0) {
-        callback(stanza, muc, Strophe.getResourceFromJid(stanza.getAttribute("from")), Strophe.getText(body[0]));
+    var $stanza = $(stanza);
+    if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
+      var body = $stanza.find("body");
+      if (body.length > 0 && $stanza.find("delay").length == 0 && $stanza.find("subject").length > 0) {
+        ui.topicHandler(Strophe.getText(body[0]));
+      }
+    }
+
+    return true;
+  };
+}
+
+Muc.fn.topicChangeHandler = function(ui, muc) {
+  return function (stanza) {
+    console.log("---- ");
+    console.log(stanza);
+    var $stanza = $(stanza);
+    if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
+      var body = $stanza.find("body");
+      if (body.length > 0 && $stanza.find("delay").length == 0 && $stanza.find("subject").length > 0) {
+        ui.topicChangeHandler($stanza.attr("from"), Strophe.getText(body[0]));
       }
     }
 
