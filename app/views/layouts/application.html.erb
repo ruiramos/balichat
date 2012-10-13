@@ -18,16 +18,21 @@
         </a>
         
         <a class="brand" href="#">Balichat</a>
-        <div class="nav-collapse collapse">
-          <p class="navbar-text pull-right">
-            Logged in as <a href="#" class="navbar-link">Username</a>
-          </p>
-          
+        <div class="nav-collapse collapse">          
           <ul class="nav">
             <li class="active"><a href="#">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
+
+          <p class="navbar-text pull-right">
+            <% if user_signed_in? %>
+              Logged in as <%= current_user %>
+              <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "navbar-link" %>
+            <% else %>
+              <%= link_to "Log in", new_user_session_path, class: "navbar-link" %>
+            <% end %>
+          </p>
         </div>
       </div>
     </div>
