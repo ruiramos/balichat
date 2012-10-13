@@ -1,7 +1,14 @@
 var Ui = function() {}
 
-Ui.appendMessage = function(from, text) {
-  $('.chat-window').append("<p><span>&lt;"+from+"&gt;</span> "+text+"</p>")
+Ui.appendMucMessage = function(from, text) {
+  $('.chat-muc-messages').append("<p><span>&lt;"+from+"&gt;</span> "+text+"</p>")
+  Ui.scrollBottom();
+}
+
+Ui.scrollBottom = function() {
+  var scrollDiv = $('.scroll-pane');
+  var api = scrollDiv.data('jsp');
+  api.reinitialise();
 }
 
 $(document).ready(function () {

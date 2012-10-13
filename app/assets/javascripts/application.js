@@ -16,4 +16,6 @@
 //= require strophe.min
 //= require strophe.muc
 //= require linkify
+//= require jquery.jscrollpane.min
+//= require jquery.mousewheel
 //= require_tree .

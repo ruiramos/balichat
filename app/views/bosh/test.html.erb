@@ -8,7 +8,9 @@
       <h1>Sala de chat</h1>
     </div>
 
-    <div class="chat-window"></div>
+    <div class="chat-window scroll-pane">
+      <div class="chat-muc-messages"></div>
+    </div>
     
     <div class="chat-input form-inline">
       <table width="100%" cellspacing="0">
@@ -33,5 +35,7 @@
   $(document).ready(function () {
     jabber = new Jabber();
     jabber.connect('<%= @jid %>', '<%= @sid %>', '<%= @rid %>');
+
+    $('.scroll-pane').jScrollPane();
   });
 </script>

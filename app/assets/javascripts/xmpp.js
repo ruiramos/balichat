@@ -21,7 +21,7 @@ Jabber.fn.onMessage = function(message) {
   var text = $(message).find('body').text();
   var from = $(message).attr('from');
   
-  Ui.appendMessage(from, text);
+  Ui.appendMucMessage(from, text);
 
   return true;
 }
@@ -39,7 +39,7 @@ Jabber.fn.sendGroupMessage = function(jid, text) {
   var message = $msg({to: jid, from: this.jid, type: 'groupchat'}).c('body').t(text);
   connection.send(message.tree());
 
-  Ui.appendMessage(this.jid, text);
+  Ui.appendMucMessage(this.jid, text);
 
   return true;
 }
@@ -61,7 +61,6 @@ Jabber.fn.connect = function(jid, sid, rid) {
   connection.attach(jid, sid, rid, this.onAttach);
 
   muc = Jabber.fn.create_muc_handler('amizade@conference.pylon.local', jid);
-  muc.send_message('PUTAS');
 }
 
 Jabber.fn.create_muc_handler = function(jid, nick, options) {
