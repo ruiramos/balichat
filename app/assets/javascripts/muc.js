@@ -22,12 +22,12 @@ Muc.fn.createMucHandler = function() {
   };
   
   connection.addHandler(this.joinHandler(this.ui, muc), null, "presence", null, null, null);
+  connection.addHandler(this.leaveHandler(this.ui, muc), null, "presence", null, null, null);
   connection.addHandler(this.messageHandler(this.ui, muc), null, "message", "groupchat", null, null);
   connection.addHandler(this.historyHandler(this.ui, muc), null, "message", "groupchat", null, null);
   connection.addHandler(this.topicHandler(this.ui, muc), null, "message", "groupchat", null, null);
   connection.addHandler(this.topicChangeHandler(this.ui, muc), null, "message", "groupchat", null, null);
-  connection.addHandler(this.leaveHandler(this.ui, muc), null, "presence", null, null, null);
-
+  
   //if (options.handle_leave) {
   //  connection.addHandler(Muc.fn.new_leave_handler(muc, options.handle_leave), null, "presence", null, null, null);
   //}
@@ -140,6 +140,7 @@ Muc.fn.topicHandler = function(ui, muc) {
     if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
       var body = $stanza.find("body");
       if (body.length > 0 && $stanza.find("delay").length == 0 && $stanza.find("subject").length > 0) {
+        console.log("::::::: TOPICHANDLER BROTHER");
         ui.topicHandler(Strophe.getText(body[0]));
       }
     }
@@ -150,13 +151,12 @@ Muc.fn.topicHandler = function(ui, muc) {
 
 Muc.fn.topicChangeHandler = function(ui, muc) {
   return function (stanza) {
-    console.log("---- ");
-    console.log(stanza);
     var $stanza = $(stanza);
     if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
       var body = $stanza.find("body");
-      if (body.length > 0 && $stanza.find("delay").length == 0 && $stanza.find("subject").length > 0) {
-        ui.topicChangeHandler($stanza.attr("from"), Strophe.getText(body[0]));
+      if (body.length == 0 && $stanza.find("delay").length == 0 && $stanza.find("subject").length > 0) {
+        console.log("::::::::: AQUI");
+        ui.topicChangeHandler($stanza.attr("from"), $stanza.find("subject").text());
       }
     }
 

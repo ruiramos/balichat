@@ -3,7 +3,7 @@ var MucUi = function(connection, jid, nick) {
   var that = this;
   var handlers = {};
   var roster = $('#user-list-'+Strophe.getNodeFromJid(jid));
-  this.topicDiv = $('#muc-'+Strophe.getNodeFromJid(jid)+' h2.topic');
+  this.topicDiv = $('#topic-'+Strophe.getNodeFromJid(jid));
 
   var scrollDiv = $('#muc-'+Strophe.getNodeFromJid(jid));
   this.api = scrollDiv.data('jsp');
@@ -102,8 +102,8 @@ MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
 
 MucUi.fn.sendTopicNotification = function(nick, topic) {
   var newStr = nick+" changed room topic to: "+topic;
-  that.appendNotification(newStr, gui.notifications.topic);
-  that.topicDiv.text(topic);
+  this.appendNotification(newStr, gui.notifications.topic);
+  this.topicDiv.text(topic);
 }
 
 MucUi.fn.topicHandler = function(topic) {
@@ -114,7 +114,8 @@ MucUi.fn.topicHandler = function(topic) {
   });
 }
 
-MucUi.fn.topicChangeHandler = function(nick, topic) {
-  console.log("TOPIC CHANGE HANDLER");
-  that.sendTopicNotification(nick, topic);
+MucUi.fn.topicChangeHandler = function(from, topic) {
+  var nick = Strophe.getResourceFromJid(from);
+  console.log("TOPIC CHANGE HANDLER "+nick+" "+topic);
+  this.sendTopicNotification(nick, topic);
 }
