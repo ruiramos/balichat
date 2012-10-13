@@ -27,7 +27,7 @@ end
 
 gem 'jquery-rails'
 
-gem 'xmpp4r'
+gem 'ruby_bosh', git: 'https://github.com/rikas/ruby_bosh.git'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
