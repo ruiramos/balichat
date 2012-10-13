@@ -37,11 +37,11 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   }
 }
 
-MucUi.fn.appendMessage = function(message) {
+MucUi.fn.appendMessage = function(nick, message) {
   var from = $(message).attr('from');
   var text = $(message).find('body').text();
-  
-  var element = "<p><span>&lt;"+from+"&gt;</span> "+text+"</p>";
+
+  var element = "<p><span>&lt;"+nick+"&gt;</span> "+text+"</p>";
   this.appendToMuc(element, Jabber.isOwnMessage(message));
 }
 
@@ -85,4 +85,12 @@ MucUi.fn.joinHandler = function(stanza, muc, nick, text) {
   //}
 
   this.appendNotification(nick + " has joined", gui.notifications.join);
+}
+
+MucUi.fn.messageHandler = function (stanza, muc, nick, message) {
+  //if (options.detect_focus && !muc.window_focused) {
+  //  muc.unread_messages++;
+  //  document.title = " ("+muc.unread_messages+") " + original_title;
+  //}
+  this.appendMessage(nick, stanza);
 }

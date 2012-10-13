@@ -10,7 +10,7 @@ Muc.fn = Muc.prototype;
 
 Muc.fn.sendMessage = function(text) {
   var message = $msg({to: this.jid, from: jabber.jid, type: 'groupchat'}).c('body').t(text);
-  //gui.appendMucMessage(this.jid, text);
+  connection.send(message);
 
   return true;
 }
@@ -18,13 +18,11 @@ Muc.fn.sendMessage = function(text) {
 Muc.fn.createMucHandler = function() { 
   var muc = {
     connection: connection, jid: this.jid, nick: this.nick,
-    send_message: function (text) {
-      connection.send($msg({to: jid, type: 'groupchat'}).c('body').t(text).tree());
-    },
     occupants: {}
   };
   
-  connection.addHandler(this.joinHandler(muc), null, "presence", null, null, null);
+  connection.addHandler(this.joinHandler(this.ui, muc), null, "presence", null, null, null);
+  connection.addHandler(this.messageHandler(this.ui, muc), null, "message", "groupchat", null, null);
 
   //if (options.handle_leave) {
   //  connection.addHandler(Muc.fn.new_leave_handler(muc, options.handle_leave), null, "presence", null, null, null);
@@ -65,33 +63,35 @@ Muc.fn.createMucHandler = function() {
   return muc;
 }
 
-Muc.fn.joinHandler = function(muc) {
-  var ui = this.ui;
-  console.log("----------- UIUIUIUI ---------------")
-  console.log(this.ui);
-
+Muc.fn.joinHandler = function(ui, muc) {  
   return function (stanza) {
-    var nick = Strophe.getResourceFromJid($(stanza).attr("from"));
-    if ($(stanza).attr("type") != "unavailable" && $(stanza).attr("type") != "error"
-      && Strophe.getBareJidFromJid($(stanza).attr("from")) == muc.jid) {
+    var $stanza = $(stanza);
+    var nick = Strophe.getResourceFromJid($stanza.attr("from"));
+    if ($stanza.attr("type") != "unavailable" && $stanza.attr("type") != "error"
+      && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
       if (!muc.occupants[nick]) {
-        var text = stanza.getElementsByTagName("status")[0];
+        var text = $stanza.find("status")[0];
         if (text) text = Strophe.getText(text);
         muc.occupants[nick] = {};
-        
-        console.log("----------- PRESENCE ---------------")
-        console.log(stanza)
-        console.log(muc)
-        console.log(nick)
-        console.log(text)
-
-        
-
         ui.joinHandler(stanza, muc, nick, text);
 
         if (muc.status_handler) {
           muc.status_handler(stanza);
         }
+      }
+    }
+
+    return true;
+  };
+}
+
+Muc.fn.messageHandler = function(ui, muc) {
+  return function (stanza) {
+    var $stanza = $(stanza);
+    if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
+      var body = $stanza.find("body");
+      if (body.length > 0 && $stanza.find("delay").length == 0) {
+        ui.messageHandler(stanza, muc, Strophe.getResourceFromJid($stanza.attr("from")), Strophe.getText(body[0]));
       }
     }
 
@@ -108,20 +108,6 @@ Muc.fn.new_leave_handler = function(muc, callback) {
         if (text) text = Strophe.getText(text);
         callback(stanza, muc, nick, text);
         muc.occupants[nick] = null;
-      }
-    }
-
-    return true;
-  };
-}
-
-Muc.fn.new_message_handler = function(muc, callback) {
-  return function (stanza) {
-
-    if (stanza.getAttribute("type") == "groupchat" && Strophe.getBareJidFromJid(stanza.getAttribute("from")) == muc.jid) {
-      var body = stanza.getElementsByTagName("body");
-      if (body.length > 0 && stanza.getElementsByTagName("delay").length == 0) {
-        callback(stanza, muc, Strophe.getResourceFromJid(stanza.getAttribute("from")), Strophe.getText(body[0]));
       }
     }
 
