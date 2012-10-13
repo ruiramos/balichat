@@ -84,7 +84,11 @@ MucUi.fn.joinHandler = function(stanza, muc, nick, text) {
   //  muc.occupants[nick].rosteritem = rosteritem;
   //}
 
-  this.appendNotification(nick + " has joined", gui.notifications.join);
+  this.appendNotification(nick + " joined the room.", gui.notifications.join);
+}
+
+MucUi.fn.leaveHandler = function(stanza, muc, nick, text) {
+  this.appendNotification(nick + " left the room.", gui.notifications.leave);
 }
 
 MucUi.fn.messageHandler = function (stanza, muc, nick, message) {
@@ -93,4 +97,12 @@ MucUi.fn.messageHandler = function (stanza, muc, nick, message) {
   //  document.title = " ("+muc.unread_messages+") " + original_title;
   //}
   this.appendMessage(nick, stanza);
+}
+
+MucUi.fn.topicHandler = function (stanza, muc, nick, message) {
+  //if (options.detect_focus && !muc.window_focused) {
+  //  muc.unread_messages++;
+  //  document.title = " ("+muc.unread_messages+") " + original_title;
+  //}
+  this.appendNotification(message, gui.notifications.topic);
 }

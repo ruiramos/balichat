@@ -9,7 +9,8 @@ var Ui = function() {
 
   this.notifications = {
     join: 'join',
-    part: 'part'
+    part: 'leave',
+    topic: 'topic'
   }
 }
 
