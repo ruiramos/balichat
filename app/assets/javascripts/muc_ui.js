@@ -22,7 +22,7 @@ MucUi.fn.appendToMuc = function() {
   return this.api;
 }
 
-MucUi.fn.appendToMuc = function(element) {
+MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   var scrollBottom = true;
 
   if (this.api.getPercentScrolledY() != 1) {
@@ -32,20 +32,22 @@ MucUi.fn.appendToMuc = function(element) {
   $('.chat-muc-messages').append(element)
   this.updateChatWindow();
 
-  if (scrollBottom == true || from == Strophe.getBareJidFromJid(jabber.jid)) {
+  if (scrollBottom == true || isOwnMessage) {
     this.scrollBottom();
   }
 }
 
-MucUi.fn.appendMessage = function(from, text) {
+MucUi.fn.appendMessage = function(message) {
+  var from = $(message).attr('from');
+  var text = $(message).find('body').text();
+  
   var element = "<p><span>&lt;"+from+"&gt;</span> "+text+"</p>";
-  this.appendToMuc(element);
+  this.appendToMuc(element, Jabber.isOwnMessage(message));
 }
 
 MucUi.fn.appendNotification = function(text, type) {
   var element = "<p class='notification'>"+text+"</p>";
-  console.log("Vou append "+element);
-  this.appendToMuc(element);
+  this.appendToMuc(element, false);
 }
 
 MucUi.fn.updateChatWindow = function() {

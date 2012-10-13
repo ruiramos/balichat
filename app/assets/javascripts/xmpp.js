@@ -7,6 +7,11 @@ var Jabber = function() {
 
 Jabber.fn = Jabber.prototype;
 
+Jabber.isOwnMessage = function(message) {
+  var from = $(message).attr('from');
+  return (Strophe.getBareJidFromJid(from) == this.jid);
+}
+
 Jabber.fn.onAttach = function(status) {
   if (status == Strophe.Status.DISCONNECTED) {
     console.log('Disconnected.');
