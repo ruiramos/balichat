@@ -2,11 +2,16 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.8'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+gem 'capistrano'
 
-gem 'sqlite3'
+group :development do
+  gem 'sqlite3'
+end
 
+group :production do
+  gem 'mysql2' # If using mysql in development, this can be outside the production group.
+  gem 'therubyracer'
+end
 
 # Gems used only for assets and not required
 # in production environments by default.
