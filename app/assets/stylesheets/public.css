@@ -1,1 +1,6 @@
+div.container-main {margin-top:50px}
+
 div.chat-window {height:400px;overflow-y:scroll;overflow-x:hidden}
+
+div.chat-input table {width:100%;background:red}
+.chat-input-field {width:100%}
