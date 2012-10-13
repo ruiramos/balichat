@@ -4,7 +4,7 @@ var Ui = function() {
     away: "Away",
     xa: "Not available",
     dnd: "Busy",
-    chat: "Free for a chat"
+    chat: "Free for chat"
   }
 
   this.notifications = {

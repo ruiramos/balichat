@@ -1,10 +1,6 @@
-/*
-Bem vindos ao BaliCSS!
-*/
-
 /* Nav Bar */
-#header .navbar-inner { padding-top:15px; border:0; }
-#header ul {margin-left:25px;}
+#header .navbar-inner { padding-top:15px; border:0}
+#header ul {margin-left:25px}
 #header .nav > li.active a { background: white; color:black; text-shadow:0 0 0 rgba(0, 0, 0, 0); box-shadow:0 0 0; /*box-shadow: inset -2px -2px 1 rgba(0, 0, 0, 0.1);*/}
 #header .nav > li.active a:hover { background: white; color:black;border-color:white }
 
@@ -34,7 +30,6 @@ Bem vindos ao BaliCSS!
 
 /* Filters */
 #filters {}
-
 
 div.container-main {margin-top:50px}
 
