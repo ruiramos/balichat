@@ -21,7 +21,7 @@ Jabber.fn.onMessage = function(message) {
   var text = $(message).find('body').text();
   var from = $(message).attr('from');
   
-  Ui.appendMucMessage(from, text);
+  gui.appendMucMessage(from, text);
 
   return true;
 }
@@ -30,7 +30,7 @@ Jabber.fn.sendMessage = function(jid, text) {
   var message = $msg({to: jid, from: this.jid, type: 'chat'}).c('body').t(text);
   connection.send(message.tree());
 
-  Ui.appendMessage(this.jid, text);
+  gui.appendMessage(this.jid, text);
 
   return true;
 }
@@ -39,7 +39,7 @@ Jabber.fn.sendGroupMessage = function(jid, text) {
   var message = $msg({to: jid, from: this.jid, type: 'groupchat'}).c('body').t(text);
   connection.send(message.tree());
 
-  Ui.appendMucMessage(this.jid, text);
+  gui.appendMucMessage(this.jid, text);
 
   return true;
 }

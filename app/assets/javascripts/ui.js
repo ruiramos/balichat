@@ -1,14 +1,31 @@
-var Ui = function() {}
-
-Ui.appendMucMessage = function(from, text) {
-  $('.chat-muc-messages').append("<p><span>&lt;"+from+"&gt;</span> "+text+"</p>")
-  Ui.scrollBottom();
+var Ui = function() {
+  var scrollDiv = $('.scroll-pane');
+  this.api = scrollDiv.data('jsp');
 }
 
-Ui.scrollBottom = function() {
-  var scrollDiv = $('.scroll-pane');
-  var api = scrollDiv.data('jsp');
-  api.reinitialise();
+Ui.fn = Ui.prototype;
+
+Ui.fn.appendMucMessage = function(from, text) {
+  var scrollBottom = true;
+
+  if (this.api.getPercentScrolledY() != 1) {
+    scrollBottom = false;
+  }
+
+  $('.chat-muc-messages').append("<p><span>&lt;"+from+"&gt;</span> "+text+"</p>")
+  this.updateChatWindow();
+
+  if (scrollBottom == true || from == Strophe.getBareJidFromJid(jabber.jid)) {
+    this.scrollBottom();
+  }
+}
+
+Ui.fn.updateChatWindow = function() {
+  this.api.reinitialise();
+}
+
+Ui.fn.scrollBottom = function() {
+  this.api.scrollToPercentY(100, false);
 }
 
 $(document).ready(function () {

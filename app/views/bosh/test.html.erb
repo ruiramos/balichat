@@ -31,11 +31,13 @@
 
 <script type="text/javascript">
   var jabber = null;
+  var gui = null;
 
   $(document).ready(function () {
+    $('.scroll-pane').jScrollPane();
+    gui = new Ui();
+
     jabber = new Jabber();
     jabber.connect('<%= @jid %>', '<%= @sid %>', '<%= @rid %>');
-
-    $('.scroll-pane').jScrollPane();
   });
 </script>
