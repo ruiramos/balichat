@@ -1,5 +1,17 @@
 var Ui = function() {
-  var status = { online: "Available", away: "Away", xa: "Not available", dnd: "Busy", chat: "Free for a chat" }
+  this.status = {
+    online: "Available",
+    away: "Away",
+    xa: "Not available",
+    dnd: "Busy",
+    chat: "Free for a chat"
+  }
+
+  this.notifications = {
+    join: 'join',
+    part: 'leave',
+    topic: 'topic'
+  }
 }
 
 Ui.fn = Ui.prototype;
