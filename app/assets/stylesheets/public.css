@@ -1,11 +1,7 @@
-/*
-Bem vindos ao BaliCSS!
-*/
-
 /* Nav Bar */
-#header .navbar-inner { padding-top:25px; border:0; }
-#header ul {margin-left:25px;}
-#header .nav > li.active a { background: white; color:black; text-shadow:0 0 0 rgba(0, 0, 0, 0); box-shadow:0 0 0; /*box-shadow: inset -2px -2px 1 rgba(0, 0, 0, 0.1);*/}
+#header .navbar-inner {padding-top:25px;border:0}
+#header ul {margin-left:25px}
+#header .nav > li.active a {background: white;color:black; text-shadow:0 0 0 rgba(0, 0, 0, 0);box-shadow:0 0 0; /*box-shadow: inset -2px -2px 1 rgba(0, 0, 0, 0.1);*/}
 #header .nav > li.active a:hover { background: white; color:black;border-color:white }
 
 #header .nav > li a { border-radius:0 0 0 0; padding:10px 40px 10px 10px}
@@ -27,8 +23,6 @@ span.offline-user {color:#bbb;}
 #users img.info {margin-top:12px;}
 #users img.online-user {background-color:#56CF4B; border-color:#31BE39;}
 #users img.offline-user {background-color:#aaa; border-color:#999;}
-
-
 
 div.container-main {margin-top:50px}
 

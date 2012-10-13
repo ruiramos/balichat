@@ -4,6 +4,7 @@ var Muc = function(ui, jid, nick) {
   this.nick = nick;
 
   this.createMucHandler();
+  this.receivedTopic = false; // used to know when the user stoped receiving history
 }
 
 Muc.fn = Muc.prototype;
@@ -141,6 +142,7 @@ Muc.fn.topicHistoryHandler = function(ui, muc) {
       var body = $stanza.find("body");
       if (body.length == 0 && $stanza.find("delay").length > 0 && $stanza.find("subject").length > 0) {
         ui.topicHistoryHandler($stanza.attr("from"), $stanza.find("subject").text());
+        receivedTopic
       }
     }
 
