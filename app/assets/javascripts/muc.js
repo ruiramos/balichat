@@ -1,5 +1,9 @@
-var Muc = function(jid) {
-  var jid = jid;
+var Muc = function(ui, jid, nick) {
+  this.ui = ui;  
+  this.jid = jid;
+  this.nick = nick;
+
+  this.createMucHandler();
 }
 
 Muc.fn = Muc.prototype;
@@ -11,51 +15,41 @@ Muc.fn.sendMessage = function(text) {
   return true;
 }
 
-Muc.fn.createMucHandler = function(jid, nick, options) {
-  console.log("Create muc handler");
-  console.log("Options:");
-  console.log(options);
-
-  if (typeof(options) == "undefined" || !options) {
-    options = {};
-  }
-
+Muc.fn.createMucHandler = function() { 
   var muc = {
-    connection: connection, jid: jid, nick: nick, options: options,
+    connection: connection, jid: this.jid, nick: this.nick,
     send_message: function (text) {
       connection.send($msg({to: jid, type: 'groupchat'}).c('body').t(text).tree());
     },
     occupants: {}
   };
+  
+  connection.addHandler(this.joinHandler(muc), null, "presence", null, null, null);
 
-  if (options.handle_join) {
-    connection.addHandler(Muc.fn.joinHandler(muc, options.handle_join), null, "presence", null, null, null);
-  }
-
-  if (options.handle_leave) {
-    connection.addHandler(Muc.fn.new_leave_handler(muc, options.handle_leave), null, "presence", null, null, null);
-  }
-
-  if (options.handle_status) {
-    // This one is called internally, so we need to store a reference to it
-    muc.status_handler = new_status_handler(muc, options.handle_status);
-    connection.addHandler(muc.status_handler, null, "presence", null, null, null);
-  }
-
-  if (options.handle_history) {
-    connection.addHandler(Muc.fn.new_history_handler(muc, options.handle_history), null, "message", "groupchat", null, null);
-  }
-
-  if (options.handle_message) {
-    connection.addHandler(Muc.fn.new_message_handler(muc, options.handle_message), null, "message", "groupchat", null, null);
-  }
-
-  if (options.handle_error) {
-    connection.addHandler(Muc.fn.new_error_handler(muc, options.handle_error), null, "presence", "error", null, null);
-  }
+  //if (options.handle_leave) {
+  //  connection.addHandler(Muc.fn.new_leave_handler(muc, options.handle_leave), null, "presence", null, null, null);
+  //}
+//
+  //if (options.handle_status) {
+  //  // This one is called internally, so we need to store a reference to it
+  //  muc.status_handler = new_status_handler(muc, options.handle_status);
+  //  connection.addHandler(muc.status_handler, null, "presence", null, null, null);
+  //}
+//
+  //if (options.handle_history) {
+  //  connection.addHandler(Muc.fn.new_history_handler(muc, options.handle_history), null, "message", "groupchat", null, null);
+  //}
+//
+  //if (options.handle_message) {
+  //  connection.addHandler(Muc.fn.new_message_handler(muc, options.handle_message), null, "message", "groupchat", null, null);
+  //}
+//
+  //if (options.handle_error) {
+  //  connection.addHandler(Muc.fn.new_error_handler(muc, options.handle_error), null, "presence", "error", null, null);
+  //}
 
   muc.set_status = function (status, text) {
-    var pres = $pres({to: jid+'/'+nick});
+    var pres = $pres({to: this.jid+'/'+this.nick});
     if (status && status != "online") {
       pres.c("show").t(status).up();
     }
@@ -71,7 +65,11 @@ Muc.fn.createMucHandler = function(jid, nick, options) {
   return muc;
 }
 
-Muc.fn.joinHandler = function(muc, callback) {
+Muc.fn.joinHandler = function(muc) {
+  var ui = this.ui;
+  console.log("----------- UIUIUIUI ---------------")
+  console.log(this.ui);
+
   return function (stanza) {
     var nick = Strophe.getResourceFromJid($(stanza).attr("from"));
     if ($(stanza).attr("type") != "unavailable" && $(stanza).attr("type") != "error"
@@ -80,12 +78,16 @@ Muc.fn.joinHandler = function(muc, callback) {
         var text = stanza.getElementsByTagName("status")[0];
         if (text) text = Strophe.getText(text);
         muc.occupants[nick] = {};
-        callback(stanza, muc, nick, text);
+        
         console.log("----------- PRESENCE ---------------")
         console.log(stanza)
         console.log(muc)
         console.log(nick)
         console.log(text)
+
+        
+
+        ui.joinHandler(stanza, muc, nick, text);
 
         if (muc.status_handler) {
           muc.status_handler(stanza);
