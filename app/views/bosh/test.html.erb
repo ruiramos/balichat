@@ -1,59 +1,32 @@
-  <script type="text/javascript">
-    var ATTACH_SID = "<%= @sid %>";
-    var ATTACH_RID = "<%= @rid %>";
-    var ATTACH_JID = "<%= @jid %>";
-    var BOSH_SERVICE = "/http-bind";
+<div class="row-fuid page-header">
+  <h1>Sala de chat</h1>
+</div>
 
-    var connection = null;
-    var startTime = null;
-
-    function log(msg) {
-      $('#log').append('<div></div>').append(document.createTextNode(msg));
-    }
-
-    function onConnect(status) {
-      connection.send($pres().tree());
-      if (status == Strophe.Status.DISCONNECTED)
-        log('Disconnected.');
-    }
-
-    function onResult(iq) {
-      var elapsed = (new Date()) - startTime;
-      log('Response from jabber.org took ' + elapsed + 'ms.');
-    }
-
-    $(document).ready(function () {
-      // create the connection and attach it
-      connection = new Strophe.Connection(BOSH_SERVICE);
-
-      connection.rawInput = function (data) {
-        log('RECV: ' + data);
-      };
-
-      connection.rawOutput = function (data) {
-        log('SENT: ' + data);
-      };
-
-      // uncomment for extra debugging
-      // Strophe.log = function (lvl, msg) { log(msg); };
-      connection.attach(ATTACH_JID, ATTACH_SID, ATTACH_RID, onConnect);
-
-      // set up handler
-      connection.addHandler(onResult, null, 'iq', 'result', 'disco-1', null);
-
-      log('Strophe is attached.');
-
-      // send disco#info to jabber.org
-      var iq = $iq({to: 'jabber.org', type: 'get', id: 'disco-1'})
-        .c('query', {xmlns: Strophe.NS.DISCO_INFO}).tree()
-        startTime = new Date();
-        connection.send(iq);
-    });
-  </script>
-
-  <h1>Strophe Attach Example</h1>
-    <p>This example shows how to attach to an existing BOSH session with
-    Strophe.</p>
-    <h2>Log</h2>
-    <div id='log'>
+<div class="row-fluid">
+  <div class="span12">
+    <div class="chat-window"></div>
+    <div class="chat-input form-inline">
+      <%= text_field_tag :input %>
+      <%= link_to_function 'Send', 'return false', class: 'btn' %>
     </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    // create the connection and attach it
+    connection = new Strophe.Connection(BOSH_SERVICE);
+
+    //connection.rawInput = function (data) {
+    //  console.log('RAW_IN: ' + data);
+    //};
+//
+    //connection.rawOutput = function (data) {
+    //  console.log('SENT: ' + data);
+    //};
+
+    // uncomment for extra debugging
+    // Strophe.log = function (lvl, msg) { console.log(msg); };
+    connection.attach(ATTACH_JID, ATTACH_SID, ATTACH_RID, onAttach);
+  });
+</script>

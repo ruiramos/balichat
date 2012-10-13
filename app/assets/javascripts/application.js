@@ -12,4 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap.min
+//= require strophe.min
 //= require_tree .
