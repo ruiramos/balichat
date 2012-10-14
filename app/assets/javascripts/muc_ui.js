@@ -2,7 +2,7 @@ var MucUi = function(connection, jid, nick) {
   var muc = {}; // make muc an object from the start. Needed by muc.window_focused focus tracking.
   var that = this;
   var handlers = {};
-  var roster = $('#user-list-'+Strophe.getNodeFromJid(jid));
+  this.roster = $('#user-list-'+Strophe.getNodeFromJid(jid));
   this.topicDiv = $('#topic-'+Strophe.getNodeFromJid(jid));
 
   var scrollDiv = $('#muc-'+Strophe.getNodeFromJid(jid));
@@ -41,6 +41,14 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
 MucUi.fn.appendMessage = function(nick, message) {
   var from = $(message).attr('from');
   var text = $(message).find('body').text();
+
+  console.debug(text);
+
+  // FIXME: POR ISTO NOUTRO SITIO
+  if(text.match(/(?:^|\s)https?:\/\//)){
+    text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
+    text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>');
+  }
 
   var element = "<p><span>&lt;"+nick+"&gt;</span> "+text+"</p>";
   this.appendToMuc(element, Jabber.isOwnMessage(message));
@@ -97,11 +105,28 @@ MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
   //  muc.unread_messages++;
   //  document.title = " ("+muc.unread_messages+") " + original_title;
   //}
+
   this.appendMessage(nick, stanza);
 }
 
 MucUi.fn.mucRosterHandler = function(stanza, muc, nick, text) {
+  var users = this.roster.find('ul.users');
 
+  var $li = $('<li></li>').addClass('user');
+  var $div = $('<div></div>');
+  $div.addClass('online-placeholder').addClass('img-rounded').addClass('img-polaroid');
+
+  $innerDiv = $('<div></div>').addClass('userimg');
+  $innerDiv.css('background', "url('/assets/default-avatar.png')");
+  $div.append($innerDiv);
+
+  $span = $('<span></span>').addClass('user-name').addClass('online-user');
+  $span.text(nick);
+
+  $li.append($div);
+  $li.append($span);
+
+  $(users).append($li);
 }
 
 MucUi.fn.sendTopicNotification = function(nick, topic, printNotification) {
