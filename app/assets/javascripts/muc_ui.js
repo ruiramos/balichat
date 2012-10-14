@@ -81,12 +81,9 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
   text = this.doReplacements(text);
 
   if (this.includeAsParagraph(message) == false) {
-    var $element = $('#empty-message').clone();
-    $element.removeAttr('id');
+    var $element = this.makeNewMessage(timestamp);
     $element.find('.nick').text(nick);
     $element.find('.text').html(text);
-    $element.find('.timestamp').text(moment(timestamp).format(this.timeFormat));
-    $element.show();
 
     if (jabber.isOwnMessage(message)) {
       $element.find('.message').addClass('own');
@@ -133,10 +130,27 @@ MucUi.fn.doReplacements = function(text) {
   return text;
 }
 
-MucUi.fn.appendNotification = function(text, type) {
-  var element = "<p class='notification'>"+text+"</p>";
+MucUi.fn.makeNewMessage = function(timestamp) {
   var $element = $('#empty-message').clone();
-  this.appendToMuc(element, false);
+  $element.removeAttr('id');
+  $element.removeClass('hide');
+
+  if (timestamp != null) {
+    $element.find('.timestamp').text(moment().format(this.timeFormat));
+  } else {
+    $element.find('.timestamp').text(moment(timestamp).format(this.timeFormat));
+  }
+
+  return $element;
+}
+
+MucUi.fn.appendNotification = function(text, type) {
+  var $element = this.makeNewMessage();
+  $element.find('.message').addClass("system").addClass(type);
+  $element.find('.nick').remove();
+  $element.find('.text').html(text);
+
+  this.appendToMuc($element.first(), false);
 }
 
 MucUi.fn.updateChatWindow = function() {
@@ -148,11 +162,12 @@ MucUi.fn.scrollBottom = function() {
 }
 
 MucUi.fn.joinHandler = function(stanza, muc, nick, text) {
-  this.appendNotification(nick + " joined the room.", gui.notifications.join);
+  console.log("JOIN DE: "+nick);
+  this.appendNotification("<strong>"+ nick + "</strong> joined the room.", gui.notifications.join);
 }
 
 MucUi.fn.leaveHandler = function(stanza, muc, nick, text) {
-  this.appendNotification(nick + " left the room.", gui.notifications.leave);
+  this.appendNotification("<strong>"+ nick + "</strong> left the room.", gui.notifications.leave);
 }
 
 MucUi.fn.historyHandler = function(stanza, muc, nick, message) {
