@@ -139,7 +139,7 @@
 
     // update chat-window size
     $(window).resize(function(){
-      h = $(window).height()-150;
+      h = $(window).height()-160;
       $(".chat-window").css("height", h);
       $(".chat-window").css("width", $(".chat-column").css("width"));
       window.muc.ui.api.reinitialise();

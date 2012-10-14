@@ -33,12 +33,13 @@ ul .pending {padding:1px 6px; margin:0 12px; background:#a6a6a6; border-radius: 
 .users li img {margin-right:4px;}
 .users img.info {margin-top:12px;}
 .users li div { width:18px; height:18px}
+.users li:hover { background-color:#eee}
 .users li > div {padding:2px; float:left}
 .users div.img-polaroid {border-radius:2px;padding:1px}
 .users div.userimg {border-radius:2px; background-position: 0 0;background-size:18px 18px !important}
 .users div.online-placeholder {background-color:#3CC248; border-color:#38b143; }
 .users div.offline-placeholder {background-color:#999; border-color:#666; }
-.users span.user-name, .users span.concierge {line-height:25px;margin-left:8px;}
+.users span.user-name, .users span.concierge {line-height:22px;margin-left:8px;}
 .users span.offline-user {color:#bbb;}
 
 /* Search */
@@ -59,9 +60,10 @@ h3.topic span {font-style: italic;}
 .message {overflow:auto;border-bottom:1px solid #ddd;background:white;padding:10px 0}
 .message.own {background:#f4f7fb;border-bottom:1px solid #cfdcef}
 .message-avatar {width:100%;background:url(/assets/default-avatar.png) 100% 0 no-repeat;height:32px;background-size:32px 32px}
-.message-content .nick { font-weight: bold; float:left;margin:0;}
-.message-content .timestamp {color:#ccc; float:right; font-size:0.85em;margin-bottom:2px;}
-.message-content .text {clear:both;margin:0;}
+.message-content .nick { font-weight: bold; float:left;line-height: 12px;height: 20px;}
+.message-content .timestamp {color:#ccc; float:right; font-size:0.85em;line-height: 12px;height: 20px;}
+.message-content .text {clear:both;}
+.message-content p {margin:0;}
 .message .nick { color:#0a79b1}
 .message.own .nick {color:#333}
 

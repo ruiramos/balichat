@@ -53,5 +53,5 @@ Jabber.fn.connect = function(jid, sid, rid) {
   this.jid = jid;
   connection.attach(jid, sid, rid, this.onAttach);
 
-  this.muc = new MucUi(connection, 'amizade@conference.pylon.local', jid);
+  this.muc = new MucUi(connection, 'amizade@conference.localhost', jid);
 }
