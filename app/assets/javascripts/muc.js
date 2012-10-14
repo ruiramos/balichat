@@ -61,7 +61,7 @@ Muc.fn.joinHandler = function(ui, muc) {
         }
 
         // If i received my own presence then show joins from here on!
-        if (Strophe.getBareJidFromJid(nick) == Strophe.getBareJidFromJid(jabber.jid)) {
+        if (nick == Strophe.getNodeFromJid(jabber.jid)) {
           that.showJoins = true;
         }
       }
