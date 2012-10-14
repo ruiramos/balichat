@@ -2,6 +2,10 @@ var MucUi = function(connection, jid, nick) {
   var muc = {}; // make muc an object from the start. Needed by muc.window_focused focus tracking.
   var that = this;
   var handlers = {};
+
+  this.timeFormat = "HH\\hmm";
+
+  this.lastMessageFrom = "";
   this.roster = $('#user-list-'+Strophe.getNodeFromJid(jid));
   this.topicDiv = $('#topic-'+Strophe.getNodeFromJid(jid));
 
@@ -19,10 +23,11 @@ var MucUi = function(connection, jid, nick) {
 
 MucUi.fn = MucUi.prototype;
 
-MucUi.fn.appendToMuc = function() {
-  return this.api;
-}
-
+/**
+ * Updates the muc message area with a new message. If called with no arguments
+ * it will just do the scrolling stuff, because we are adding something that is not
+ * a chat row. This happens when adding new paragraph on existing message.
+ */
 MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   var scrollBottom = true;
 
@@ -30,15 +35,18 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
     scrollBottom = false;
   }
 
-  $('.chat-muc-messages').append(element)
+  if (element != null) {
+    $('.chat-muc-messages').append(element)
+  }
+
   this.updateChatWindow();
 
-  if (scrollBottom == true || isOwnMessage) {
+  if (element != null || scrollBottom == true || isOwnMessage) {
     this.scrollBottom();
   }
 }
 
-MucUi.fn.appendMessage = function(nick, message) {
+MucUi.fn.appendMessage = function(nick, message, timestamp) {
   var from = $(message).attr('from');
   var text = $(message).find('body').text();
 
@@ -48,16 +56,27 @@ MucUi.fn.appendMessage = function(nick, message) {
     text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>');
   }
 
-  var $element = $('#empty-message').clone();
-  $element.find('.nick').text(nick);
-  $element.find('.text').text(text);
-  $element.show();
-  
-  if (jabber.isOwnMessage(message)) {
-    $element.find('.message').addClass('own');
-  }
+  if (from != this.lastMessageFrom) {
+    var $element = $('#empty-message').clone();
+    $element.find('.nick').text(nick);
+    $element.find('.text').text(text);
+    $element.find('.timestamp').text(moment(timestamp).format(this.timeFormat));
+    $element.show();
 
-  this.appendToMuc($element, jabber.isOwnMessage(message));
+    if (jabber.isOwnMessage(message)) {
+      $element.find('.message').addClass('own');
+    }
+  } else {
+    var $oldElement = $('.chat-muc-messages .message-content .text').last();
+  }
+  
+  if (from != this.lastMessageFrom) {
+    this.appendToMuc($element, jabber.isOwnMessage(message));
+  } else {
+    var $newParagraph = $oldElement.clone().text(text)
+    $oldElement.after($newParagraph);
+    this.appendToMuc();
+  }
 }
 
 MucUi.fn.appendNotification = function(text, type) {
@@ -74,31 +93,6 @@ MucUi.fn.scrollBottom = function() {
 }
 
 MucUi.fn.joinHandler = function(stanza, muc, nick, text) {
-  //if (this.roster) {
-  //  var rosteritem = document.createElement("div");
-  //  rosteritem.setAttribute("class", "rosteritem");
-  //  rosteritem.innerHTML = "<span class='statusindicator'>&bull;</span>&nbsp;<span>" + gui.htmlescape(nick) + "</span>";
-//
-  //  var nicks = roster.childNodes;
-  //  var added = false;
-//
-  //  for (var i = 0; i<nicks.length; i++) {
-  //    if (nicks[i].nodeType == 1) {
-  //      var thisnick = nicks[i].childNodes[2].childNodes[0].nodeValue;
-  //      if (thisnick.toLowerCase() > nick.toLowerCase()) {
-  //        roster.insertBefore(rosteritem, nicks[i]);
-  //        added = true;
-  //        break;
-  //      }
-  //    }
-  //  }
-//
-  //  if (!added) {
-  //    roster.appendChild(rosteritem);
-  //  }
-  //  muc.occupants[nick].rosteritem = rosteritem;
-  //}
-
   this.appendNotification(nick + " joined the room.", gui.notifications.join);
 }
 
@@ -106,13 +100,16 @@ MucUi.fn.leaveHandler = function(stanza, muc, nick, text) {
   this.appendNotification(nick + " left the room.", gui.notifications.leave);
 }
 
-MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
-  //if (options.detect_focus && !muc.window_focused) {
-  //  muc.unread_messages++;
-  //  document.title = " ("+muc.unread_messages+") " + original_title;
-  //}
+MucUi.fn.historyHandler = function(stanza, muc, nick, message) {
+  var stamp = $(stanza).find('delay').attr('stamp');
 
-  this.appendMessage(nick, stanza);
+  this.appendMessage(nick, stanza, stamp);
+  this.lastMessageFrom = $(stanza).attr('from');
+}
+
+MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
+  this.appendMessage(nick, stanza, moment().format("YYYY-MM-DDTHH:mm:ss"));
+  this.lastMessageFrom = $(stanza).attr('from');
 }
 
 MucUi.fn.mucRosterHandler = function(stanza, muc, nick, text) {
