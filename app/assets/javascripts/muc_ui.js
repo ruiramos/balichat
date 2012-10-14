@@ -26,7 +26,7 @@ var MucUi = function(connection, jid, nick) {
 MucUi.fn = MucUi.prototype;
 
 /**
- * Updates the muc message area with a new element. If called with no arguments
+ * Updates the muc message area with a new element. If called with just the second argument
  * it will just do the scrolling stuff, because we are adding something that is not
  * a chat row. This happens when adding new paragraph on existing message.
  */
