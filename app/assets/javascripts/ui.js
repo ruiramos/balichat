@@ -113,5 +113,5 @@ $(document).ready(function () {
   Ui.fn.topicHandler();
 
   // Add window focus handler
-  Ui.fn.focusHanler();
+  //Ui.fn.focusHanler();
 });
