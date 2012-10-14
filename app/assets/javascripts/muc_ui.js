@@ -90,14 +90,22 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
 }
 
 MucUi.fn.doReplacements = function(text) {
+  
+  if($('#expand-embeds').attr("checked")!="checked"){  //we're not expanding embeds, linkify and get out of here!
+    return linkify(text);
+  }
+
   var source = text;
+  
   if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:vimeo.com|youtube.com)\//)) { //video embedd
     text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
     text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>');
     text += "<small class='link-source'>"+linkify(source)+"</small>";
+  
   } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(.*)(\.jpg|\.png|\.gif|\.bmp)/)) { //image embedd
     text = "<img class='embedded' src='"+text+"'>";
     text += "<small class='link-source'>"+linkify(source)+"</small>";
+  
   } else {
     text = linkify(text);
   }

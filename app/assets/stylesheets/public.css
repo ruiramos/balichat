@@ -1,5 +1,6 @@
 html, body { height: 100%; font-size:0.9em;}
 a:hover {color:#08C;} /* para não mudar de cor */
+label {font-size:0.9em;}
 
 .container-fluid {padding:0;}
 .row-fluid {padding-left:20px; padding-right:20px;width:auto;}
