@@ -11,10 +11,10 @@ $(function() {
       dataType: 'xml', // This is really important as s3 gives us back the url of the file in a XML document
       add: function (event, data) {
         $.ajax({
-          url: "/signed_urls",
-          type: 'GET',
+          url: "/documents",
+          type: 'POST',
           dataType: 'json',
-          data: {doc: {title: data.files[0].name}}, // send the file name to the server so it can generate the key param
+          data: {doc: {filename: data.files[0].name, chatroom: window.muc.jid}}, // send the file name to the server so it can generate the key param
           async: false,
           success: function(data) {
             // Now that we have our data, we update the form so it contains all
