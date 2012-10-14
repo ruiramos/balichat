@@ -16,10 +16,6 @@ Muc.fn.sendMessage = function(text) {
   return true;
 }
 
-Muc.fn.sendMessage = function(text) {
-  //connection.setTopic(text);
-}
-
 Muc.fn.createMucHandler = function() { 
   var muc = {
     connection: connection, jid: this.jid, nick: this.nick,
