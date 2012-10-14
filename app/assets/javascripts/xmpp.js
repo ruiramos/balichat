@@ -20,7 +20,6 @@ Jabber.fn.onAttach = function(status) {
     console.log('Strophe is attached.');
   }
   connection.send($pres().tree());
-  //connection.addHandler(Jabber.fn.onMessage, null, 'message', null, null, null);
 }
 
 Jabber.fn.onMessage = function(message) {
@@ -30,7 +29,7 @@ Jabber.fn.onMessage = function(message) {
   return true;
 }
 
-Jabber.fn.sendMessage = function(jid, text) {
+Jabber.fn.sendPrivateMessage = function(jid, text) {
   var message = $msg({to: jid, from: this.jid, type: 'chat'}).c('body').t(text);
   connection.send(message.tree());
 
@@ -48,7 +47,6 @@ Jabber.fn.connect = function(jid, sid, rid) {
   //  console.log('SENT: ' + data);
   //};
 
-  // uncomment for extra debugging
   // Strophe.log = function (lvl, msg) { console.log(msg); };
   this.jid = jid;
   connection.attach(jid, sid, rid, this.onAttach);

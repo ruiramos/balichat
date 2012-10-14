@@ -122,7 +122,7 @@ Muc.fn.historyHandler = function(ui, muc) {
     if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
       var body = $stanza.find("body");
       if (body.length > 0 && $stanza.find("delay").length > 0) {
-        // TODO: for now we will just ignore history messages
+        ui.
       }
     }
 
@@ -145,41 +145,6 @@ Muc.fn.topicHistoryHandler = function(ui, muc) {
     return true;
   };
 }
-
-Muc.fn.topicHistoryHandler = function(ui, muc) {
-  var that = this;
-  return function (stanza) {
-    var $stanza = $(stanza);
-    if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
-      var body = $stanza.find("body");
-      if (body.length == 0 && $stanza.find("delay").length > 0 && $stanza.find("subject").length > 0) {
-        ui.topicHistoryHandler($stanza.attr("from"), $stanza.find("subject").text());
-        that.receivedTopic = true;
-      }
-    }
-
-    return true;
-  };
-}
-
-Muc.fn.topicHandler = function(ui, muc) {
-  var that = this;
-  return function (stanza) {
-    var $stanza = $(stanza);
-    if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
-      var body = $stanza.find("body");
-      if (body.length > 0 && $stanza.find("delay").length > 0 && $stanza.find("subject").length > 0) {
-        ui.topicHistoryHandler($stanza.attr("from"), $stanza.find("subject").text());
-        that.receivedTopic = true;
-      }
-    }
-
-    return true;
-  };
-}
-
-//<message xmlns='jabber:client' from='amizade@conference.pylon.local' to='teste@pylon.local/web' type='groupchat'>
-//<subject>a</subject><body>RIKO has set the subject to: a</body></message></body>
 
 Muc.fn.topicChangeHandler = function(ui, muc) {
   var that = this;
