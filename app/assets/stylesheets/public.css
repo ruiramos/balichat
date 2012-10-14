@@ -54,12 +54,16 @@ ul .pending {padding:1px 6px; margin:0 12px; background:#a6a6a6; border-radius: 
 /* Filters */
 #filters {}
 #filters a {color:black;}
-#filters li.active a {color:white; background-color:#666;}
+#filters li.active a {color:white;background-color:#666}
 
 /* ChatRoom */
 .chat-muc-messages .row-fluid {padding:0 5px}
-h3.topic { font-size:0.85em; text-transform: uppercase; color:#666; padding: 0px;  padding-bottom: 4px; border-bottom:1px solid #ccc; line-height: 16px;margin:16px 0 0; }
-h3.topic span {font-style: italic;}
+h3 {padding:6px 0 2px 5px !important}
+h3.topic {font-size:0.85em;text-transform:uppercase;color:#666;padding-bottom:4px;border:1px solid #fff;border-bottom:1px solid #ccc;line-height:16px;margin:16px 0 0}
+h3.topic.editable:hover {border:1px dashed #eee;cursor:text}
+h3.topic.edit input.topic {margin:0;text-transform:uppercase;color:#666;font-size:0.95em;font-weight:bold}
+h3.topic.edit a {text-transform:none;font-weight:bold}
+h3.topic span {font-style: italic}
 
 /* Messages */
 .message {overflow:auto;border-top:1px solid #ddd;background:white;padding:10px 0}
