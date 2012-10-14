@@ -15,7 +15,8 @@
   </div>
 
   <div class="span8 chat-column">
-    <h3 id="topic-amizade" class="topic">&nbsp;</h3>
+    <h3 id="topic-amizade" class="topic">No topic</h3>
+    <h3><%= text_field_tag :topic %></h3>
 
     <div class="chat-window scroll-pane" id="muc-amizade">
       <div class="chat-muc-messages">
@@ -117,6 +118,8 @@
 
     jabber = new Jabber();
     jabber.connect('<%= @jid %>', '<%= @sid %>', '<%= @rid %>', '<%= JABBER[:host] %>');
+
+    $('.chat-input-field').focus();
 
     // update chat-window size
     $(window).resize(function(){
