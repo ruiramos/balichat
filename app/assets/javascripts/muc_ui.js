@@ -200,10 +200,31 @@ MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
   this.lastMessageFrom = $(stanza).attr('from');
 }
 
+MucUi.fn.presenceHandler = function(muc, nick, status, type) {
+  var $user = $('ul.users').find('li[title="'+nick+'"]');
+  var $status = $user.find('.img-polaroid');
+  var klass = 'online-placeholder';
+
+  $status.removeClass('online-placeholder');
+  $status.removeClass('away-placeholder');
+  $status.removeClass('offline-placeholder');
+
+  if (type == gui.status.away || type == gui.status.xa || type == gui.status.dnd) {
+    $status.addClass('away-placeholder');
+  } else if (type == gui.status.online) {
+    $status.addClass('online-placeholder');
+  } else if (type == gui.status.online) {
+    $status.addClass('offline-placeholder');
+  }
+}
+
 MucUi.fn.mucRosterHandler = function(stanza, muc, nick, text) {
   var users = this.roster.find('ul.users');
-
   var $user = $('#empty-user').clone();
+
+  $user.removeAttr('id');
+  $user.attr('title', nick);
+  $user.removeClass('hide');
   $user.find('.user-name').text(nick);
   $(users).append($user);
   $user.show();

@@ -1,10 +1,11 @@
 var Ui = function() {
   this.status = {
-    online: "Available",
-    away: "Away",
-    xa: "Not available",
-    dnd: "Busy",
-    chat: "Free for chat"
+    online: 'Available',
+    away: 'Away',
+    xa: 'Not available',
+    dnd: 'Busy',
+    chat: 'Free for chat',
+    unavailable: 'Offline'
   }
 
   this.notifications = {
