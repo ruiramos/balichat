@@ -83,9 +83,11 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
 }
 
 MucUi.fn.doReplacements = function(text) {
-  if (text.match(/(?:^|\s)https?:\/\//)) {
+  if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:vimeo.com|youtube.com)\//)) {
     text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
     text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>');
+    text += "<br/><small>Fodasse!</small>";
+  }else{
     text = linkify(text);
   }
 
