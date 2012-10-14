@@ -39,7 +39,8 @@ ul .pending {padding:1px 6px; margin:0 12px; background:#a6a6a6; border-radius: 
 .users div.userimg {border-radius:2px; background-position: 0 0;background-size:18px 18px !important}
 .users div.online-placeholder {background-color:#3CC248; border-color:#38b143; }
 .users div.offline-placeholder {background-color:#999; border-color:#666; }
-.users span.user-name, .users span.concierge {line-height:22px;margin-left:8px;}
+.users div.away-placeholder {background-color:yellow; border-color:#C4C400; } 
+.users span.user-name, .users span.concierge {line-height:22px;margin-left:6px;}
 .users span.offline-user {color:#bbb;}
 
 /* Search */
@@ -78,8 +79,11 @@ height:32px;width:32px;border-radius:2px;float:right;}
 .message.system a {color:#5E6302; font-weight: bold; text-decoration: underline;}
 
 .message.system.user-joins {background:#ECFFEE;border-color:#C2F3C7;}
+.message.system.user-joins .text {color:#333;}
 .message.system.user-leaves {background:#FFF2F2;border-color:#FADFDF;}
- 
+ .message.system.user-leaves .text {color:#333;}
+
+
  div.scroll-pane {overflow:auto;overflow-x:hidden}
 
 div.chat-input table {width:100%;margin-top:10px;}

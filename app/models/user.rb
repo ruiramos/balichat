@@ -30,6 +30,7 @@ class User < ActiveRecord::Base
   end
 
   def create_user_on_ejabberd
+    Rails.logger.debug "#{JABBER[:ejabberdctl]} register #{self.jid} #{JABBER[:host]} #{self.jabber_password}"
     ok = system "#{JABBER[:ejabberdctl]} register #{self.jid} #{JABBER[:host]} #{self.jabber_password}"
     raise "Error registering user" if !ok
   end
