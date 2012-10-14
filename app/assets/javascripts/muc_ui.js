@@ -108,23 +108,13 @@ MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
 }
 
 MucUi.fn.mucRosterHandler = function(stanza, muc, nick, text) {
+  this.appendNotification('Adicionando '+nick+' na lista!', null);
   var users = this.roster.find('ul.users');
 
-  var $li = $('<li></li>').addClass('user');
-  var $div = $('<div></div>');
-  $div.addClass('online-placeholder').addClass('img-rounded').addClass('img-polaroid');
+  var $user = $('#empty-user').clone().show();
+  $user.find('.user-name').text(nick);
 
-  $innerDiv = $('<div></div>').addClass('userimg');
-  $innerDiv.css('background', "url('/assets/default-avatar.png')");
-  $div.append($innerDiv);
-
-  $span = $('<span></span>').addClass('user-name').addClass('online-user');
-  $span.text(nick);
-
-  $li.append($div);
-  $li.append($span);
-
-  $(users).append($li);
+  $(users).append($user);
 }
 
 MucUi.fn.sendTopicNotification = function(nick, topic, printNotification) {
