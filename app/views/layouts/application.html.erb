@@ -8,8 +8,10 @@
 </head>
 
 <body>
-  <div id="header" class="container-fluid row-fluid">
-    <h1 class="span2"><a class="brand" href="#">Balichat</a></h1>
+  <div class="container-fluid">
+    <div id="header" class="row-fluid">
+    
+    <div class="span2"><h1><a class="brand" href="#">Balichat</a></h1></div>
 
     <ul class="span8 nav nav-pills">
       <li class="active"><a href="#">Amizade</a> <a href="#"><i class="icon-remove icon-white"></i></a></li>
@@ -18,20 +20,20 @@
     </ul>
      
     <div class="span2 settings">  
-      <p class="">
         <% if user_signed_in? %>
           Logged in as <%= current_user %>
           <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "navbar-link" %>
         <% else %>
           <%= link_to "Log in", new_user_session_path, class: "navbar-link" %>
         <% end %>
-      </p>
-      <p class=""><a href="#" class="navbar-link">Settings</a></p>
-    </div>  
+        <a href="#" class="navbar-link">Settings</a>
+    </div> 
   </div>
 
-  <div class="container-fluid container-main">
+  <div class="row-fluid content-row">
     <%= yield %>
   </div>
+
+</div>
 </body>
 </html>

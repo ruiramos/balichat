@@ -1,7 +1,7 @@
-<div class="row-fluid">
-  <div class="span2 right-column">
+<div class="span2">
+  <div class="left-column">
     <div class="filters box" id="filters-amizade">
-      <h3>Content<span class="pull-right"><img src="/assets/collapse.png" alt=""></span></h3>
+      <h3>Content</h3>
       <ul id="filters" class="box-content nav nav-pills nav-stacked">
         <li class="active"><a href="#">All</a></li>
         <li><a href="#">Links</a></li>
@@ -11,13 +11,69 @@
         <li><a href="#">Alerts<span class="pending">14</span></a></li>
       </ul>
     </div>  
+   </div>
   </div>
 
-  <div class="span8">
+  <div class="span8 chat-column">
     <h3 id="topic-amizade" class="topic">&nbsp;</h3>
 
     <div class="chat-window scroll-pane" id="muc-amizade">
-      <div class="chat-muc-messages"></div>
+      <div class="chat-muc-messages">
+
+      <div class="message">
+        <div class="message-avatar"><img src="/assets/default-avatar.png" alt=""></div>
+        <div class="message-content">
+          <p class="nick">Tiago Pinto</p>
+          <p class="text">foooooodasss... ta sick essa merda!!! lolol Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod...</p>
+        </div>
+      </div>
+
+      <div class="message">
+        <div class="message-avatar"><img src="/assets/default-avatar.png" alt=""></div>
+        <div class="message-content">
+          <p class="nick">Ricardo Otero</p>
+          <p class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat.</p>
+        </div>
+      </div>
+
+    <div class="message">
+        <div class="message-avatar"><img src="/assets/default-avatar.png" alt=""></div>
+        <div class="message-content">
+          <p class="nick">Ricardo Otero</p>
+          <p class="text"> Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+      </div>
+
+      <div class="message own">
+        <div class="message-avatar"><img src="/assets/default-avatar.png" alt=""></div>
+        <div class="message-content">
+          <p class="nick">Rui Ramos</p>
+          <p class="text">Tens razão!</p>
+        </div>
+      </div>
+
+      <div class="message">
+        <div class="message-avatar"><img src="/assets/default-avatar.png" alt=""></div>
+        <div class="message-content">
+          <p class="nick">Ricardo Otero</p>
+          <p class="text">:)</p>
+        </div>
+      </div>
+
+      <div class="message">
+        <div class="message-avatar"><img src="/assets/default-avatar.png" alt=""></div>
+        <div class="message-content">
+          <p class="nick">Tiago Pinto</p>
+          <p class="text">putas</p>
+        </div>
+      </div>
+
+      </div>
     </div>
     
     <div class="chat-input form-inline">
@@ -25,14 +81,15 @@
         <tbody>
           <tr>
             <td><%= text_area :input, '', class: 'chat-input-field', rows: 2 %></td>
-            <td><%= link_to_function 'Send', 'return false', class: 'btn btn-info btn-send' %></td>
+            <td class="btn-send-td"><%= link_to_function 'Send', 'return false', class: 'btn btn-info btn-send' %></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <div class="span2 left-column">
+  <div class="span2">
+    <div class="right-column">
     <div class="user-list box" id="user-list-amizade">
       <h3>Users</h3>
       <ul id="" class="users box-content unstyled">
@@ -47,21 +104,16 @@
 
     <div class="search box" id="search-amizade">
       <h3>Search</h3>
-      <form class="form-search">
-        <div class="input-append box-content">
-          <input type="text" class="span10 search-query">
-          <button type="submit" class="btn"><i class="icon-search"></i></button>
-        </div>
-      </form>    
+      <div class="input-append box-content">
+        <input class="" id="appendedInputButtons" type="text">
+        <button class="btn" type="button"><i class="icon-search"></i></button>
+      </div>
     </div>
 
     <div class="timeline box" id="timeline-amizade">
       <h3>Timeline</h3>
     </div>
-  
-
   </div>
-
 </div>
 
 <script type="text/javascript">
@@ -74,5 +126,14 @@
 
     jabber = new Jabber();
     jabber.connect('<%= @jid %>', '<%= @sid %>', '<%= @rid %>');
+
+    // update chat-window size
+    $(window).resize(function(){
+      h = $(window).height()-150;
+      $(".chat-window").css("height", h);
+      $(".chat-window").css("width", $(".chat-column").css("width"));
+    });
+    $(window).resize();
+
   });
 </script>
