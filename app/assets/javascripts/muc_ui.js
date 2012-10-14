@@ -105,7 +105,7 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
   else {
     var $newParagraph = jQuery("<p></p>").html(text).addClass('text');
     this.lastMessageElement.find('.text').last().after($newParagraph);
-    this.appendToMuc();
+    this.appendToMuc(null, jabber.isOwnMessage(message));
   }
 }
 
