@@ -59,17 +59,25 @@ h3.topic span {font-style: italic;}
 /* Messages */
 .message {overflow:auto;border-bottom:1px solid #ddd;background:white;padding:10px 0}
 .message.own {background:#f4f7fb;border-bottom:1px solid #cfdcef}
+.message.system {background:#FEFFF2;border-bottom:1px solid #D9DD8C}
+.message.old {background:white;border-bottom:1px solid #ddd}
+
 .message-avatar {width:100%;background:url(/assets/default-avatar.png) 100% 0 no-repeat;height:32px;background-size:32px 32px}
-.message-content .nick { font-weight: bold; float:left;line-height: 12px;height: 20px;}
-.message-content .timestamp {color:#ccc; float:right; font-size:0.85em;line-height: 12px;height: 20px;}
+.message-content .nick { font-weight: bold; float:left;line-height: 12px;height: 14px;}
+.message-content p.timestamp {color:#ccc; float:right; font-size:0.85em;line-height: 10px;height: 12px;margin-right:12px;}
 .message-content .text {clear:both;}
 .message-content p {margin:0;}
 .message .nick { color:#0a79b1}
-.message.own .nick {color:#333}
+.message.own .nick,.message.old .nick {color:#333}
 
+.message.system .nick{color:#5E6302}
+.message.system .text{font-weight: normal;font-style: italic; color:#5E6302;font-family: Georgia}
+.message.system .message-content span.timestamp {float:none;margin:0;font-weight: bold;font-size:0.9em;} 
+.message.system a {color:#5E6302; font-weight: bold; text-decoration: underline;}
+ 
 div.scroll-pane {overflow:auto;overflow-x:hidden}
 
-div.chat-input table {width:100%;margin-top:2px;}
+div.chat-input table {width:100%;margin-top:10px;}
 .chat-input .btn-send {float:right;width:30px; height:40px;line-height: 40px;}
 .chat-input .btn-send-td {width:80px;}
 .chat-input-field {width:100%}
