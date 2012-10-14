@@ -5,6 +5,7 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 config/ejabberd.yml
+config/s3.yml
 
 # Ignore Mac OS X DS_Store
 .DS_Store
