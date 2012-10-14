@@ -51,5 +51,5 @@ Jabber.fn.connect = function(jid, sid, rid, host) {
   this.jid = jid;
   connection.attach(jid, sid, rid, this.onAttach);
 
-  this.muc = new MucUi(connection, 'amizade@conference.'+host, jid);
+  this.muc = new MucUi(connection, 'amizade@conference.'+host, Strophe.getNodeFromJid(jid));
 }
