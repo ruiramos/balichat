@@ -33,12 +33,9 @@ $(document).ready(function () {
       if(text.length){
         window.muc.sendMessage(text);
       }
-
+      
       $(this).val("");
       return false;
     }
   });
-
-
-
 });
