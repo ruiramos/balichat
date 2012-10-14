@@ -71,7 +71,7 @@ h3.topic span {font-style: italic;}
 .avatar-placeholder {background:url(/assets/default-avatar.png) 100% 0 no-repeat;background-size:32px 32px;
 height:32px;width:32px;border-radius:2px;float:right;}
 .message-content .nick { font-weight: bold; float:left;line-height: 12px;height: 14px;}
-.message-content p.timestamp {color:rgba(0,0,0,0.1);font-weight:bold;float:right; font-size:0.85em;line-height: 10px;height: 12px;margin-right:12px;}
+.message-content p.timestamp {color:rgba(0,0,0,0.2);font-weight:bold;float:right; font-size:0.85em;line-height: 10px;height: 12px;margin-right:12px;}
 .message-content .text {clear:both;}
 .message-content p {margin:0;}
 .message .nick { color:#0a79b1}
@@ -92,10 +92,11 @@ height:32px;width:32px;border-radius:2px;float:right;}
 .message.old .avatar-placeholder {opacity:0.5;}
 .message.old a {color:#777;}
 
-small.link-source {display:block;overflow:auto;font-size: 85%;display: block;line-height: 20px;min-height: 20px;opacity:0.7;}
+small.link-source {display:block;overflow:auto;font-size: 85%;display: block;line-height: 15px;min-height: 20px;
+opacity:0.7;background: url('/assets/link_icon.gif') 0 0 no-repeat;padding-left: 20px;}
 img.embedded {max-width:90%; max-height:500px}
 iframe.noEmbedds, img.noEmbedds {display:none;}
-small.link-source.noEmbedds {font-size:100%;opacity:1;}
+small.link-source.noEmbedds {font-size:100%;opacity:1;background:none;padding:0;}
 
 div.scroll-pane {overflow:auto;overflow-x:hidden}
 

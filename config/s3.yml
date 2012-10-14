@@ -1,0 +1,14 @@
+development:
+  bucket: balichat_dev
+  aws_access_key: OMGLOL
+  aws_secret: OMGLOL
+
+test:
+  bucket: balichat_test
+  aws_access_key: OMGLOL
+  aws_secret: OMGLOL
+
+production:
+  bucket: balichat_prod
+  aws_access_key: OMGLOL
+  aws_secret: OMGLOL
