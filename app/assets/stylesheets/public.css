@@ -53,16 +53,18 @@ ul .pending {padding:1px 6px; margin:0 12px; background:#a6a6a6; border-radius: 
 
 /* ChatRoom */
 .chat-muc-messages .row-fluid {padding:0 5px}
-h3.topic { font-size:0.85em; text-transform: uppercase; color:#666; padding: 0px;  padding-bottom: 4px; border-bottom:1px solid #ccc; line-height: 16px;margin:16px 0 4px; }
+h3.topic { font-size:0.85em; text-transform: uppercase; color:#666; padding: 0px;  padding-bottom: 4px; border-bottom:1px solid #ccc; line-height: 16px;margin:16px 0 0; }
 h3.topic span {font-style: italic;}
 
 /* Messages */
-.message {overflow:auto;border-bottom:1px solid #ddd;background:white;padding:10px 0}
-.message.own {background:#f4f7fb;border-bottom:1px solid #cfdcef}
-.message.system {background:#FEFFF2;border-bottom:1px solid #D9DD8C}
-.message.old {background:white;border-bottom:1px solid #ddd}
+.message {overflow:auto;border-top:1px solid #ddd;background:white;padding:10px 0}
+.message.own {background:#f4f7fb;border-color:#cfdcef}
+.message.system {background:#FEFFF2;border-color:#E2E69A}
+.message.old {background:white;border-color:#ddd}
 
-.message-avatar {width:100%;background:url(/assets/default-avatar.png) 100% 0 no-repeat;height:32px;background-size:32px 32px}
+.message-avatar {width:100%;}
+.avatar-placeholder {background:url(/assets/default-avatar.png) 100% 0 no-repeat;background-size:32px 32px;
+height:32px;width:32px;border-radius:2px;float:right;}
 .message-content .nick { font-weight: bold; float:left;line-height: 12px;height: 14px;}
 .message-content p.timestamp {color:#ccc; float:right; font-size:0.85em;line-height: 10px;height: 12px;margin-right:12px;}
 .message-content .text {clear:both;}
@@ -74,8 +76,11 @@ h3.topic span {font-style: italic;}
 .message.system .text{font-weight: normal;font-style: italic; color:#5E6302;font-family: Georgia}
 .message.system .message-content span.timestamp {float:none;margin:0;font-weight: bold;font-size:0.9em;} 
 .message.system a {color:#5E6302; font-weight: bold; text-decoration: underline;}
+
+.message.system.user-joins {background:#ECFFEE;border-color:#C2F3C7;}
+.message.system.user-leaves {background:#FFF2F2;border-color:#FADFDF;}
  
-div.scroll-pane {overflow:auto;overflow-x:hidden}
+ div.scroll-pane {overflow:auto;overflow-x:hidden}
 
 div.chat-input table {width:100%;margin-top:10px;}
 .chat-input .btn-send {float:right;width:30px; height:40px;line-height: 40px;}
