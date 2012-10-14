@@ -59,8 +59,9 @@ h3.topic span {font-style: italic;}
 .message {overflow:auto;border-bottom:1px solid #ddd;background:white;padding:10px 0}
 .message.own {background:#f4f7fb;border-bottom:1px solid #cfdcef}
 .message-avatar {width:100%;background:url(/assets/default-avatar.png) 100% 0 no-repeat;height:32px;background-size:32px 32px}
-.message-content .nick { font-weight: bold;}
-.message p.nick, p.text {margin:0;}
+.message-content .nick { font-weight: bold; float:left;margin:0;}
+.message-content .timestamp {color:#ccc; float:right; font-size:0.85em;margin-bottom:2px;}
+.message-content .text {clear:both;margin:0;}
 .message .nick { color:#0a79b1}
 .message.own .nick {color:#333}
 
