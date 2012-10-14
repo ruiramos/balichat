@@ -111,26 +111,28 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
 MucUi.fn.doReplacements = function(text) {
   var $container = $('<div/>');
   var source = text;
-  
+  var hiddenClass = '';
+  if($('#expand-embeds').attr("checked")!="checked") hiddenClass = 'noEmbedds';
+
   if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:vimeo.com)\//)) { // vimeo video embedd
-    $container.append(text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" class="ebedded" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));  
-    $container.append("<small class='link-source'>"+linkify(source)+"</small>");
+    $container.append(text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" class="embedded '+hiddenClass+'" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));  
+    $container.append("<small class='link-source "+hiddenClass+"'>"+linkify(source)+"</small>");
 
 
   } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:youtube.com)\//)) { // youtube video embedd
-    $container.append(text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" class="ebedded" frameborder="0" allowfullscreen></iframe>'));
-    $container.append("<small class='link-source'>"+linkify(source)+"</small>");
+    $container.append(text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" class="embedded '+hiddenClass+'" frameborder="0" allowfullscreen></iframe>'));
+    $container.append("<small class='link-source "+hiddenClass+"'>"+linkify(source)+"</small>");
 
 
-  } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(.*)(\.jpg|\.png|\.gif|\.bmp)/)) { //image embedd
-    var img = $("<img class='embedded' src='"+text+"'>");
+  } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(.*)(\.jpg|\.png|\.gif|\.bmp|)/i)) { //image embedd
+    var img = $("<img class='embedded "+hiddenClass+"' src='"+text+"'>");
     $(img).load(function() {
       window.muc.ui.api.reinitialise();
       window.muc.ui.api.scrollToBottom();
     });
 
     $container.append(img);
-    $container.append("<small class='link-source'>"+linkify(source)+"</small>");
+    $container.append("<small class='link-source "+hiddenClass+"'>"+linkify(source)+"</small>");
   
   } else {
     $container.append(linkify(text));

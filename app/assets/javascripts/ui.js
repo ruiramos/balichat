@@ -31,8 +31,11 @@ Ui.fn.expandEmbeds = function() {
 
   if($('#expand-embeds').attr("checked")!="checked"){ 
     $('.embedded').hide();
+    $('small.link-source').addClass('noEmbedds');
+
   } else {
     $('.embedded').show();
+    $('small.link-source').removeClass('noEmbedds');
   }
 
 window.muc.ui.api.reinitialise();

@@ -82,17 +82,20 @@ height:32px;width:32px;border-radius:2px;float:right;}
 .message.system .message-content span.timestamp {float:none;margin:0;font-weight: bold;font-size:0.9em;} 
 .message.system a {color:#5E6302; font-weight: bold;}
 
-.message.system.user-joins {background:#F5FFF6;border-color:#D4F0D7;}
-.message.system.user-joins .text, .message.system.user-leaves .text {color:#333;float:left;clear:none;}
-.message.system.user-leaves {background:#FCF7F7;border-color:#FDE2E2;}
+.message.system.user-joins {background:white;border-color:#D4F0D7;}
+.message.system.user-joins .text {color:#008800;float:left;clear:none}
+.message.system.user-leaves .text {color:#A00000;float:left;clear:none;}
+.message.system.user-leaves {background:white;border-color:#FDE2E2;}
 
 .message.old .text {color:#999;}
 .message.old .nick {color:#777;}
 .message.old .avatar-placeholder {opacity:0.5;}
 .message.old a {color:#777;}
 
-small.link-source {font-size: 85%;display: block;line-height: 20px;height: 20px;opacity:0.7;}
+small.link-source {display:block;overflow:auto;font-size: 85%;display: block;line-height: 20px;min-height: 20px;opacity:0.7;}
 img.embedded {max-width:90%; max-height:500px}
+iframe.noEmbedds, img.noEmbedds {display:none;}
+small.link-source.noEmbedds {font-size:100%;opacity:1;}
 
 div.scroll-pane {overflow:auto;overflow-x:hidden}
 
