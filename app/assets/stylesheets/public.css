@@ -34,7 +34,7 @@ ul .pending {padding:1px 6px; margin:0 12px; background:#a6a6a6; border-radius: 
 .users img.info {margin-top:12px;}
 .users li div { width:32px; height:32px;}
 .users li > div {padding:2px; float:left;}
-.users div.userimg {border-radius: 5px; background-position: 0 0; }
+.users div.userimg {border-radius: 5px; background-position: 0 0;background-size:32px 32px !important}
 .users div.online-placeholder {background-color:#3CC248; border-color:#38b143; }
 .users div.offline-placeholder {background-color:#999; border-color:#666; }
 .users span.user-name, .users span.concierge {line-height:38px;margin-left:8px;}

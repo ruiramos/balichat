@@ -42,8 +42,6 @@ MucUi.fn.appendMessage = function(nick, message) {
   var from = $(message).attr('from');
   var text = $(message).find('body').text();
 
-  console.debug(text);
-
   // FIXME: POR ISTO NOUTRO SITIO
   if(text.match(/(?:^|\s)https?:\/\//)){
     text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
@@ -51,7 +49,7 @@ MucUi.fn.appendMessage = function(nick, message) {
   }
 
   var element = "<p><span>&lt;"+nick+"&gt;</span> "+text+"</p>";
-  this.appendToMuc(element, Jabber.isOwnMessage(message));
+  this.appendToMuc(element, jabber.isOwnMessage(message));
 }
 
 MucUi.fn.appendNotification = function(text, type) {

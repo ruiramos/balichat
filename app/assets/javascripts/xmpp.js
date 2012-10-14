@@ -7,10 +7,9 @@ var Jabber = function() {
 
 Jabber.fn = Jabber.prototype;
 
-Jabber.isOwnMessage = function(message) {
-  //var from = $(message).attr('from');
-  //return (Strophe.getBareJidFromJid(from) == this.jid);
-  return false;
+Jabber.fn.isOwnMessage = function(message) {
+  var from = $(message).attr('from');
+  return (Strophe.getResourceFromJid(from) == this.jid);
 }
 
 Jabber.fn.onAttach = function(status) {
@@ -54,5 +53,5 @@ Jabber.fn.connect = function(jid, sid, rid) {
   this.jid = jid;
   connection.attach(jid, sid, rid, this.onAttach);
 
-  this.muc = new MucUi(connection, 'amizade@conference.pylon.local', jid);
+  this.muc = new MucUi(connection, 'amizade@conference.aeronave.local', jid);
 }

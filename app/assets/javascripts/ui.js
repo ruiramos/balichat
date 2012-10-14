@@ -27,7 +27,13 @@ $(document).ready(function () {
   $('.chat-input-field').keydown(function (e) {
     if (e.keyCode == 13) {
       var text = $(this).val();
-      window.muc.sendMessage(text);
+
+      text = $.trim(text);
+
+      if(text.length){
+        window.muc.sendMessage(text);
+      }
+
       $(this).val("");
 
       return false;
