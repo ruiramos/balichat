@@ -93,31 +93,6 @@ MucUi.fn.scrollBottom = function() {
 }
 
 MucUi.fn.joinHandler = function(stanza, muc, nick, text) {
-  //if (this.roster) {
-  //  var rosteritem = document.createElement("div");
-  //  rosteritem.setAttribute("class", "rosteritem");
-  //  rosteritem.innerHTML = "<span class='statusindicator'>&bull;</span>&nbsp;<span>" + gui.htmlescape(nick) + "</span>";
-//
-  //  var nicks = roster.childNodes;
-  //  var added = false;
-//
-  //  for (var i = 0; i<nicks.length; i++) {
-  //    if (nicks[i].nodeType == 1) {
-  //      var thisnick = nicks[i].childNodes[2].childNodes[0].nodeValue;
-  //      if (thisnick.toLowerCase() > nick.toLowerCase()) {
-  //        roster.insertBefore(rosteritem, nicks[i]);
-  //        added = true;
-  //        break;
-  //      }
-  //    }
-  //  }
-//
-  //  if (!added) {
-  //    roster.appendChild(rosteritem);
-  //  }
-  //  muc.occupants[nick].rosteritem = rosteritem;
-  //}
-
   this.appendNotification(nick + " joined the room.", gui.notifications.join);
 }
 
@@ -133,10 +108,6 @@ MucUi.fn.historyHandler = function(stanza, muc, nick, message) {
 }
 
 MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
-  //if (options.detect_focus && !muc.window_focused) {
-  //  muc.unread_messages++;
-  //  document.title = " ("+muc.unread_messages+") " + original_title;
-  //}
   this.appendMessage(nick, stanza, moment().format("YYYY-MM-DDTHH:mm:ss"));
   this.lastMessageFrom = $(stanza).attr('from');
 }
