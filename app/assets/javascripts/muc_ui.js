@@ -208,7 +208,7 @@ MucUi.fn.mucRosterHandler = function(stanza, muc, nick, text) {
 }
 
 MucUi.fn.sendTopicNotification = function(nick, topic, printNotification) {
-  var newStr = nick+" changed room topic to: "+topic;
+  var newStr = "<strong>"+nick+"</strong> changed room topic to: "+topic;
 
   if (printNotification) {
     this.appendNotification(newStr, gui.notifications.topic);
