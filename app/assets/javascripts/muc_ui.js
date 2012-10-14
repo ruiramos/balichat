@@ -116,7 +116,6 @@ MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
 }
 
 MucUi.fn.mucRosterHandler = function(stanza, muc, nick, text) {
-  this.appendNotification('Adicionando '+nick+' na lista!', null);
   var users = this.roster.find('ul.users');
 
   var $user = $('#empty-user').clone();
