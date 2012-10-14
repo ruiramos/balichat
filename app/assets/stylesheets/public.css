@@ -64,7 +64,7 @@ h3.topic span {font-style: italic;}
 .message {overflow:auto;border-top:1px solid #ddd;background:white;padding:10px 0}
 .message.own {background:#f4f7fb;border-color:#cfdcef}
 .message.system {background:#FEFFF2;border-color:#E2E69A}
-.message.old {background:white;border-color:#ddd}
+.message.old {background:#fafafa;border-color:#ddd}
 
 .message-avatar {width:100%;}
 .avatar-placeholder {background:url(/assets/default-avatar.png) 100% 0 no-repeat;background-size:32px 32px;
@@ -82,14 +82,13 @@ height:32px;width:32px;border-radius:2px;float:right;}
 .message.system a {color:#5E6302; font-weight: bold;}
 
 .message.system.user-joins {background:#F5FFF6;border-color:#D4F0D7;}
-.message.system.user-joins .text {color:#333;}
+.message.system.user-joins .text, .message.system.user-leaves .text {color:#333;float:left;clear:none;}
 .message.system.user-leaves {background:#FCF7F7;border-color:#FDE2E2;}
-.message.system.user-leaves .text {color:#333;}
 
 .message.old .text {color:#999;}
 .message.old .nick {color:#777;}
 .message.old .avatar-placeholder {opacity:0.5;}
-.message.old a {color:#333;}
+.message.old a {color:#777;}
 
  div.scroll-pane {overflow:auto;overflow-x:hidden}
 
