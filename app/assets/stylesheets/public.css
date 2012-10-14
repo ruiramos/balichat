@@ -40,7 +40,8 @@ ul .pending {padding:1px 6px; margin:0 12px; background:#a6a6a6; border-radius: 
 .users div.online-placeholder {background-color:#3CC248; border-color:#38b143; }
 .users div.offline-placeholder {background-color:#999; border-color:#666; }
 .users div.away-placeholder {background-color:yellow; border-color:#C4C400; } 
-.users span.user-name, .users span.concierge {line-height:22px;margin-left:6px;}
+.users div.user-name-container {width:130px}
+.users span.user-name, .users span.concierge {line-height:22px;margin-left:6px;white-space:nowrap;width:100%;overflow:hidden;text-overflow:ellipsis;display:inline-block}
 .users span.offline-user {color:#bbb;}
 
 /* Search */

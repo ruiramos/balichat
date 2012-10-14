@@ -16,6 +16,10 @@ var Ui = function() {
 
 Ui.fn = Ui.prototype;
 
+Ui.fn.insertBreaks = function(text) {
+  return text.replace(/\n/, "<br>");
+}
+
 Ui.fn.htmlescape = function(text) {
   return text.replace(/&/g,'&amp;').
               replace(/>/g,'&gt;').
