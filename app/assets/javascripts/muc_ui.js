@@ -2,6 +2,7 @@ var MucUi = function(connection, jid, nick) {
   var muc = {}; // make muc an object from the start. Needed by muc.window_focused focus tracking.
   var that = this;
   var handlers = {};
+  this.lastMessageFrom = "";
   this.roster = $('#user-list-'+Strophe.getNodeFromJid(jid));
   this.topicDiv = $('#topic-'+Strophe.getNodeFromJid(jid));
 
@@ -19,10 +20,11 @@ var MucUi = function(connection, jid, nick) {
 
 MucUi.fn = MucUi.prototype;
 
-MucUi.fn.appendToMuc = function() {
-  return this.api;
-}
-
+/**
+ * Updates the muc message area with a new message. If called with no arguments
+ * it will just do the scrolling stuff, because we are adding something that is not
+ * a chat row. This happens when adding new paragraph on existing message.
+ */
 MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   var scrollBottom = true;
 
@@ -30,10 +32,13 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
     scrollBottom = false;
   }
 
-  $('.chat-muc-messages').append(element)
+  if (element != null) {
+    $('.chat-muc-messages').append(element)
+  }
+
   this.updateChatWindow();
 
-  if (scrollBottom == true || isOwnMessage) {
+  if (element != null || scrollBottom == true || isOwnMessage) {
     this.scrollBottom();
   }
 }
@@ -48,16 +53,26 @@ MucUi.fn.appendMessage = function(nick, message) {
     text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>');
   }
 
-  var $element = $('#empty-message').clone();
-  $element.find('.nick').text(nick);
-  $element.find('.text').text(text);
-  $element.show();
-  
-  if (jabber.isOwnMessage(message)) {
-    $element.find('.message').addClass('own');
-  }
+  if (from != this.lastMessageFrom) {
+    var $element = $('#empty-message').clone();
+    $element.find('.nick').text(nick);
+    $element.find('.text').text(text);
+    $element.show();
 
-  this.appendToMuc($element, jabber.isOwnMessage(message));
+    if (jabber.isOwnMessage(message)) {
+      $element.find('.message').addClass('own');
+    }
+  } else {
+    var $oldElement = $('.chat-muc-messages .message-content .text').last();
+  }
+  
+  if (from != this.lastMessageFrom) {
+    this.appendToMuc($element, jabber.isOwnMessage(message));
+  } else {
+    var $newParagraph = $oldElement.clone().text(text)
+    $oldElement.after($newParagraph);
+    this.appendToMuc();
+  }
 }
 
 MucUi.fn.appendNotification = function(text, type) {
@@ -113,6 +128,7 @@ MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
   //}
 
   this.appendMessage(nick, stanza);
+  this.lastMessageFrom = $(stanza).attr('from');
 }
 
 MucUi.fn.mucRosterHandler = function(stanza, muc, nick, text) {
