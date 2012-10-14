@@ -24,7 +24,7 @@ var MucUi = function(connection, jid, nick) {
 MucUi.fn = MucUi.prototype;
 
 /**
- * Updates the muc message area with a new message. If called with no arguments
+ * Updates the muc message area with a new element. If called with no arguments
  * it will just do the scrolling stuff, because we are adding something that is not
  * a chat row. This happens when adding new paragraph on existing message.
  */
@@ -46,20 +46,20 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   }
 }
 
+/**
+ * Updates the muc message area with a new message.
+ */
 MucUi.fn.appendMessage = function(nick, message, timestamp) {
   var from = $(message).attr('from');
   var text = $(message).find('body').text();
 
-  // FIXME: POR ISTO NOUTRO SITIO
-  if(text.match(/(?:^|\s)https?:\/\//)){
-    text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
-    text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>');
-  }
+  // Replace links, youtube clips, etc.
+  text = this.doReplacements(text);
 
   if (from != this.lastMessageFrom) {
     var $element = $('#empty-message').clone();
     $element.find('.nick').text(nick);
-    $element.find('.text').text(text);
+    $element.find('.text').html(text);
     $element.find('.timestamp').text(moment(timestamp).format(this.timeFormat));
     $element.show();
 
@@ -73,10 +73,20 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
   if (from != this.lastMessageFrom) {
     this.appendToMuc($element, jabber.isOwnMessage(message));
   } else {
-    var $newParagraph = $oldElement.clone().text(text)
+    var $newParagraph = $oldElement.clone().html(text)
     $oldElement.after($newParagraph);
     this.appendToMuc();
   }
+}
+
+MucUi.fn.doReplacements = function(text) {
+  if (text.match(/(?:^|\s)https?:\/\//)) {
+    text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
+    text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>');
+    text = linkify(text);
+  }
+
+  return text;
 }
 
 MucUi.fn.appendNotification = function(text, type) {
