@@ -37,6 +37,7 @@ $(function() {
       },
       fail: function(e, data) {
         console.log('fail')
+        console.log(data);
       },
       success: function(data) {
         // Here we get the file url on s3 in an xml doc

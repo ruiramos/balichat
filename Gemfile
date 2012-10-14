@@ -6,7 +6,7 @@ gem 'devise'
 
 gem 'capistrano'
 
-gem "tp-blather", "~> 0.8.5"
+#gem "tp-blather", "~> 0.8.5"
 #gem 'xmpp4r'
 
 group :development do
