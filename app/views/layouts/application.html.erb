@@ -14,14 +14,14 @@
     <div class="span2"><h1><a class="brand" href="#">Balichat</a></h1></div>
 
     <ul class="span8 nav nav-pills">
-      <li class="active"><a href="#">Amizade</a> <a href="#"><i class="icon-remove icon-white"></i></a></li>
-      <li><a href="#">outro</a><i class="icon-remove icon-white"></i></li>
-      <li><a href="#">caralho</a><i class="icon-remove icon-white"></i></li>
+      <li class="active"><a href="#">Demo room</a> <a href="#"><i class="icon-remove icon-white"></i></a></li>
+      <!--<li><a href="#">outro</a><i class="icon-remove icon-white"></i></li>
+      <li><a href="#">caralho</a><i class="icon-remove icon-white"></i></li>-->
     </ul>
      
-    <div class="span2 settings">  
+    <div class="span2 settings-panel">  
         <% if user_signed_in? %>
-          Logged in as <%= current_user %>
+          <%= current_user %>
           <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "navbar-link" %>
         <% else %>
           <%= link_to "Log in", new_user_session_path, class: "navbar-link" %>
