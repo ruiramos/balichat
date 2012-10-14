@@ -4,7 +4,7 @@ Balichat::Application.routes.draw do
   resources :chats
 
   resources :signed_urls, only: :index
-  resources :files
+  resources :documents
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
