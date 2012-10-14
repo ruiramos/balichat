@@ -16,7 +16,6 @@ var MucUi = function(connection, jid, nick) {
 
   muc = new Muc(this, jid, nick);
   muc.unread_messages = 0;
-  muc.window_focused = true;
 
   window.muc = muc;
   return muc;
@@ -107,11 +106,10 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
     this.appendToMuc(null, jabber.isOwnMessage(message));
   }
 
-  // Update titlebar if needed
-  this.setTitleBar();
-}
-
-MucUi.fn.setTitleBar = function() {
+  if (!this.lastMessageElement.find('.message').hasClass('old')) {
+    // Update titlebar if needed
+    gui.setTitleBar();
+  }
 }
 
 MucUi.fn.doReplacements = function(text) {

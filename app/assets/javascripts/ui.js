@@ -13,7 +13,7 @@ var Ui = function() {
     topic: 'topic'
   }
 
-  this.window_focus = true;
+  this.window_focus = false;
 }
 
 Ui.fn = Ui.prototype;
@@ -80,12 +80,27 @@ Ui.fn.topicHandler = function() {
   });
 }
 
-Ui.fn.focusHanler = function() {
+Ui.fn.focusHandler = function() {
   $(window).focus(function() {
-    this.window_focus = true;
+    gui.window_focus = true;
+    gui.clearTitleBar();
   }).blur(function() {
-    this.window_focus = false;
+    gui.window_focus = false;
   });
+}
+
+
+// Title Bar Management
+Ui.fn.setTitleBar = function() {
+  if (!gui.window_focus) {
+    window.muc.unread_messages++;
+    var roomName = Strophe.getNodeFromJid(window.muc.jid);
+    document.title = "("+window.muc.unread_messages+") "+roomName;
+  }
+}
+
+Ui.fn.clearTitleBar = function() {
+  document.title = Strophe.getNodeFromJid(window.muc.jid);;
 }
 
 $(document).ready(function () {
@@ -113,5 +128,5 @@ $(document).ready(function () {
   Ui.fn.topicHandler();
 
   // Add window focus handler
-  Ui.fn.focusHanler();
+  Ui.fn.focusHandler();
 });
