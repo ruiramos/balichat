@@ -29,15 +29,16 @@ html, body { height: 100%; font-size:0.9em;}
 ul .pending {padding:1px 6px; margin:0 12px; background:#a6a6a6; border-radius: 8px; color:white; font-size:0.9em;}
 
 /* Users */
-.users li {padding:4px; cursor: pointer; height:38px;clear:both; border-radius: 5px}
+.users li {padding:4px; cursor: pointer;height:22px;clear:both; border-radius: 5px}
 .users li img {margin-right:4px;}
 .users img.info {margin-top:12px;}
-.users li div { width:32px; height:32px;}
-.users li > div {padding:2px; float:left;}
-.users div.userimg {border-radius: 5px; background-position: 0 0;background-size:32px 32px !important}
+.users li div { width:18px; height:18px}
+.users li > div {padding:2px; float:left}
+.users div.img-polaroid {border-radius:2px;padding:1px}
+.users div.userimg {border-radius:2px; background-position: 0 0;background-size:18px 18px !important}
 .users div.online-placeholder {background-color:#3CC248; border-color:#38b143; }
 .users div.offline-placeholder {background-color:#999; border-color:#666; }
-.users span.user-name, .users span.concierge {line-height:38px;margin-left:8px;}
+.users span.user-name, .users span.concierge {line-height:25px;margin-left:8px;}
 .users span.offline-user {color:#bbb;}
 
 /* Search */
@@ -50,22 +51,20 @@ ul .pending {padding:1px 6px; margin:0 12px; background:#a6a6a6; border-radius: 
 #filters li.active a {color:white; background-color:#666;}
 
 /* ChatRoom */
+.chat-muc-messages .row-fluid {padding:0 5px}
 h3.topic { font-size:0.85em; text-transform: uppercase; color:#666; padding: 0px;  padding-bottom: 4px; border-bottom:1px solid #ccc; line-height: 16px;margin:16px 0 4px; }
 h3.topic span {font-style: italic;}
 
 /* Messages */
-.message {overflow:auto;padding:10px; border-bottom:1px solid #ddd;background:white;}
+.message {overflow:auto;border-bottom:1px solid #ddd;background:white;padding:10px 0}
 .message.own {background:#f4f7fb;border-bottom:1px solid #cfdcef}
-.message-avatar {margin:0 15px;float:left;}
-.message-avatar img { margin:0px auto; border-radius: 5px}
-.message-content {  }
+.message-avatar {width:100%;background:url(/assets/default-avatar.png) 100% 0 no-repeat;height:32px;background-size:32px 32px}
 .message-content .nick { font-weight: bold;}
-p.nick, p.text {margin:0;}
-.nick { color:#0a79b1;}
-.message.own .nick {color:#333;}
+.message p.nick, p.text {margin:0;}
+.message .nick { color:#0a79b1}
+.message.own .nick {color:#333}
 
-.chat-window {width:100%;background:#eee;}
-div.scroll-pane {;overflow:auto;overflow-x:hidden}
+div.scroll-pane {overflow:auto;overflow-x:hidden}
 
 div.chat-input table {width:100%;margin-top:2px;}
 .chat-input .btn-send {float:right;width:30px; height:40px;line-height: 40px;}

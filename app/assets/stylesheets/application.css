@@ -10,6 +10,7 @@
  *
  *= require_self
  *= require bootstrap.min
+ *= require bootstrap-responsive.min
  *= require jquery.jscrollpane
  *= require_tree .
  */
