@@ -6,6 +6,8 @@ var MucUi = function(connection, jid, nick) {
   this.timeFormat = "HH\\hmm";
 
   this.lastMessageFrom = "";
+  this.lastMessageElement = "";
+
   this.roster = $('#user-list-'+Strophe.getNodeFromJid(jid));
   this.topicDiv = $('#topic-'+Strophe.getNodeFromJid(jid));
 
@@ -48,6 +50,23 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   }
 }
 
+MucUi.fn.includeAsParagraph = function(message) {
+  var from = $(message).attr('from');
+  var old = $(message).attr('old');
+  var includeAsParagraph = true;
+  var lastSystem = $(document).find('.message-container').last().attr('id') != null;
+
+  if (from != this.lastMessageFrom) {
+    includeAsParagraph = false;
+  }
+
+  if (lastSystem && old == null) {
+    includeAsParagraph = false;
+  }
+
+  return includeAsParagraph;
+}
+
 /**
  * Updates the muc message area with a new message.
  */
@@ -61,8 +80,9 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
   // Replace links, youtube clips, etc.
   text = this.doReplacements(text);
 
-  if (from != this.lastMessageFrom) {
+  if (this.includeAsParagraph(message) == false) {
     var $element = $('#empty-message').clone();
+    $element.removeAttr('id');
     $element.find('.nick').text(nick);
     $element.find('.text').html(text);
     $element.find('.timestamp').text(moment(timestamp).format(this.timeFormat));
@@ -71,20 +91,20 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
     if (jabber.isOwnMessage(message)) {
       $element.find('.message').addClass('own');
     }
-  } else {
-    var $oldElement = $('.chat-muc-messages .message-content .text').last();
   }
   
-  if (from != this.lastMessageFrom) {
+  // Message from different jid of the last message
+  if (this.includeAsParagraph(message) == false) {
     if ($(message).attr('old')) {
       $element.find('.message').addClass('old');
-      this.appendToMuc($element, jabber.isOwnMessage(message));
-    } else {
-      this.appendToMuc($element, jabber.isOwnMessage(message));
     }
-  } else {
-    var $newParagraph = $oldElement.clone().html(text)
-    $oldElement.after($newParagraph);
+    this.appendToMuc($element, jabber.isOwnMessage(message));
+    this.lastMessageElement = $element;
+  }
+  // Message from the same user as the last one
+  else {
+    var $newParagraph = jQuery("<p></p>").html(text).addClass('text');
+    this.lastMessageElement.find('.text').last().after($newParagraph);
     this.appendToMuc();
   }
 }
