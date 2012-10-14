@@ -100,6 +100,10 @@ MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
   this.appendMessage(nick, stanza);
 }
 
+MucUi.fn.mucRosterHandler = function(stanza, muc, nick, text) {
+
+}
+
 MucUi.fn.sendTopicNotification = function(nick, topic, printNotification) {
   var newStr = nick+" changed room topic to: "+topic;
 

@@ -27,8 +27,6 @@ Jabber.fn.onAttach = function(status) {
 Jabber.fn.onMessage = function(message) {
   var text = $(message).find('body').text();
   var from = $(message).attr('from');
-  
-  gui.appendMucMessage(from, text);
 
   return true;
 }
@@ -36,8 +34,6 @@ Jabber.fn.onMessage = function(message) {
 Jabber.fn.sendMessage = function(jid, text) {
   var message = $msg({to: jid, from: this.jid, type: 'chat'}).c('body').t(text);
   connection.send(message.tree());
-
-  gui.appendMessage(this.jid, text);
 
   return true;
 }
