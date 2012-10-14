@@ -48,8 +48,16 @@ MucUi.fn.appendMessage = function(nick, message) {
     text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>');
   }
 
-  var element = "<p><span>&lt;"+nick+"&gt;</span> "+text+"</p>";
-  this.appendToMuc(element, jabber.isOwnMessage(message));
+  var $element = $('#empty-message').clone();
+  $element.find('.nick').text(nick);
+  $element.find('.text').text(text);
+  $element.show();
+  
+  if (jabber.isOwnMessage(message)) {
+    $element.find('.message').addClass('own');
+  }
+
+  this.appendToMuc($element, jabber.isOwnMessage(message));
 }
 
 MucUi.fn.appendNotification = function(text, type) {
@@ -111,10 +119,10 @@ MucUi.fn.mucRosterHandler = function(stanza, muc, nick, text) {
   this.appendNotification('Adicionando '+nick+' na lista!', null);
   var users = this.roster.find('ul.users');
 
-  var $user = $('#empty-user').clone().show();
+  var $user = $('#empty-user').clone();
   $user.find('.user-name').text(nick);
-
   $(users).append($user);
+  $user.show();
 }
 
 MucUi.fn.sendTopicNotification = function(nick, topic, printNotification) {
