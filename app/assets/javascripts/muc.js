@@ -22,6 +22,7 @@ Muc.fn.createMucHandler = function() {
     occupants: {}
   };
   
+  connection.addHandler(this.presenceHandler(this.ui, muc), null, "presence", null, null, null);
   connection.addHandler(this.joinHandler(this.ui, muc), null, "presence", null, null, null);
   connection.addHandler(this.leaveHandler(this.ui, muc), null, "presence", null, null, null);
   connection.addHandler(this.messageHandler(this.ui, muc), null, "message", "groupchat", null, null);
@@ -38,9 +39,36 @@ Muc.fn.createMucHandler = function() {
   return muc;
 }
 
+Muc.fn.presenceHandler = function(ui, muc) {
+  var that = this;
+  return function(stanza) {
+    var $stanza = $(stanza);
+    var nick = Strophe.getResourceFromJid($stanza.attr("from"));
+    if (Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
+      var status = $stanza.find("status")[0];
+      if (status) status = Strophe.getText(status);
+
+      var type = gui.status.online;
+      if ($stanza.attr("type") == "unavailable") {
+        type = gui.status.unavailable;
+      } else if ($stanza.find('show')) {
+        var show = $stanza.find('show').text();
+        if (show == 'chat') type = gui.status.chat;
+        if (show == 'away') type = gui.status.away;
+        if (show == 'xa') type = gui.status.xa;
+        if (show == 'dnd') type = gui.status.dnd;
+      }
+
+      ui.presenceHandler(muc, nick, status, type);
+    }
+
+    return true;
+  };
+}
+
 Muc.fn.joinHandler = function(ui, muc) {
   var that = this;
-  return function (stanza) {
+  return function(stanza) {
     var $stanza = $(stanza);
     var nick = Strophe.getResourceFromJid($stanza.attr("from"));
     if ($stanza.attr("type") != "unavailable" && $stanza.attr("type") != "error"
@@ -72,7 +100,7 @@ Muc.fn.joinHandler = function(ui, muc) {
 }
 
 Muc.fn.leaveHandler = function(ui, muc) {
-  return function (stanza) {
+  return function(stanza) {
     var $stanza = $(stanza);
     var nick = Strophe.getResourceFromJid($stanza.attr("from"));
     if ($stanza.attr("type") == "unavailable" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
@@ -89,7 +117,7 @@ Muc.fn.leaveHandler = function(ui, muc) {
 }
 
 Muc.fn.messageHandler = function(ui, muc) {
-  return function (stanza) {
+  return function(stanza) {
     var $stanza = $(stanza);
     if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
       var body = $stanza.find("body");
@@ -103,7 +131,7 @@ Muc.fn.messageHandler = function(ui, muc) {
 }
 
 Muc.fn.historyHandler = function(ui, muc) {
-  return function (stanza) {
+  return function(stanza) {
     var $stanza = $(stanza);
     if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
       var body = $stanza.find("body");
@@ -118,7 +146,7 @@ Muc.fn.historyHandler = function(ui, muc) {
 
 Muc.fn.topicHistoryHandler = function(ui, muc) {
   var that = this;
-  return function (stanza) {
+  return function(stanza) {
     var $stanza = $(stanza);
     if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
       var body = $stanza.find("body");
@@ -133,7 +161,7 @@ Muc.fn.topicHistoryHandler = function(ui, muc) {
 
 Muc.fn.topicChangeHandler = function(ui, muc) {
   var that = this;
-  return function (stanza) {
+  return function(stanza) {
     var $stanza = $(stanza);
     if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
       var body = $stanza.find("body");
