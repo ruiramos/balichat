@@ -1,7 +1,7 @@
 <div class="row-fluid">
-  <div class="span2">
+  <div class="span2 right-column">
     <div class="filters box" id="filters-amizade">
-      <h3>Content<span class="pull-right collapse"><img src="/assets/collapse.png" alt=""></span></h3>
+      <h3>Content<span class="pull-right"><img src="/assets/collapse.png" alt=""></span></h3>
       <ul id="filters" class="box-content nav nav-pills nav-stacked">
         <li class="active"><a href="#">All</a></li>
         <li><a href="#">Links</a></li>
@@ -14,7 +14,7 @@
   </div>
 
   <div class="span8">
-    <h3 id="topic-amizade" class="topic">Topic: <span>Fodasse</span></h3>    
+    <h3 id="topic-amizade" class="topic">topic</h3>    
 
     <div class="chat-window scroll-pane" id="muc-amizade">
       <div class="chat-muc-messages"></div>
@@ -32,37 +32,33 @@
     </div>
   </div>
 
-  <div class="span2">
+  <div class="span2 left-column">
     <div class="user-list box" id="user-list-amizade">
       <h3>Users</h3>
-      <ul id="users" class="box-content unstyled">
+      <ul id="" class="users box-content unstyled">
         <li class="concierge">
           <div class="online-placeholder img-rounded img-polaroid">
             <div class="userimg" style="background:url('/assets/concierge32.png')"></div>
           </div>
           <span class="concierge">Concierge</span>
-          <img src="/assets/info.png" class="pull-right info">          
         </li>
         <li style="clear:both">
           <div class="online-placeholder img-rounded img-polaroid">
             <div class="userimg" style="background:url('/assets/avatar1-32.png')"></div>
           </div>
           <span class="user-name online-user">Tiago Pinto</span>
-          <img src="/assets/info.png" class="pull-right info">          
         </li>
         <li>
           <div class="online-placeholder img-rounded img-polaroid">
             <div class="userimg" style="background:url('/assets/avatar2-32.png')"></div>
           </div>          
           <span class="user-name online-user">Rui Ramos</span>
-          <img src="/assets/info.png" class="pull-right info">
         </li>
         <li>
           <div class="offline-placeholder img-rounded img-polaroid">
             <div class="userimg" style="background:url('/assets/avatar3-32.png')"></div>
           </div>          
           <span class="user-name offline-user">Ricardo Pinto</span>
-          <img src="/assets/info.png" class="pull-right info">
         </li>
       </ul>
     </div>
@@ -71,8 +67,8 @@
       <h3>Search</h3>
       <form class="form-search">
         <div class="input-append box-content">
-          <input type="text" class="span11 search-query">
-          <button type="submit" class="btn">S</button>
+          <input type="text" class="span10 search-query">
+          <button type="submit" class="btn"><i class="icon-search"></i></button>
         </div>
       </form>    
     </div>

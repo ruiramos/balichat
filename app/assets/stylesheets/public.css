@@ -1,34 +1,54 @@
-/* Nav Bar */
+/* Nav Bar 
 #header .navbar-inner { padding-top:15px; border:0}
 #header ul {margin-left:25px}
-#header .nav > li.active a { background: white; color:black; text-shadow:0 0 0 rgba(0, 0, 0, 0); box-shadow:0 0 0; /*box-shadow: inset -2px -2px 1 rgba(0, 0, 0, 0.1);*/}
+#header .nav > li.active {background:white;}
+#header .nav > li.active a { background: white; color:black; 
+text-shadow:0 0 0 rgba(0, 0, 0, 0); box-shadow:0 0 0; /*box-shadow: inset -2px -2px 1 rgba(0, 0, 0, 0.1);*/
+/*padding: 0; display: inline;
+}
 #header .nav > li.active a:hover { background: white; color:black;border-color:white }
 
 #header .nav > li a { border-radius:0 0 0 0; padding:10px 40px 10px 10px}
 #header .nav > li a:hover {background:#333;border-color:#333;}
 
-#header .nav-tabs { border-bottom:0;}
+#header .nav-tabs { border-bottom:0;}*/
+#header {overflow:auto; height:40px; padding-top: 20px;padding-left:20px;border-bottom:1px solid #e8e8e8; background:#f1f1f1;}
+#header h1 { margin-top:-5px; }
+#header a.brand {float:left; display:block; color:black; font-size:0.75em; font-weight: normal}
+#header ul.nav {float:left; margin-bottom: 0px}
+#header .settings {float:left;padding-top: 10px;margin-left:12px}
+#header .settings p {float:left; margin-right:12px;}
+
+#header .nav {border:0;}
+#header .nav > li.active a { color:white;}
+#header .nav > li a { color:black;}
+
+#header li { padding:4px 6px; margin-right:12px; border-radius:5px;}
+#header li:hover {background:#ddd;}
+#header li.active {background:#08C;  overflow: auto}
+#header li a {padding:0; margin:0;  background:transparent; display:inline;}
+#header li i {margin-left:8px;}
 
 /* Box */
 .box {margin:16px 0 32px;}
-.box h3 { font-size:0.85em; text-transform: uppercase; color:#666; padding: 0px; margin: 0; border-bottom:1px solid #ccc; line-height: 16px }
+.box h3 { font-size:0.85em; text-transform: uppercase; color:#666; padding: 0px; margin: 0; padding-bottom: 4px; border-bottom:1px solid #ccc; line-height: 16px }
 .box ul {list-style: none; margin:0; padding:0;}
-.box .box-content {margin-top:8px;}
+.box .box-content {margin-top:4px;}
 
 ul .pending {padding:1px 6px; margin:0 12px; background:#a6a6a6; border-radius: 8px; color:white; font-size:0.9em;}
 
 /* Users */
-#users li {padding:4px; cursor: pointer; height:38px;clear:both; border-radius: 5px}
-#users li img {margin-right:4px;}
-#users li:hover {background:#eee;}
-#users img.info {margin-top:12px;}
-#users li div { width:32px; height:32px;}
-#users li > div {padding:2px; float:left;}
-#users div.userimg {border-radius: 5px; background-position: 0 0; }
-#users div.online-placeholder {background-color:#3CC248; border-color:#38b143; }
-#users div.offline-placeholder {background-color:#aaa; border-color:#999; }
-#users span.user-name, #users span.concierge {line-height:38px;margin-left:8px;}
-#users span.offline-user {color:#bbb;}
+.users li {padding:4px; cursor: pointer; height:38px;clear:both; border-radius: 5px}
+.users li img {margin-right:4px;}
+.users li:hover {background:;}
+.users img.info {margin-top:12px;}
+.users li div { width:32px; height:32px;}
+.users li > div {padding:2px; float:left;}
+.users div.userimg {border-radius: 5px; background-position: 0 0; }
+.users div.online-placeholder {background-color:#3CC248; border-color:#38b143; }
+.users div.offline-placeholder {background-color:#999; border-color:#666; }
+.users span.user-name, .users span.concierge {line-height:38px;margin-left:8px;}
+.users span.offline-user {color:#bbb;}
 
 /* Filters */
 #filters {}
@@ -36,10 +56,10 @@ ul .pending {padding:1px 6px; margin:0 12px; background:#a6a6a6; border-radius: 
 #filters li.active a {color:white; background-color:#666;}
 
 /* ChatRoom */
-h3.topic { font-size:0.85em; text-transform: uppercase; color:#666; padding: 0px; margin: 0; border-bottom:1px solid #ccc; line-height: 16px;margin:16px 0; }
+h3.topic { font-size:0.85em; text-transform: uppercase; color:#666; padding: 0px; margin: 0; padding-bottom: 4px; border-bottom:1px solid #ccc; line-height: 16px;margin:16px 0; }
 h3.topic span {font-style: italic;}
 
-div.container-main {margin-top:50px}
+.left-column, .right-column { /*padding:0 6px; background:#eee;*/}
 
 div.scroll-pane {height:300px;overflow:auto;overflow-x:hidden}
 
