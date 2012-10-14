@@ -36,7 +36,7 @@ Jabber.fn.sendPrivateMessage = function(jid, text) {
   return true;
 }
 
-Jabber.fn.connect = function(jid, sid, rid) {
+Jabber.fn.connect = function(jid, sid, rid, host) {
   connection = new Strophe.Connection(this.BOSH_SERVICE);
   
   //connection.rawInput = function (data) {
@@ -51,5 +51,5 @@ Jabber.fn.connect = function(jid, sid, rid) {
   this.jid = jid;
   connection.attach(jid, sid, rid, this.onAttach);
 
-  this.muc = new MucUi(connection, 'amizade@conference.localhost', jid);
+  this.muc = new MucUi(connection, 'amizade@conference.'+host, jid);
 }

@@ -1,0 +1,1 @@
+JABBER = File.open(Rails.root.join("config","ejabberd.yml")) { |file| YAML.load(file) }[Rails.env].symbolize_keys

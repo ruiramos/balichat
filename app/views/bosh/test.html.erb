@@ -92,7 +92,7 @@
     gui = new Ui();
 
     jabber = new Jabber();
-    jabber.connect('<%= @jid %>', '<%= @sid %>', '<%= @rid %>');
+    jabber.connect('<%= @jid %>', '<%= @sid %>', '<%= @rid %>', '<%= JABBER[:host] %>');
 
     // update chat-window size
     $(window).resize(function(){
