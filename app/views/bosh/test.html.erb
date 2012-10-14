@@ -37,6 +37,18 @@
           </div>
         </div>
 
+        <div class="row-fluid message-container" id="welcome-message">
+          <div class="message system">
+            <div class="span1">&nbsp;</div>
+            <div class="span11">
+              <div class="message-content">
+                <p class="nick">Welcome message</p>
+                <p class="timestamp">Time</p>
+                <p class="text">Message</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     
@@ -110,5 +122,6 @@
     // Welcome message
     var mucName = Strophe.getNodeFromJid(window.muc.jid);
     $('#welcome-message').find('.nick').text('Welcome to '+mucName);
+    $('#welcome-message').find('.timestamp').text(moment().format(window.muc.ui.timeFormat));
   });
 </script>
