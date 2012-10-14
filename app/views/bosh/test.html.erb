@@ -106,5 +106,9 @@
       window.muc.ui.api.reinitialise();
     });
     $(window).resize();
+
+    // Welcome message
+    var mucName = Strophe.getNodeFromJid(window.muc.jid);
+    $('#welcome-message').find('.nick').text('Welcome to '+mucName);
   });
 </script>

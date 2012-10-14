@@ -35,8 +35,10 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
     scrollBottom = false;
   }
 
-  if (element != null) {
-    $('.chat-muc-messages').append(element)
+  if (element != null && $(element).find('.message').hasClass('old')) {
+    $('#welcome-message').before(element);
+  } else {
+    $('.chat-muc-messages').append(element);
   }
 
   this.updateChatWindow();
@@ -74,7 +76,12 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
   }
   
   if (from != this.lastMessageFrom) {
-    this.appendToMuc($element, jabber.isOwnMessage(message));
+    if ($(message).attr('old')) {
+      $element.find('.message').addClass('old');
+      this.appendToMuc($element, jabber.isOwnMessage(message));
+    } else {
+      this.appendToMuc($element, jabber.isOwnMessage(message));
+    }
   } else {
     var $newParagraph = $oldElement.clone().html(text)
     $oldElement.after($newParagraph);
@@ -100,6 +107,7 @@ MucUi.fn.doReplacements = function(text) {
 
 MucUi.fn.appendNotification = function(text, type) {
   var element = "<p class='notification'>"+text+"</p>";
+  var $element = $('#empty-message').clone();
   this.appendToMuc(element, false);
 }
 
@@ -121,9 +129,11 @@ MucUi.fn.leaveHandler = function(stanza, muc, nick, text) {
 
 MucUi.fn.historyHandler = function(stanza, muc, nick, message) {
   var stamp = $(stanza).find('delay').attr('stamp');
+  var $stanza = $(stanza);
+  $stanza.attr('old', true);
 
-  this.appendMessage(nick, stanza, stamp);
-  this.lastMessageFrom = $(stanza).attr('from');
+  this.appendMessage(nick, $stanza, stamp);
+  this.lastMessageFrom = $stanza.attr('from');
 }
 
 MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
