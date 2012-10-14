@@ -1,4 +1,6 @@
 html, body { height: 100%; font-size:0.9em;}
+a:hover {color:#08C;} /* para não mudar de cor */
+
 .container-fluid {padding:0;}
 .row-fluid {padding-left:20px; padding-right:20px;width:auto;}
 
@@ -85,7 +87,7 @@ height:32px;width:32px;border-radius:2px;float:right;}
 .message.system.user-leaves .text {color:#333;}
 
 .message.old .text {color:#999;}
-.message.old .nick {color:#666;}
+.message.old .nick {color:#777;}
 .message.old .avatar-placeholder {opacity:0.5;}
 .message.old a {color:#333;}
 
