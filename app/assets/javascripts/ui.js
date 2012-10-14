@@ -116,6 +116,13 @@ $(document).ready(function () {
     }
   });
 
+  $('#files-info-tooltip').tooltip();
+  $('#mentions-tooltip').tooltip();
+  $('#alerts-tooltip').tooltip();
+
+  // Handles file-info popup
+  $('.file-info').mouseover(function(){$('#file-info-tooltip').tooltip();})
+
   $('#expand-embeds').change(function(){ gui.expandEmbeds(); });
 
   // Focus on input field

@@ -7,18 +7,23 @@
         <li><a href="#">Links</a></li>
         <li><a href="#">Images</a></li>
         <li><a href="#">Files</a></li>
-        <li><a href="#">Mentions</a></li>
-        <li><a href="#">Alerts<span class="pending">14</span></a></li>
+        <li><a href="#" id="mentions-tooltip" rel="tooltip" data-placement="right" data-original-title="Coming soon!"  class="coming-soon">Mentions</a></li>
+        <li><a href="#" id="alerts-tooltip" rel="tooltip" data-placement="right" data-original-title="Coming soon!" class="coming-soon">Alerts</a></li>
       </ul>
     </div>
     <div class="files box" id="files-amizade">
-      <h3>Files</h3>
-      <ul id="files" class="box-content nav nav-pills nav-stacked">
+      <h3>Latest files 
+          <a href="#" id="files-info-tooltip" rel="tooltip" data-placement="top" data-original-title="You can easily upload files by drag-and-dropping them to the chat window!" class="pull-right"><img src="/assets/info.png" class="files-info" /></a>
+      </h3>
+      <ul id="files" class="box-content files">
         <% for document in Document.where(chatroom: "amizade@conference.#{JABBER[:host]}") %>
+        <li>
+          <i class="icon-file"></i> 
           <%= link_to document.filename, "http://balichat_dev.s3.amazonaws.com/#{document.remote_url}" %>
+        </li>
         <% end %>
       </ul>
-      <h4>Drop files here</h4>
+      
       <form action="https://<%=UPLOADS[:bucket]%>.s3.amazonaws.com" method="post" enctype="multipart/form-data" class="direct-upload">
         <input type="hidden" name="AWSAccessKeyId" value="<%=UPLOADS[:aws_access_key]%>">
         <input type="hidden" name="key">
