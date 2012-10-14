@@ -30,19 +30,16 @@ Ui.fn.htmlescape = function(text) {
 }
 
 Ui.fn.expandEmbeds = function() {
-
-  if($('#expand-embeds').attr("checked")!="checked"){ 
+  if ($('#expand-embeds').attr("checked")!="checked") { 
     $('.embedded').hide();
     $('small.link-source').addClass('noEmbedds');
-
   } else {
     $('.embedded').show();
     $('small.link-source').removeClass('noEmbedds');
   }
 
-window.muc.ui.api.reinitialise();
-window.muc.ui.api.scrollToBottom();
-
+  window.muc.ui.api.reinitialise();
+  window.muc.ui.api.scrollToBottom();
 }
 
 Ui.fn.submitTopic = function(text) {
