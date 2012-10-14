@@ -6,6 +6,8 @@ var MucUi = function(connection, jid, nick) {
   this.timeFormat = "HH\\hmm";
 
   this.lastMessageFrom = "";
+  this.lastMessageElement = "";
+
   this.roster = $('#user-list-'+Strophe.getNodeFromJid(jid));
   this.topicDiv = $('#topic-'+Strophe.getNodeFromJid(jid));
 
@@ -24,7 +26,7 @@ var MucUi = function(connection, jid, nick) {
 MucUi.fn = MucUi.prototype;
 
 /**
- * Updates the muc message area with a new element. If called with no arguments
+ * Updates the muc message area with a new element. If called with just the second argument
  * it will just do the scrolling stuff, because we are adding something that is not
  * a chat row. This happens when adding new paragraph on existing message.
  */
@@ -48,6 +50,23 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   }
 }
 
+MucUi.fn.includeAsParagraph = function(message) {
+  var from = $(message).attr('from');
+  var old = $(message).attr('old');
+  var includeAsParagraph = true;
+  var lastSystem = $(document).find('.message-container').last().attr('id') != null;
+
+  if (from != this.lastMessageFrom) {
+    includeAsParagraph = false;
+  }
+
+  if (lastSystem && old == null) {
+    includeAsParagraph = false;
+  }
+
+  return includeAsParagraph;
+}
+
 /**
  * Updates the muc message area with a new message.
  */
@@ -61,8 +80,8 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
   // Replace links, youtube clips, etc.
   textReplaced = this.doReplacements(text);
 
-  if (from != this.lastMessageFrom) {
-    var $element = $('#empty-message').clone();
+  if (this.includeAsParagraph(message) == false) {
+    var $element = this.makeNewMessage(timestamp);
     $element.find('.nick').text(nick);
     $element.find('.text').html(textReplaced);
     $element.find('.timestamp').text(moment(timestamp).format(this.timeFormat));
@@ -71,21 +90,21 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
     if (jabber.isOwnMessage(message)) {
       $element.find('.message').addClass('own');
     }
-  } else {
-    var $oldElement = $('.chat-muc-messages .message-content .text').last();
   }
   
-  if (from != this.lastMessageFrom) {
+  // Message from different jid of the last message
+  if (this.includeAsParagraph(message) == false) {
     if ($(message).attr('old')) {
       $element.find('.message').addClass('old');
-      this.appendToMuc($element, jabber.isOwnMessage(message));
-    } else {
-      this.appendToMuc($element, jabber.isOwnMessage(message));
     }
-  } else {
-    var $newParagraph = $oldElement.clone().html(textReplaced);
-    $oldElement.after($newParagraph);
-    this.appendToMuc();
+    this.appendToMuc($element, jabber.isOwnMessage(message));
+    this.lastMessageElement = $element;
+  }
+  // Message from the same user as the last one
+  else {
+    var $newParagraph = jQuery("<p></p>").html(textReplaced).addClass('text');
+    this.lastMessageElement.find('.text').last().after($newParagraph);
+    this.appendToMuc(null, jabber.isOwnMessage(message));
   }
 }
 
@@ -121,10 +140,27 @@ MucUi.fn.doReplacements = function(text) {
   return $container;
 }
 
-MucUi.fn.appendNotification = function(text, type) {
-  var element = "<p class='notification'>"+text+"</p>";
+MucUi.fn.makeNewMessage = function(timestamp) {
   var $element = $('#empty-message').clone();
-  this.appendToMuc(element, false);
+  $element.removeAttr('id');
+  $element.removeClass('hide');
+
+  if (timestamp != null) {
+    $element.find('.timestamp').text(moment().format(this.timeFormat));
+  } else {
+    $element.find('.timestamp').text(moment(timestamp).format(this.timeFormat));
+  }
+
+  return $element;
+}
+
+MucUi.fn.appendNotification = function(text, type) {
+  var $element = this.makeNewMessage();
+  $element.find('.message').addClass("system").addClass(type);
+  $element.find('.nick').remove();
+  $element.find('.text').html(text);
+
+  this.appendToMuc($element.first(), false);
 }
 
 MucUi.fn.updateChatWindow = function() {
@@ -136,11 +172,12 @@ MucUi.fn.scrollBottom = function() {
 }
 
 MucUi.fn.joinHandler = function(stanza, muc, nick, text) {
-  this.appendNotification(nick + " joined the room.", gui.notifications.join);
+  console.log("JOIN DE: "+nick);
+  this.appendNotification("<strong>"+ nick + "</strong> joined the room.", gui.notifications.join);
 }
 
 MucUi.fn.leaveHandler = function(stanza, muc, nick, text) {
-  this.appendNotification(nick + " left the room.", gui.notifications.leave);
+  this.appendNotification("<strong>"+ nick + "</strong> left the room.", gui.notifications.leave);
 }
 
 MucUi.fn.historyHandler = function(stanza, muc, nick, message) {

@@ -8,8 +8,8 @@ var Ui = function() {
   }
 
   this.notifications = {
-    join: 'join',
-    part: 'leave',
+    join: 'user-joins',
+    leave: 'user-leaves',
     topic: 'topic'
   }
 }
