@@ -86,6 +86,7 @@ height:32px;width:32px;border-radius:2px;float:right;}
 .message.old .text {color:#999;}
 .message.old .nick {color:#666;}
 .message.old .avatar-placeholder {opacity:0.5;}
+.message.old a {color:#333;}
 
  div.scroll-pane {overflow:auto;overflow-x:hidden}
 
