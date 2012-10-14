@@ -49,7 +49,7 @@ MucUi.fn.appendMessage = function(nick, message) {
   }
 
   var element = "<p><span>&lt;"+nick+"&gt;</span> "+text+"</p>";
-  this.appendToMuc(element, Jabber.isOwnMessage(message));
+  this.appendToMuc(element, jabber.isOwnMessage(message));
 }
 
 MucUi.fn.appendNotification = function(text, type) {
