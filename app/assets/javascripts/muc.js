@@ -30,10 +30,6 @@ Muc.fn.createMucHandler = function() {
   connection.addHandler(this.topicChangeHandler(this.ui, muc), null, "message", "groupchat", null, null);
   connection.addHandler(this.errorHandler(this.ui, muc), null, "presence", "error", null, null);
   
-  //if (options.handle_leave) {
-  //  connection.addHandler(Muc.fn.new_leave_handler(muc, options.handle_leave), null, "presence", null, null, null);
-  //}
-//
   //if (options.handle_status) {
   //  // This one is called internally, so we need to store a reference to it
   //  muc.status_handler = new_status_handler(muc, options.handle_status);
