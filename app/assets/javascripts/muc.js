@@ -28,27 +28,12 @@ Muc.fn.createMucHandler = function() {
   connection.addHandler(this.historyHandler(this.ui, muc), null, "message", "groupchat", null, null);
   connection.addHandler(this.topicHistoryHandler(this.ui, muc), null, "message", "groupchat", null, null);
   connection.addHandler(this.topicChangeHandler(this.ui, muc), null, "message", "groupchat", null, null);
-  connection.addHandler(this.errorHandler(this.ui, muc), null, "presence", "error", null, null);
-  
-  //if (options.handle_status) {
-  //  // This one is called internally, so we need to store a reference to it
-  //  muc.status_handler = new_status_handler(muc, options.handle_status);
-  //  connection.addHandler(muc.status_handler, null, "presence", null, null, null);
-  //}
+  // TODO: not done yet
+  //connection.addHandler(this.errorHandler(this.ui, muc), null, "presence", "error", null, null);
 
-  muc.set_status = function (status, text) {
-    var pres = $pres({to: this.jid+'/'+this.nick});
-    if (status && status != "online") {
-      pres.c("show").t(status).up();
-    }
-
-    if (text) {
-      pres.c("status").t(text).up();
-    }
-    connection.send(pres.tree());
-  };
-
-  muc.set_status("online");
+  // Join the muc.
+  // Params: room, nick, msg_handler_cb, pres_handler_cb, roster_cb, password
+  connection.muc.join(this.jid, this.nick, null, null, null, null);
 
   return muc;
 }
@@ -160,50 +145,24 @@ Muc.fn.topicChangeHandler = function(ui, muc) {
     return true;
   };
 }
-
-Muc.fn.errorHandler = function(muc, callback) {
-  return function (stanza) {
-
-    if (Strophe.getBareJidFromJid(stanza.getAttribute("from")) == muc.jid) {
-      var e = stanza.getElementsByTagName("error");
-      if (e.length > 0) {
-        var err = null;
-        Strophe.forEachChild(e[0], null, function (child) {
-          if (child.getAttribute("xmlns") == "urn:ietf:params:xml:ns:xmpp-stanzas") {
-            err = child.nodeName;
-          }
-        });
-
-        callback(stanza, muc, err);
-      }
-    }
-
-    return true;
-  };
-}
-
-Muc.fn.new_status_handler = function(muc, callback) {
-  return function (stanza) {
-    var nick = Strophe.getResourceFromJid(stanza.getAttribute("from"));
-    if (stanza.getAttribute("type") != "unavailable" && stanza.getAttribute("type") != "error"
-      && Strophe.getBareJidFromJid(stanza.getAttribute("from")) == muc.jid) {
-
-      if (muc.occupants[nick]) {
-        var status = stanza.getElementsByTagName("show")[0];
-        var text = stanza.getElementsByTagName("status")[0];
-        if (!status)
-          status = "online";
-        else
-          status = Strophe.getText(status);
-        if (text) text = Strophe.getText(text);
-        if (status != muc.occupants[nick].status || text != muc.occupants[nick].status_text) {
-          muc.occupants[nick].status = status;
-          muc.occupants[nick].status_text = text;
-          callback(stanza, muc, nick, status, text);
-        }
-      }
-    }
-
-    return true;
-  };
-}
+// TODO: not getting errors yet
+//Muc.fn.errorHandler = function(muc, callback) {
+//  return function (stanza) {
+//
+//    if (Strophe.getBareJidFromJid(stanza.getAttribute("from")) == muc.jid) {
+//      var e = stanza.getElementsByTagName("error");
+//      if (e.length > 0) {
+//        var err = null;
+//        Strophe.forEachChild(e[0], null, function (child) {
+//          if (child.getAttribute("xmlns") == "urn:ietf:params:xml:ns:xmpp-stanzas") {
+//            err = child.nodeName;
+//          }
+//        });
+//
+//        callback(stanza, muc, err);
+//      }
+//    }
+//
+//    return true;
+//  };
+//}
