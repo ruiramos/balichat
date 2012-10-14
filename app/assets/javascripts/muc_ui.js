@@ -112,7 +112,7 @@ MucUi.fn.doReplacements = function(text) {
   var $container = $('<div/>');
   var source = text;
   var hiddenClass = '';
-  if($('#expand-embeds').attr("checked")!="checked") hiddenClass = 'noEmbedds';
+  if ($('#expand-embeds').attr("checked")!="checked") hiddenClass = 'noEmbedds';
 
   if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:vimeo.com)\//)) { // vimeo video embedd
     $container.append(text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" class="embedded '+hiddenClass+'" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));  
@@ -136,7 +136,6 @@ MucUi.fn.doReplacements = function(text) {
   
   } else {
     $container.append(linkify(text));
-  
   }
 
   return $container;
@@ -176,7 +175,6 @@ MucUi.fn.scrollBottom = function() {
 }
 
 MucUi.fn.joinHandler = function(stanza, muc, nick, text) {
-  console.log("JOIN DE: "+nick);
   this.appendNotification("<strong>"+ nick + "</strong> joined the room.", gui.notifications.join);
 }
 
@@ -208,7 +206,7 @@ MucUi.fn.mucRosterHandler = function(stanza, muc, nick, text) {
 }
 
 MucUi.fn.sendTopicNotification = function(nick, topic, printNotification) {
-  var newStr = nick+" changed room topic to: "+topic;
+  var newStr = "<strong>"+nick+"</strong> changed room topic to: "+topic;
 
   if (printNotification) {
     this.appendNotification(newStr, gui.notifications.topic);
