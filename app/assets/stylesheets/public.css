@@ -76,13 +76,16 @@ height:32px;width:32px;border-radius:2px;float:right;}
 .message.system .nick{color:#5E6302}
 .message.system .text{font-weight: normal;font-style: italic; color:#5E6302;font-family: Georgia}
 .message.system .message-content span.timestamp {float:none;margin:0;font-weight: bold;font-size:0.9em;} 
-.message.system a {color:#5E6302; font-weight: bold; text-decoration: underline;}
+.message.system a {color:#5E6302; font-weight: bold;}
 
-.message.system.user-joins {background:#ECFFEE;border-color:#C2F3C7;}
+.message.system.user-joins {background:#F5FFF6;border-color:#D4F0D7;}
 .message.system.user-joins .text {color:#333;}
-.message.system.user-leaves {background:#FFF2F2;border-color:#FADFDF;}
- .message.system.user-leaves .text {color:#333;}
+.message.system.user-leaves {background:#FCF7F7;border-color:#FDE2E2;}
+.message.system.user-leaves .text {color:#333;}
 
+.message.old .text {color:#999;}
+.message.old .nick {color:#666;}
+.message.old .avatar-placeholder {opacity:0.5;}
 
  div.scroll-pane {overflow:auto;overflow-x:hidden}
 
