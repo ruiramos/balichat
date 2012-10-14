@@ -21,12 +21,22 @@
      
     <div class="span2 settings-panel">  
         <% if user_signed_in? %>
-          <%= current_user %>
-          <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "navbar-link" %>
+          <p>Hi, <%= current_user %>.</p>
+          <div class="btn-group">
+          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            <i class="icon-align-justify"></i>
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <!-- dropdown menu links -->
+            <li><a href="#settings" role="button" class="navbar-link" data-toggle="modal">Settings</a></li>
+            <li><%= link_to "Log out", destroy_user_session_path, method: :delete, class: "navbar-link" %></li>
+          </ul>
+        </div>
         <% else %>
           <%= link_to "Log in", new_user_session_path, class: "navbar-link" %>
         <% end %>
-        <a href="#settings" role="button" class="navbar-link" data-toggle="modal">Settings</a>
+
     </div> 
   </div>
 
