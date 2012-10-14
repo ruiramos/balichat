@@ -71,6 +71,8 @@ role :db,  LINODE_SERVER_HOSTNAME, :primary => true
 after 'deploy:update_code' do
   # Setup Configuration
   run "cp #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+  run "cp #{shared_path}/config/ejabberd.yml #{release_path}/config/ejabberd.yml"
+  run "cp #{shared_path}/config/s3.yml #{release_path}/config/s3.yml"
 
   # Compile Assets
   run "cd #{release_path}; RAILS_ENV=production bundle exec rake assets:precompile"
