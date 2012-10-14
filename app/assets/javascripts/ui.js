@@ -27,6 +27,19 @@ Ui.fn.htmlescape = function(text) {
               replace(/"/g,'&quot;');
 }
 
+Ui.fn.expandEmbeds = function() {
+
+  if($('#expand-embeds').attr("checked")!="checked"){ 
+    $('.embedded').hide();
+  } else {
+    $('.embedded').show();
+  }
+
+window.muc.ui.api.reinitialise();
+window.muc.ui.api.scrollToBottom();
+
+}
+
 $(document).ready(function () {
   $('.chat-input-field').keydown(function (e) {
     if (e.keyCode == 13 && event.shiftKey){
@@ -42,4 +55,7 @@ $(document).ready(function () {
       return false;
     }
   });
+
+  $('#expand-embeds').change(function(){gui.expandEmbeds();});
+
 });

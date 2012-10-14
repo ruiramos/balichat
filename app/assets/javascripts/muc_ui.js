@@ -59,12 +59,12 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
   text = gui.insertBreaks(text);
 
   // Replace links, youtube clips, etc.
-  text = this.doReplacements(text);
+  textReplaced = this.doReplacements(text);
 
   if (from != this.lastMessageFrom) {
     var $element = $('#empty-message').clone();
     $element.find('.nick').text(nick);
-    $element.find('.text').html(text);
+    $element.find('.text').html(textReplaced);
     $element.find('.timestamp').text(moment(timestamp).format(this.timeFormat));
     $element.show();
 
@@ -83,34 +83,42 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
       this.appendToMuc($element, jabber.isOwnMessage(message));
     }
   } else {
-    var $newParagraph = $oldElement.clone().html(text)
+    var $newParagraph = $oldElement.clone().html(textReplaced);
     $oldElement.after($newParagraph);
     this.appendToMuc();
   }
 }
 
 MucUi.fn.doReplacements = function(text) {
-  
-  if($('#expand-embeds').attr("checked")!="checked"){  //we're not expanding embeds, linkify and get out of here!
-    return linkify(text);
-  }
-
+  var $container = $('<div/>');
   var source = text;
   
-  if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:vimeo.com|youtube.com)\//)) { //video embedd
-    text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
-    text = text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>');
-    text += "<small class='link-source'>"+linkify(source)+"</small>";
-  
+  if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:vimeo.com)\//)) { // vimeo video embedd
+    $container.append(text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" class="ebedded" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));  
+    $container.append("<small class='link-source'>"+linkify(source)+"</small>");
+
+
+  } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:youtube.com)\//)) { // youtube video embedd
+    $container.append(text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" class="ebedded" frameborder="0" allowfullscreen></iframe>'));
+    $container.append("<small class='link-source'>"+linkify(source)+"</small>");
+
+
   } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(.*)(\.jpg|\.png|\.gif|\.bmp)/)) { //image embedd
-    text = "<img class='embedded' src='"+text+"'>";
-    text += "<small class='link-source'>"+linkify(source)+"</small>";
+    var img = $("<img class='embedded' src='"+text+"'>");
+    $(img).load(function() {
+      window.muc.ui.api.reinitialise();
+      window.muc.ui.api.scrollToBottom();
+    });
+
+    $container.append(img);
+    $container.append("<small class='link-source'>"+linkify(source)+"</small>");
   
   } else {
-    text = linkify(text);
+    $container.append(linkify(text));
+  
   }
 
-  return text;
+  return $container;
 }
 
 MucUi.fn.appendNotification = function(text, type) {
