@@ -19,4 +19,7 @@
 //= require moment.min
 //= require jquery.jscrollpane.min
 //= require jquery.mousewheel
+//= require jquery.fileupload
+//= require jquery.ui.widget
+//= require upload
 //= require_tree .

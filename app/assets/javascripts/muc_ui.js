@@ -161,6 +161,7 @@ MucUi.fn.appendNotification = function(text, type) {
   $element.attr('id', 'notification');
   $element.find('.message').addClass("system").addClass(type);
   $element.find('.nick').remove();
+  $element.find('.avatar-placeholder').remove();
   $element.find('.text').html(text);
 
   this.appendToMuc($element.first(), false);
