@@ -90,7 +90,10 @@ height:32px;width:32px;border-radius:2px;float:right;}
 .message.old .avatar-placeholder {opacity:0.5;}
 .message.old a {color:#777;}
 
- div.scroll-pane {overflow:auto;overflow-x:hidden}
+small.link-source {font-size: 85%;display: block;line-height: 20px;height: 20px;opacity:0.7;}
+img.embedded {max-width:90%; max-height:500px}
+
+div.scroll-pane {overflow:auto;overflow-x:hidden}
 
 div.chat-input table {width:100%;margin-top:10px;}
 .chat-input .btn-send {float:right;width:30px; height:40px;line-height: 40px;}
