@@ -15,12 +15,12 @@
 .box ul {list-style: none; margin:0; padding:0;}
 .box .box-content {margin-top:8px;}
 
-ul .pending {float: right; padding:0 6px; background:white;}
+ul .pending {padding:1px 6px; margin:0 12px; background:#a6a6a6; border-radius: 8px; color:white; font-size:0.9em;}
 
 /* Users */
-#users li {padding:4px; cursor: pointer; height:38px;clear:both;}
+#users li {padding:4px; cursor: pointer; height:38px;clear:both; border-radius: 5px}
 #users li img {margin-right:4px;}
-#users li:hover {background:#f0f0f0;}
+#users li:hover {background:#eee;}
 #users img.info {margin-top:12px;}
 #users li div { width:32px; height:32px;}
 #users li > div {padding:2px; float:left;}
@@ -32,6 +32,12 @@ ul .pending {float: right; padding:0 6px; background:white;}
 
 /* Filters */
 #filters {}
+#filters a {color:black;}
+#filters li.active a {color:white; background-color:#666;}
+
+/* ChatRoom */
+h3.topic { font-size:0.85em; text-transform: uppercase; color:#666; padding: 0px; margin: 0; border-bottom:1px solid #ccc; line-height: 16px;margin:16px 0; }
+h3.topic span {font-style: italic;}
 
 div.container-main {margin-top:50px}
 
