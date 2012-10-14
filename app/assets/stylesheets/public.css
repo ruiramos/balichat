@@ -71,7 +71,7 @@ h3.topic span {font-style: italic;}
 .avatar-placeholder {background:url(/assets/default-avatar.png) 100% 0 no-repeat;background-size:32px 32px;
 height:32px;width:32px;border-radius:2px;float:right;}
 .message-content .nick { font-weight: bold; float:left;line-height: 12px;height: 14px;}
-.message-content p.timestamp {color:#ccc; float:right; font-size:0.85em;line-height: 10px;height: 12px;margin-right:12px;}
+.message-content p.timestamp {color:rgba(0,0,0,0.1);font-weight:bold;float:right; font-size:0.85em;line-height: 10px;height: 12px;margin-right:12px;}
 .message-content .text {clear:both;}
 .message-content p {margin:0;}
 .message .nick { color:#0a79b1}

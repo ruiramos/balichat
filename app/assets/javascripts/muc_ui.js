@@ -156,6 +156,7 @@ MucUi.fn.makeNewMessage = function(timestamp) {
 
 MucUi.fn.appendNotification = function(text, type) {
   var $element = this.makeNewMessage();
+  $element.attr('id', 'notification');
   $element.find('.message').addClass("system").addClass(type);
   $element.find('.nick').remove();
   $element.find('.text').html(text);
