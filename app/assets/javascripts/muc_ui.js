@@ -2,7 +2,7 @@ var MucUi = function(connection, jid, nick) {
   var muc = {}; // make muc an object from the start. Needed by muc.window_focused focus tracking.
   var that = this;
   var handlers = {};
-  var roster = $('#user-list-'+Strophe.getNodeFromJid(jid));
+  this.roster = $('#user-list-'+Strophe.getNodeFromJid(jid));
   this.topicDiv = $('#topic-'+Strophe.getNodeFromJid(jid));
 
   var scrollDiv = $('#muc-'+Strophe.getNodeFromJid(jid));
@@ -110,7 +110,23 @@ MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
 }
 
 MucUi.fn.mucRosterHandler = function(stanza, muc, nick, text) {
+  var users = this.roster.find('ul.users');
 
+  var $li = $('<li></li>').addClass('user');
+  var $div = $('<div></div>');
+  $div.addClass('online-placeholder').addClass('img-rounded').addClass('img-polaroid');
+
+  $innerDiv = $('<div></div>').addClass('userimg');
+  $innerDiv.css('background', "url('/assets/default-avatar.png')");
+  $div.append($innerDiv);
+
+  $span = $('<span></span>').addClass('user-name').addClass('online-user');
+  $span.text(nick);
+
+  $li.append($div);
+  $li.append($span);
+
+  $(users).append($li);
 }
 
 MucUi.fn.sendTopicNotification = function(nick, topic, printNotification) {
