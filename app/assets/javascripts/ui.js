@@ -44,9 +44,17 @@ window.muc.ui.api.scrollToBottom();
 }
 
 Ui.fn.submitTopic = function(text) {
-  window.muc.changeTopic(text);
+  if (text == "_button") {
+    text = $('input#topic').val();
+  }
+
+  if (text.length > 0) {
+    connection.muc.setTopic(window.muc.jid, text);
+    $('.topic.editable').text(text);
+  }
+
+  $('.topic.editable').show()
   $('.topic.edit').hide();
-  $('.topic.editable').show();
   $('.chat-input-field').focus();
 }
 
@@ -60,7 +68,7 @@ Ui.fn.topicHandler = function() {
     $('.topic.edit input').focus();
   });
 
-  $('.topic.edit').keydown(function(e) {
+  $('input#topic').keydown(function(e) {
     if (e.keyCode == 13) {
       var text = $(this).val();
       if (text.length) {
