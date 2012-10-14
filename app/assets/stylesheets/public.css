@@ -41,7 +41,7 @@ h3.topic span {font-style: italic;}
 
 div.container-main {margin-top:50px}
 
-div.scroll-pane {height:400px;overflow:auto;overflow-x:hidden}
+div.scroll-pane {height:300px;overflow:auto;overflow-x:hidden}
 
 div.chat-input table {width:100%;background:red}
 .chat-input-field {width:100%}
