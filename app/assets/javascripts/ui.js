@@ -12,6 +12,8 @@ var Ui = function() {
     leave: 'user-leaves',
     topic: 'topic'
   }
+
+  this.window_focus = true;
 }
 
 Ui.fn = Ui.prototype;
@@ -78,6 +80,14 @@ Ui.fn.topicHandler = function() {
   });
 }
 
+Ui.fn.focusHanler = function() {
+  $(window).focus(function() {
+    this.window_focus = true;
+  }).blur(function() {
+    this.window_focus = false;
+  });
+}
+
 $(document).ready(function () {
   $('.chat-input-field').keydown(function(e) {
     if (e.keyCode == 13 && event.shiftKey) {
@@ -101,4 +111,7 @@ $(document).ready(function () {
 
   // Add topic interactions
   Ui.fn.topicHandler();
+
+  // Add window focus handler
+  Ui.fn.focusHanler();
 });

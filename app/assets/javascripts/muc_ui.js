@@ -17,7 +17,6 @@ var MucUi = function(connection, jid, nick) {
   muc = new Muc(this, jid, nick);
   muc.unread_messages = 0;
   muc.window_focused = true;
-  muc.hide_slash_warning = false;
 
   window.muc = muc;
   return muc;
@@ -100,12 +99,19 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
     this.appendToMuc($element, jabber.isOwnMessage(message));
     this.lastMessageElement = $element;
   }
+
   // Message from the same user as the last one
   else {
     var $newParagraph = jQuery("<p></p>").html(textReplaced).addClass('text');
     this.lastMessageElement.find('.text').last().after($newParagraph);
     this.appendToMuc(null, jabber.isOwnMessage(message));
   }
+
+  // Update titlebar if needed
+  this.setTitleBar();
+}
+
+MucUi.fn.setTitleBar = function() {
 }
 
 MucUi.fn.doReplacements = function(text) {
