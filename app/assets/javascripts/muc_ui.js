@@ -2,6 +2,9 @@ var MucUi = function(connection, jid, nick) {
   var muc = {}; // make muc an object from the start. Needed by muc.window_focused focus tracking.
   var that = this;
   var handlers = {};
+
+  this.timeFormat = "HH\\hmm";
+
   this.lastMessageFrom = "";
   this.roster = $('#user-list-'+Strophe.getNodeFromJid(jid));
   this.topicDiv = $('#topic-'+Strophe.getNodeFromJid(jid));
@@ -43,7 +46,7 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   }
 }
 
-MucUi.fn.appendMessage = function(nick, message) {
+MucUi.fn.appendMessage = function(nick, message, timestamp) {
   var from = $(message).attr('from');
   var text = $(message).find('body').text();
 
@@ -57,6 +60,7 @@ MucUi.fn.appendMessage = function(nick, message) {
     var $element = $('#empty-message').clone();
     $element.find('.nick').text(nick);
     $element.find('.text').text(text);
+    $element.find('.timestamp').text(moment(timestamp).format(this.timeFormat));
     $element.show();
 
     if (jabber.isOwnMessage(message)) {
@@ -121,13 +125,19 @@ MucUi.fn.leaveHandler = function(stanza, muc, nick, text) {
   this.appendNotification(nick + " left the room.", gui.notifications.leave);
 }
 
+MucUi.fn.historyHandler = function(stanza, muc, nick, message) {
+  var stamp = $(stanza).find('delay').attr('stamp');
+
+  this.appendMessage(nick, stanza, stamp);
+  this.lastMessageFrom = $(stanza).attr('from');
+}
+
 MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
   //if (options.detect_focus && !muc.window_focused) {
   //  muc.unread_messages++;
   //  document.title = " ("+muc.unread_messages+") " + original_title;
   //}
-
-  this.appendMessage(nick, stanza);
+  this.appendMessage(nick, stanza, moment().format("YYYY-MM-DDTHH:mm:ss"));
   this.lastMessageFrom = $(stanza).attr('from');
 }
 

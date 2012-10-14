@@ -122,7 +122,7 @@ Muc.fn.historyHandler = function(ui, muc) {
     if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
       var body = $stanza.find("body");
       if (body.length > 0 && $stanza.find("delay").length > 0) {
-        ui.messageHandler(stanza, muc, Strophe.getResourceFromJid($stanza.attr("from")), Strophe.getText(body[0]));
+        ui.historyHandler(stanza, muc, Strophe.getResourceFromJid($stanza.attr("from")), Strophe.getText(body[0]));
       }
     }
 
