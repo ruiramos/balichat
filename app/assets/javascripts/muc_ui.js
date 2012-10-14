@@ -53,6 +53,9 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
   var from = $(message).attr('from');
   var text = $(message).find('body').text();
 
+  // Replace newlines with <br>
+  text = gui.insertBreaks(text);
+
   // Replace links, youtube clips, etc.
   text = this.doReplacements(text);
 
