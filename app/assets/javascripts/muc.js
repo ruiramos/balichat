@@ -4,7 +4,7 @@ var Muc = function(ui, jid, nick) {
   this.nick = nick;
 
   this.createMucHandler();
-  this.receivedTopic = false; // used to know when the user stoped receiving history
+  this.showJoins = false; // used to know when the user stoped receiving history
 }
 
 Muc.fn = Muc.prototype;
@@ -65,7 +65,7 @@ Muc.fn.joinHandler = function(ui, muc) {
         if (text) text = Strophe.getText(text);
         muc.occupants[nick] = {};
 
-        if (that.receivedTopic == true) {
+        if (that.showJoins == true) {
           ui.joinHandler(stanza, muc, nick, text);
         } else {
           ui.mucRosterHandler(stanza, muc, nick, text);
@@ -73,6 +73,11 @@ Muc.fn.joinHandler = function(ui, muc) {
 
         if (muc.status_handler) {
           muc.status_handler(stanza);
+        }
+
+        // If i received my own presence then show joins from here on!
+        if (Strophe.getBareJidFromJid(nick) == Strophe.getBareJidFromJid(jabber.jid)) {
+          that.showJoins = true;
         }
       }
     }
@@ -134,7 +139,6 @@ Muc.fn.topicHistoryHandler = function(ui, muc) {
       var body = $stanza.find("body");
       if (body.length == 0 && $stanza.find("delay").length > 0 && $stanza.find("subject").length > 0) {
         ui.topicHistoryHandler($stanza.attr("from"), $stanza.find("subject").text());
-        that.receivedTopic = true;
       }
     }
 
@@ -150,7 +154,6 @@ Muc.fn.topicChangeHandler = function(ui, muc) {
       var body = $stanza.find("body");
       if (body.length == 0 && $stanza.find("delay").length == 0 && $stanza.find("subject").length > 0) {
         ui.topicChangeHandler($stanza.attr("from"), $stanza.find("subject").text());
-        that.receivedTopic = true;
       }
     }
 
