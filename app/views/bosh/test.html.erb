@@ -36,6 +36,19 @@
           </div>
         </div>
 
+        <div class="row-fluid message-container" id="welcome-message">
+          <div class="message system">
+            <div class="span1">&nbsp;</div>
+            <div class="span11">
+              <div class="message-content">
+                <p class="nick">Welcome message</p>
+                <p class="timestamp">Time</p>
+                <p class="text">Message</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="row-fluid" id="empty-message">
           <div class="message old">
             <div class="span1">
@@ -57,7 +70,7 @@
           </div>
         </div>
 
-                <div class="row-fluid" id="empty-message">
+        <div class="row-fluid" id="empty-message">
           <div class="message old">
             <div class="span1">
               <div class="message-avatar hidden-phone">
@@ -178,5 +191,9 @@
       window.muc.ui.api.reinitialise();
     });
     $(window).resize();
+
+    // Welcome message
+    var mucName = Strophe.getNodeFromJid(window.muc.jid);
+    $('#welcome-message').find('.nick').text('Welcome to '+mucName);
   });
 </script>
