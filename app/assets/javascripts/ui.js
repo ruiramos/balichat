@@ -43,14 +43,41 @@ window.muc.ui.api.scrollToBottom();
 
 }
 
+Ui.fn.submitTopic = function(text) {
+  window.muc.changeTopic(text);
+  $('.topic.edit').hide();
+  $('.topic.editable').show();
+  $('.chat-input-field').focus();
+}
+
+Ui.fn.topicHandler = function() {
+  var that = this;
+
+  $('.topic.editable').click(function() {
+    $(this).hide();
+    $('.topic.edit').show();
+    $('.topic.edit input').val($('.topic.editable').text());
+    $('.topic.edit input').focus();
+  });
+
+  $('.topic.edit').keydown(function(e) {
+    if (e.keyCode == 13) {
+      var text = $(this).val();
+      if (text.length) {
+        that.submitTopic(text);
+      }
+    }
+  });
+}
+
 $(document).ready(function () {
-  $('.chat-input-field').keydown(function (e) {
-    if (e.keyCode == 13 && event.shiftKey){
+  $('.chat-input-field').keydown(function(e) {
+    if (e.keyCode == 13 && event.shiftKey) {
       return true;
     } else if (e.keyCode == 13) {
       var text = $(this).val();
       text = $.trim(text);
-      if(text.length){
+      if (text.length) {
         window.muc.sendMessage(text);
       }
       
@@ -59,6 +86,11 @@ $(document).ready(function () {
     }
   });
 
-  $('#expand-embeds').change(function(){gui.expandEmbeds();});
+  $('#expand-embeds').change(function(){ gui.expandEmbeds(); });
 
+  // Focus on input field
+  $('.chat-input-field').focus();
+
+  // Add topic interactions
+  Ui.fn.topicHandler();
 });

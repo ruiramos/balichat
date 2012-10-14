@@ -34,7 +34,7 @@
 
   <div class="span8 chat-column">
     <h3 id="topic-amizade" class="topic editable">No topic</h3>
-    <h3 class="topic edit hide"><%= text_field_tag :topic, '', class: 'span11 topic' %> <%= link_to_function 'Save', 'submitTopic()', class: 'btn btn-small' %></h3>
+    <h3 class="topic edit hide"><%= text_field_tag :topic, '', class: 'span11 topic' %> <%= link_to_function 'Save', 'gui.submitTopic()', class: 'btn btn-small' %></h3>
 
     <div class="chat-window scroll-pane" id="muc-amizade">
       <div class="chat-muc-messages">
@@ -136,16 +136,6 @@
 
     jabber = new Jabber();
     jabber.connect('<%= @jid %>', '<%= @sid %>', '<%= @rid %>', '<%= JABBER[:host] %>');
-
-    // Focus on input field
-    $('.chat-input-field').focus();
-
-    $('.topic.editable').click(function() {
-      $(this).hide();
-      $('.topic.edit').show();
-      $('.topic.edit input').val($('.topic.editable').text());
-      $('.topic.edit input').focus();
-    });
 
     // update chat-window size
     $(window).resize(function(){
