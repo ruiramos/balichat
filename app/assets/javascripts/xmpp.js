@@ -2,14 +2,14 @@ var Jabber = function() {
   this.BOSH_SERVICE = "/http-bind";
   this.connection = null;
   this.jid = null;
-  this.muc = null;
 };
 
 Jabber.fn = Jabber.prototype;
 
-Jabber.fn.isOwnMessage = function(message) {
+Jabber.fn.isOwnMessage = function(message, nick) {
   var from = $(message).attr('from');
-  return (Strophe.getResourceFromJid(from) == this.jid);
+
+  return (Strophe.getResourceFromJid(from) == nick);
 }
 
 Jabber.fn.onAttach = function(status) {
