@@ -83,7 +83,7 @@
         <tbody>
           <tr>
             <td><%= text_area :input, '', class: 'chat-input-field', rows: 2 %></td>
-            <td class="btn-send-td"><%= link_to_function 'Send', 'return false', class: 'btn btn-info btn-send' %></td>
+            <td class="btn-send-td"><%= link_to_function 'Send', 'gui.sendChatMessage("btn")', class: 'btn btn-info btn-send'%></td>
           </tr>
         </tbody>
       </table>

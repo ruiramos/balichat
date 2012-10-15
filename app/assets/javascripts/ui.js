@@ -101,18 +101,22 @@ Ui.fn.clearTitleBar = function() {
   document.title = Strophe.getNodeFromJid(window.muc.jid);;
 }
 
+Ui.fn.sendChatMessage = function(text){
+  if(text=="btn") text=$('.chat-input-field').val();
+  text = $.trim(text);
+  if (text.length) {
+    window.muc.sendMessage(text);
+  }
+  $('.chat-input-field').val("");
+}
+
 $(document).ready(function () {
   $('.chat-input-field').keydown(function(e) {
     if (e.keyCode == 13 && event.shiftKey) {
       return true;
     } else if (e.keyCode == 13) {
       var text = $(this).val();
-      text = $.trim(text);
-      if (text.length) {
-        window.muc.sendMessage(text);
-      }
-      
-      $(this).val("");
+      gui.sendChatMessage(text);
       return false;
     }
   });

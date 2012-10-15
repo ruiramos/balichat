@@ -10,6 +10,7 @@ var Muc = function(ui, jid, nick) {
 Muc.fn = Muc.prototype;
 
 Muc.fn.sendMessage = function(text) {
+  if(text=="btn") text=$('.chat-input-field').val();
   var message = $msg({to: this.jid, from: jabber.jid, type: 'groupchat'}).c('body').t(text);
   connection.send(message);
 
