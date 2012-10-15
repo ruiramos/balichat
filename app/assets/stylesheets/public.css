@@ -22,20 +22,20 @@ label {font-size:0.9em;}
 .box ul {list-style: none; margin:0; padding:0;}
 .box .box-content {margin-top:4px;}
 
-ul .pending {padding:1px 6px; margin:0 12px; background:#a6a6a6; border-radius: 8px; color:white; font-size:0.9em;}
+ul .pending {padding:1px 6px;margin:0 12px;background:#a6a6a6;border-radius:8px;color:white;font-size:0.9em}
 
 /* Users */
-.users li {padding:4px; cursor: pointer;height:22px;clear:both; border-radius: 5px}
-.users li img {margin-right:4px;}
-.users img.info {margin-top:12px;}
-.users li div { width:18px; height:18px}
+.users li {padding:4px;cursor:pointer;height:22px;clear:both;border-radius:5px}
+.users li img {margin-right:4px}
+.users img.info {margin-top:12px}
+.users li div { width:18px;height:18px}
 .users li:hover { background-color:#eee}
-.users li > div {padding:2px; float:left}
+.users li > div {padding:2px;float:left}
 .users div.img-polaroid {border-radius:2px;padding:1px}
-.users div.userimg {border-radius:2px; background-position: 0 0;background-size:18px 18px !important}
-.users div.online-placeholder {background-color:#3CC248; border-color:#38b143; }
-.users div.offline-placeholder {background-color:#999; border-color:#666; }
-.users div.away-placeholder {background-color:yellow; border-color:#C4C400; } 
+.users div.userimg {border-radius:2px;background-position:0 0;background-size:18px 18px !important}
+.users div.online-placeholder {background-color:#3CC248;border-color:#38b143}
+.users div.offline-placeholder {background-color:#999;border-color:#666}
+.users div.away-placeholder {background-color:yellow;border-color:#C4C400} 
 .users div.user-name-container {width:130px}
 .users span.user-name, .users span.concierge {line-height:20px;margin-left:6px;white-space:nowrap;width:100%;overflow:hidden;text-overflow:ellipsis;display:inline-block}
 .users span.offline-user {color:#bbb;}
