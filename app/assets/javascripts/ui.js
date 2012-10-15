@@ -103,8 +103,9 @@ Ui.fn.clearTitleBar = function() {
 }
 
 Ui.fn.sendChatMessage = function(text){
-  if(text=="btn") text=$('.chat-input-field').val();
+  if (text == "btn") text = $('.chat-input-field').val();
   text = $.trim(text);
+  
   if (text.length) {
     window.muc.sendMessage(text);
   }
