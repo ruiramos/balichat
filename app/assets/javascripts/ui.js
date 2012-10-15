@@ -98,7 +98,8 @@ Ui.fn.setTitleBar = function() {
 }
 
 Ui.fn.clearTitleBar = function() {
-  document.title = Strophe.getNodeFromJid(window.muc.jid);;
+  document.title = Strophe.getNodeFromJid(window.muc.jid);
+  window.muc.unread_messages = 0;
 }
 
 Ui.fn.sendChatMessage = function(text){

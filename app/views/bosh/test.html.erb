@@ -13,7 +13,7 @@
     </div>
     <div class="files box" id="files-amizade">
       <h3>Latest files 
-          <a href="#" id="files-info-tooltip" rel="tooltip" data-placement="top" data-original-title="You can easily upload files by drag-and-dropping them to the chat window!" class="pull-right"><img src="/assets/info.png" class="files-info" /></a>
+          <a href="#" id="files-info-tooltip" rel="tooltip" data-placement="top" data-original-title="You can easily share files by drag-and-dropping them onto the chat window!" class="pull-right"><img src="/assets/info.png" class="files-info" /></a>
       </h3>
       <ul id="files" class="box-content files">
         <% for document in Document.where(chatroom: "amizade@conference.#{JABBER[:host]}") %>

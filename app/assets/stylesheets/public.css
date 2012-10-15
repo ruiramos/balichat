@@ -53,7 +53,7 @@ ul .pending {padding:1px 6px; margin:0 12px; background:#a6a6a6; border-radius: 
 .chat-muc-messages .row-fluid {padding:0 1px}
 h3 {padding:6px 0 2px 5px !important}
 h3.topic {font-size:0.85em;color:#f1f1f1;text-transform:uppercase;padding-bottom:4px;
-border:1px solid #00C8DA;border-bottom:2px solid #00C8DA;line-height:16px;margin:16px 0 0;background:#5BC0DE;}
+border:1px solid #00C8DA;border-bottom:2px solid #00C8DA;line-height:16px;margin:16px 0 0;background:#37ABCE;}
 h3.topic.editable:hover {border:1px dashed #aaa;border-bottom:2px dashed #aaa;cursor:text;background:#777;color:#fff}
 h3.topic.edit input.topic {margin:0;text-transform:uppercase;color:#666;font-size:0.95em;font-weight:bold}
 h3.topic.edit a {text-transform:none;font-weight:bold}
@@ -76,7 +76,7 @@ height:32px;width:32px;border-radius:2px;float:right;}
 .message.own .nick,.message.old .nick {color:#333}
 
 .message.system .nick{color:#5E6302}
-.message.system .text{font-weight: normal;font-style: italic; color:#5E6302;font-family: Georgia}
+.message.system .text{font-weight: normal;font-style: italic; color:#5E6302;font-family: Georgia;clear:none;}
 .message.system .message-content span.timestamp {float:none;margin:0;font-weight: bold;font-size:0.9em;} 
 .message.system a {color:#5E6302; font-weight: bold;}
 
