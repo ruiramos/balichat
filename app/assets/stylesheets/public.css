@@ -4,10 +4,10 @@ label {font-size:0.9em;}
 
 .container-fluid {padding:0;}
 .row-fluid {padding-left:20px; padding-right:20px;width:auto;}
-.coming-soon {color:#bbb !important;}
+.coming-soon {color:#bbb !important}
 
 /* Nav Bar */
-#header { height:40px; border-bottom:1px solid #e8e8e8; background:#f1f1f1; padding-top:12px;}
+#header { height:40px; border-bottom:1px solid #e8e8e8; background:#333; padding-top:12px;}
 #header h1 { margin-top:-5px; }
 #header a.brand {float:left; display:block; color:black; font-size:0.75em; font-weight: normal}
 #header .settings-panel {float:left;}
@@ -16,29 +16,35 @@ label {font-size:0.9em;}
 
 #header ul.rooms {margin-bottom:0; margin-top: 3px;padding:0;border:0;}
 
+/* Content */
+.content-row, .topic-row {padding:0}
+.topic-row {position:relative;z-index:900;border-bottom:3px solid #aaa;-webkit-box-shadow:0 8px 6px -6px rgba(0,0,0,0.2);-moz-box-shadow:0 8px 6px -6px rgba(0,0,0,0.2);box-shadow:0 8px 6px -6px rgba(0,0,0,0.2)}
+.left-column {overflow: hidden;background:#eee;border-right: 3px solid #bbb;padding: 0 15px 0 10px;width: 183px;height: 100%;min-height: 100%}
+.chat-column {margin-left:0 !important}
+
 /* Box */
 .box {margin:16px 0 32px;}
-.box h3 { font-size:0.85em; text-transform: uppercase; color:#666; padding: 0px; margin: 0; padding-bottom: 4px; border-bottom:1px solid #ccc; line-height: 16px }
+.box h3 {font-size:0.85em;text-transform:uppercase;color:#888;padding:0px;margin:0;padding-bottom:4px;border-bottom:1px solid #ccc;line-height:16px;text-shadow:1px 1px 0 #fff}
 .box ul {list-style: none; margin:0; padding:0;}
 .box .box-content {margin-top:4px;}
 
 ul .pending {padding:1px 6px;margin:0 12px;background:#a6a6a6;border-radius:8px;color:white;font-size:0.9em}
 
 /* Users */
-.users li {padding:4px;cursor:pointer;height:22px;clear:both;border-radius:5px}
-.users li img {margin-right:4px}
-.users img.info {margin-top:12px}
-.users li div { width:18px;height:18px}
-.users li:hover { background-color:#eee}
-.users li > div {padding:2px;float:left}
-.users div.img-polaroid {border-radius:2px;padding:1px}
-.users div.userimg {border-radius:2px;background-position:0 0;background-size:18px 18px !important}
-.users div.online-placeholder {background-color:#3CC248;border-color:#38b143}
-.users div.offline-placeholder {background-color:#999;border-color:#666}
-.users div.away-placeholder {background-color:yellow;border-color:#C4C400} 
-.users div.user-name-container {width:130px}
-.users span.user-name, .users span.concierge {line-height:20px;margin-left:6px;white-space:nowrap;width:100%;overflow:hidden;text-overflow:ellipsis;display:inline-block}
-.users span.offline-user {color:#bbb;}
+.users .user {padding:4px;cursor:pointer;height:22px;clear:both;border-radius:5px}
+.users .user:hover { background-color:#ddd}
+.users .user .avatar .userimg {width:18px;height:18px}
+.users .user .avatar {padding:2px;float:left}
+.users .user .avatar.img-polaroid {border-radius:2px;padding:1px}
+.users .user .avatar .userimg {border-radius:2px;background-position:0 0;background-size:18px 18px !important}
+.users .user div.user-name-container {overflow:hidden;text-overflow:ellipsis}
+.users .user span.user-name {font-size:0.9em;line-height:20px;margin-left:6px;white-space:nowrap;text-overflow:ellipsis}
+
+.user.online .avatar, .user.chat .avatar {background-color:#3CC248;border-color:#38b143}
+.user.unavailable .avatar {background-color:#999;border-color:#666}
+.user.unavailable .user-name {color:#666}
+.user.xa .avatar, .user.dnd .avatar {background-color:red;border-color:#aa0000}
+.user.away .avatar {background-color:yellow;border-color:#C4C400}
 
 /* Search */
 .search input {width:75%;}
@@ -47,14 +53,14 @@ ul .pending {padding:1px 6px;margin:0 12px;background:#a6a6a6;border-radius:8px;
 /* Filters */
 #filters {}
 #filters a {color:black;}
-#filters li.active a {color:white;background-color:#666}
+#filters li.active a, #filters li.active a:hover {color:white;background-color:#666}
+#filters li a:hover {background-color:#ddd}
 
 /* ChatRoom */
 .chat-muc-messages .row-fluid {padding:0 1px}
 h3 {padding:6px 0 2px 5px !important}
-h3.topic {font-size:0.85em;color:#f1f1f1;text-transform:uppercase;padding-bottom:4px;
-border:1px solid #00C8DA;border-bottom:2px solid #00C8DA;line-height:16px;margin:16px 0 0;background:#37ABCE;}
-h3.topic.editable:hover {border:1px dashed #aaa;border-bottom:2px dashed #aaa;cursor:text;background:#777;color:#fff}
+h3.topic {margin:0;font-size:0.9em;color:#333;text-transform:uppercase;border:1px solid #fff;line-height:16px}
+h3.topic.editable:hover {border-bottom:1px dotted #ccc;cursor:text}
 h3.topic.edit input.topic {margin:0;text-transform:uppercase;color:#666;font-size:0.95em;font-weight:bold}
 h3.topic.edit a {text-transform:none;font-weight:bold}
 h3.topic span {font-style: italic}
@@ -62,12 +68,11 @@ h3.topic span {font-style: italic}
 /* Messages */
 .message {overflow:auto;border-top:1px solid #ddd;background:white;padding:10px 0}
 .message.own {background:#f4f7fb;border-color:#cfdcef}
-.message.system {background:#FEFFF2;border-color:#E2E69A}
+.message.system {background:#FEFFF2;border-color:#E2E69A;padding-bottom:0}
 .message.old {background:#fafafa;border-color:#ddd}
 
 .message-avatar {width:100%;}
-.avatar-placeholder {background:url(/assets/default-avatar.png) 100% 0 no-repeat;background-size:32px 32px;
-height:32px;width:32px;border-radius:2px;float:right;}
+.avatar-placeholder {background:url(/assets/default-avatar.png) 100% 0 no-repeat;background-size:32px 32px;height:32px;width:32px;border-radius:2px;float:right;}
 .message-content .nick { font-weight: bold; float:left;line-height: 12px;height: 14px;}
 .message-content p.timestamp {color:rgba(0,0,0,0.2);font-weight:bold;float:right; font-size:0.85em;line-height: 10px;height: 12px;margin-right:12px;}
 .message-content .text {clear:both;}
@@ -76,14 +81,14 @@ height:32px;width:32px;border-radius:2px;float:right;}
 .message.own .nick,.message.old .nick {color:#333}
 
 .message.system .nick{color:#5E6302}
-.message.system .text{font-weight: normal;font-style: italic; color:#5E6302;font-family: Georgia;clear:none;}
-.message.system .message-content span.timestamp {float:none;margin:0;font-weight: bold;font-size:0.9em;} 
+.message.system .text{font-weight:normal;font-style:italic;color:#5E6302;font-family:Georgia;clear:none}
+.message.system .message-content span.timestamp {float:none;margin:0;font-weight:bold;font-size:0.9em;}
 .message.system a {color:#5E6302; font-weight: bold;}
 
-.message.system.user-joins {background:white;border-color:#D4F0D7;padding-bottom:0;}
+.message.system.user-joins {background:white;border-color:#D4F0D7}
 .message.system.user-joins .text {color:#008800;float:left;clear:none}
 .message.system.user-leaves .text {color:#A00000;float:left;clear:none;}
-.message.system.user-leaves {background:white;border-color:#FDE2E2;padding-bottom:0;}
+.message.system.user-leaves {background:white;border-color:#FDE2E2}
 
 .message.old .text {color:#999;}
 .message.old .nick {color:#777;}
@@ -101,7 +106,7 @@ small.link-source {display:block;overflow:auto;font-size: 85%;display: block;lin
 opacity:0.7;background: url('/assets/link_icon.gif') 0 0 no-repeat;padding-left: 20px;}
 img.embedded {max-width:90%; max-height:500px}
 iframe.noEmbedds, img.noEmbedds {display:none;}
-small.link-source.noEmbedds {font-size:100%;opacity:1;background:none;padding:0;}
+small.link-source.noEmbedds {font-size:100%;opacity:1;background:none;padding:0;line-height: 20px;}
 
 div.scroll-pane {overflow:auto;overflow-x:hidden}
 

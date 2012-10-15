@@ -1,5 +1,5 @@
-<div class="span2">
-  <div class="left-column hidden-phone">
+<div class="span2 left-column">
+  <div class="hidden-phone">
     <div class="filters box" id="filters-amizade">
       <h3>Content</h3>
       <ul id="filters" class="box-content nav nav-pills nav-stacked">
@@ -41,9 +41,6 @@
   </div>
 
   <div class="span8 chat-column">
-    <h3 id="topic-amizade" class="topic editable">No topic</h3>
-    <h3 class="topic edit hide"><%= text_field_tag :topic, '', class: 'span11 topic' %> <%= link_to_function 'Save', 'gui.submitTopic("_button")', class: 'btn btn-small' %></h3>
-
     <div class="chat-window scroll-pane" id="muc-amizade">
       <div class="chat-muc-messages">
         <div class="row-fluid hide message-container" id="empty-message">
@@ -68,7 +65,6 @@
             <div class="span1">&nbsp;</div>
             <div class="span11">
               <div class="message-content">
-                <p class="nick">Welcome message</p>
                 <p class="timestamp">Time</p>
                 <p class="text">Message</p>
               </div>
@@ -83,7 +79,7 @@
         <tbody>
           <tr>
             <td><%= text_area :input, '', class: 'chat-input-field', rows: 2 %></td>
-            <td class="btn-send-td"><%= link_to_function 'Send', 'gui.sendChatMessage("btn")', class: 'btn btn-info btn-send'%></td>
+            <td class="btn-send-td"><%= link_to_function 'Send', 'gui.sendChatMessage("btn")', class: 'btn btn-inverse btn-send'%></td>
           </tr>
         </tbody>
       </table>
@@ -95,15 +91,8 @@
     <div class="user-list box" id="user-list-amizade">
       <h3>Users</h3>
       <ul class="users box-content unstyled">
-        <li class="concierge">
-          <div class="online-placeholder img-rounded img-polaroid">
-            <div class="userimg" style="background:url('/assets/concierge32.png')"></div>
-          </div>
-          <div class="user-name-container"><span class="concierge">Concierge</span>
-        </li>
-
-        <li id="empty-user" class="hide">
-          <div class="online-placeholder img-rounded img-polaroid">
+        <li id="empty-user" class="hide user online">
+          <div class="avatar img-rounded img-polaroid">
             <div class="userimg" style="background:url('/assets/default-avatar.png')"></div>
           </div>
           <div class="user-name-container"><span class="user-name">&nbsp;</span></div>
@@ -139,7 +128,7 @@
   var gui = null;
 
   $(document).ready(function () {
-    $('.scroll-pane').jScrollPane();
+    $('.scroll-pane').jScrollPane({verticalGutter:0});
     gui = new Ui();
 
     jabber = new Jabber();
@@ -156,7 +145,7 @@
 
     // Welcome message
     var mucName = Strophe.getNodeFromJid(window.muc.jid);
-    $('#welcome-message').find('.nick').text('Welcome to '+mucName);
+    $('#welcome-message').find('.text').text('Welcome to '+mucName);
     $('#welcome-message').find('.timestamp').text(moment().format(window.muc.ui.timeFormat));
   });
 </script>

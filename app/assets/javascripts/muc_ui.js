@@ -128,7 +128,7 @@ MucUi.fn.doReplacements = function(text) {
     $container.append("<small class='link-source "+hiddenClass+"'>"+linkify(source)+"</small>");
 
 
-  } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(.*)(\.jpg|\.png|\.gif|\.bmp|)/i)) { //image embedd
+  } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(.*)(\.jpg|\.png|\.gif|\.bmp)/i)) { //image embedd
     var img = $("<img class='embedded "+hiddenClass+"' src='"+text+"'>");
     $(img).load(function() {
       window.muc.ui.api.reinitialise();
@@ -213,7 +213,7 @@ MucUi.fn.presenceHandler = function(muc, nick, status, type) {
     $status.addClass('away-placeholder');
   } else if (type == gui.status.online) {
     $status.addClass('online-placeholder');
-  } else if (type == gui.status.online) {
+  } else if (type == gui.status.unavailable) {
     $status.addClass('offline-placeholder');
   }
 }

@@ -2,6 +2,15 @@ var Jabber = function() {
   this.BOSH_SERVICE = "/http-bind";
   this.connection = null;
   this.jid = null;
+
+  this.status = {
+    online: 'online',
+    away: 'away',
+    xa: 'xa',
+    dnd: 'dnd',
+    chat: 'chat',
+    unavailable: 'unavailable'
+  }
 };
 
 Jabber.fn = Jabber.prototype;

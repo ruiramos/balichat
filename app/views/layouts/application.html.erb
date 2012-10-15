@@ -15,23 +15,19 @@
 
     <ul class="span8 nav nav-tabs rooms">
       <li class="active"><a href="#">Rumble room</a></li>
-      <!--
-<a href="#">Demo room</a> <a href="#"><i class="icon-remove icon-white"></i></a>
-      <li><a href="#">outro</a><i class="icon-remove icon-white"></i></li>
-      <li><a href="#">caralho</a><i class="icon-remove icon-white"></i></li>-->
     </ul>
      
     <div class="span2 settings-panel">  
         <% if user_signed_in? %>
           <div class="btn-group">
           <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-            <%= current_user %>
+            <i class="icon-user"></i> <%= current_user %>
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
             <!-- dropdown menu links -->
-            <li><a href="#settings" role="button" class="" data-toggle="modal">Settings</a></li>
-            <li><%= link_to "Log out", destroy_user_session_path, method: :delete, class: "" %></li>
+            <li><%= link_to '<i class="icon-cog"></i> Settings'.html_safe, '#settings', 'data-toggle' => 'modal' %></li>
+            <li><%= link_to '<i class="icon-off"></i> Log out'.html_safe, destroy_user_session_path, method: :delete, class: "" %></li>
           </ul>
         </div>
         <% else %>
@@ -39,6 +35,13 @@
         <% end %>
 
     </div> 
+  </div>
+
+  <div class="row-fluid topic-row">
+    <div class="span8 offset2">
+      <h3 id="topic-amizade" class="topic editable">No topic</h3>
+      <h3 class="topic edit hide"><%= text_field_tag :topic, '', class: 'span11 topic' %> <%= link_to_function 'Save', 'gui.submitTopic("_button")', class: 'btn btn-small' %></h3>
+    </div>
   </div>
 
   <div class="row-fluid content-row">
