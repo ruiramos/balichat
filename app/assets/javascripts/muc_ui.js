@@ -85,7 +85,7 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
     $element.find('.timestamp').text(moment(timestamp).format(this.timeFormat));
     $element.show();
 
-    if (jabber.isOwnMessage(message)) {
+    if (jabber.isOwnMessage(message, nick)) {
       $element.find('.message').addClass('own');
     }
   }
@@ -95,7 +95,7 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
     if ($(message).attr('old')) {
       $element.find('.message').addClass('old');
     }
-    this.appendToMuc($element, jabber.isOwnMessage(message));
+    this.appendToMuc($element, jabber.isOwnMessage(message, nick));
     this.lastMessageElement = $element;
   }
 
@@ -103,7 +103,7 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
   else {
     var $newParagraph = jQuery("<p></p>").html(textReplaced).addClass('text');
     this.lastMessageElement.find('.text').last().after($newParagraph);
-    this.appendToMuc(null, jabber.isOwnMessage(message));
+    this.appendToMuc(null, jabber.isOwnMessage(message, nick));
   }
 
   if (!this.lastMessageElement.find('.message').hasClass('old')) {
