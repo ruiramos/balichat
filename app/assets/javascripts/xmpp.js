@@ -15,10 +15,10 @@ var Jabber = function() {
 
 Jabber.fn = Jabber.prototype;
 
-Jabber.fn.isOwnMessage = function(message, nick) {
+Jabber.fn.isOwnMessage = function(message) {
   var from = $(message).attr('from');
-
-  return (Strophe.getResourceFromJid(from) == nick);
+  var myNode = Strophe.getNodeFromJid(this.jid);
+  return (Strophe.getResourceFromJid(from) == myNode);
 }
 
 Jabber.fn.onAttach = function(status) {
