@@ -39,8 +39,12 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   if (element != null && $(element).find('.message').hasClass('old')) {
     $('#welcome-message').before(element);
   } else {
-    $('.chat-muc-messages').append(element);
     animate = true;
+    
+    // Scroll fast (don't animate) if the scroll is not 100% and is own message
+    if (isOwnMessage && this.api.getPercentScrolledY() != 1) animate = false;
+    
+    $('.chat-muc-messages').append(element);
   }
 
   this.updateChatWindow();
