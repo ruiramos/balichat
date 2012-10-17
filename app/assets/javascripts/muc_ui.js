@@ -30,6 +30,7 @@ MucUi.fn = MucUi.prototype;
  */
 MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   var scrollBottom = true;
+  var animate = false;
 
   if (this.api.getPercentScrolledY() != 1) {
     scrollBottom = false;
@@ -39,12 +40,13 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
     $('#welcome-message').before(element);
   } else {
     $('.chat-muc-messages').append(element);
+    animate = true;
   }
 
   this.updateChatWindow();
 
   if (element != null || scrollBottom == true || isOwnMessage) {
-    this.scrollBottom();
+    this.scrollBottom(animate);
   }
 }
 
@@ -174,8 +176,8 @@ MucUi.fn.updateChatWindow = function() {
   this.api.reinitialise();
 }
 
-MucUi.fn.scrollBottom = function() {
-  this.api.scrollToPercentY(100, false);
+MucUi.fn.scrollBottom = function(animate) {
+  this.api.scrollToPercentY(100, animate);
 }
 
 MucUi.fn.joinHandler = function(stanza, muc, nick, text) {
