@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   end
 
   def create_user_on_ejabberd
-    output = `#{JABBER[:ejabberdctl]} register #{self.jid} #{JABBER[:host]} #{self.jabber_password}`
+    output = `sudo #{JABBER[:ejabberdctl]} register #{self.jid} #{JABBER[:host]} #{self.jabber_password}`
 
     if output =~ /successfully registered/
       return true
