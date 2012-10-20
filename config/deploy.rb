@@ -25,7 +25,7 @@ role :web, domain
 role :db,  domain, :primary => true
 
 # extra
-set :bundle_flags,               "--deployment"
+#set :bundle_flags,               "--deployment"
 set :normalize_asset_timestamps, false
 set :rails_env,                  "production"
 
@@ -47,11 +47,11 @@ end
 
 # Restart Passenger
 deploy.task :restart, :roles => :app do
-  # Fix Permissions
-  sudo "chown -R www-data:www-data #{current_path}"
-  sudo "chown -R www-data:www-data #{latest_release}"
-  sudo "chown -R www-data:www-data #{shared_path}/bundle"
-  sudo "chown -R www-data:www-data #{shared_path}/log"
+  ## Fix Permissions
+  #run "chown -R www-data:www-data #{current_path}"
+  #run "chown -R www-data:www-data #{latest_release}"
+  #run "chown -R www-data:www-data #{shared_path}/bundle"
+  #run "chown -R www-data:www-data #{shared_path}/log"
 
   # Restart Application
   run "touch #{current_path}/tmp/restart.txt"
