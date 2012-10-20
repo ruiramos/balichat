@@ -1,10 +1,8 @@
 development:
   host: localhost
-  host: pylon.local
-  host: aeronave.local
 
 test:
   host: localhost
 
 production:
-  host: balichat.twintend.com
+  host: localhost

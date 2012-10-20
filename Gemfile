@@ -9,9 +9,7 @@ gem 'capistrano'
 #gem "tp-blather", "~> 0.8.5"
 #gem 'xmpp4r'
 
-group :development do
-  gem 'sqlite3'
-end
+gem 'sqlite3'
 
 group :production do
   gem 'mysql2' # If using mysql in development, this can be outside the production group.
