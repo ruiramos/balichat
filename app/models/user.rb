@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
     if output =~ /successfully registered/
       return true
     else
-      raise "Error registering user (#{command})"
+      raise "Error registering user (#{output})"
     end
   end
 
