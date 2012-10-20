@@ -50,6 +50,7 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   this.updateChatWindow();
 
   if (element != null || scrollBottom == true || isOwnMessage) {
+    console.log("Scrolling to bottom!");
     this.scrollBottom(animate);
   }
 }
