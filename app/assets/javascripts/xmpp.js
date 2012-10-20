@@ -48,13 +48,13 @@ Jabber.fn.sendPrivateMessage = function(jid, text) {
 Jabber.fn.connect = function(jid, sid, rid, host) {
   connection = new Strophe.Connection(this.BOSH_SERVICE);
   
-  //connection.rawInput = function (data) {
-  //  console.log('RAW_IN: ' + data);
-  //};
-  
-  //connection.rawOutput = function (data) {
-  //  console.log('SENT: ' + data);
-  //};
+  connection.rawInput = function (data) {
+    console.log('RAW_IN: ' + data);
+  };
+
+  connection.rawOutput = function (data) {
+    console.log('SENT: ' + data);
+  };
 
   // Strophe.log = function (lvl, msg) { console.log(msg); };
   this.jid = jid;
