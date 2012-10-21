@@ -2,6 +2,7 @@ var Jabber = function() {
   this.BOSH_SERVICE = "/http-bind";
   this.connection = null;
   this.jid = null;
+  this.mucAddress = null;
 
   this.status = {
     online: 'online',
@@ -28,8 +29,8 @@ Jabber.fn.onAttach = function(status) {
   else if (status == Strophe.Status.ATTACHED) {
     console.log('Strophe is attached.');
   }
-  //connection.send($pres().tree());
-  this.muc = new MucUi(connection, 'amizade@conference.'+host, Strophe.getNodeFromJid(this.jid));
+  connection.send($pres().tree());
+  this.muc = new MucUi(connection, this.mucAddress, Strophe.getNodeFromJid(this.jid));
 }
 
 Jabber.fn.onMessage = function(message) {
@@ -59,5 +60,6 @@ Jabber.fn.connect = function(jid, sid, rid, host) {
 
   // Strophe.log = function (lvl, msg) { console.log(msg); };
   this.jid = jid;
+  this.mucAddress = 'amizade@conference.'+host;
   connection.attach(jid, sid, rid, this.onAttach);
 }
