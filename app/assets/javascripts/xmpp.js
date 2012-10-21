@@ -45,7 +45,7 @@ Jabber.fn.sendPrivateMessage = function(jid, text) {
   return true;
 }
 
-function onConnect(status) {
+Jabber.fn.onConnect = function(status) {
    if (status == Strophe.Status.CONNECTING) {
   log('Strophe is connecting.');
     } else if (status == Strophe.Status.CONNFAIL) {
@@ -58,7 +58,7 @@ function onConnect(status) {
   $('#connect').get(0).value = 'connect';
     } else if (status == Strophe.Status.CONNECTED) {
   log('Strophe is connected.');
-  xmpp.muc = new MucUi(connection, 'amizade@conference.'+host, Strophe.getNodeFromJid(jid));
+  this.muc = new MucUi(connection, 'amizade@conference.'+host, Strophe.getNodeFromJid(jid));
     }
   
 }
@@ -77,5 +77,5 @@ Jabber.fn.connect = function(jid, sid, rid, host) {
   // Strophe.log = function (lvl, msg) { console.log(msg); };
   this.jid = jid;
   //connection.attach(jid, sid, rid, this.onAttach);
-  connection.connect('oterosantos_2a94f4@chat.twintend.com', 'Jjc8hG', onConnect);
+  connection.connect('oterosantos_2a94f4@chat.twintend.com', 'Jjc8hG', this.onConnect);
 }
