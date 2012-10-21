@@ -2,12 +2,12 @@ require 'bundler/capistrano'
 
 set :application, "chat.twintend.com" # Application name.
 set :domain, "chat.twintend.com" # Web server url.
-set :user, "tpinto" # Remote user name. Must be able to log in via SSH.
+set :user, "twintend-deploy" # Remote user name. Must be able to log in via SSH.
 set :use_sudo, false # Remove or set the true if all commands should be run through sudo.
 
-set :local_user, "tpinto" # Local user name.
+#set :local_user, "tpinto" # Local user name.
 
-set :deploy_to, "/home/#{user}/hosting/#{application}"
+set :deploy_to, "/var/www/apps/chat.twintend.com"
 set :deploy_via, :export
 
 set :scm, 'git'
@@ -29,8 +29,8 @@ role :db,  domain, :primary => true
 set :normalize_asset_timestamps, false
 set :rails_env,                  "production"
 
-set :runner,                     "www-data"
-set :admin_runner,               "www-data"
+#set :runner,                     "www-data"
+#set :admin_runner,               "www-data"
 
 ssh_options[:keys] = ["~/.ssh/id_rsa"]
 
