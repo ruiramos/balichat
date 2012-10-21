@@ -58,7 +58,8 @@ Jabber.fn.connect = function(jid, sid, rid, host) {
 
   // Strophe.log = function (lvl, msg) { console.log(msg); };
   this.jid = jid;
-  connection.attach(jid, sid, rid, this.onAttach);
+  //connection.attach(jid, sid, rid, this.onAttach);
+  connection.connect('oterosantos_2a94f4@chat.twintend.com', 'Jjc8hG');
 
   this.muc = new MucUi(connection, 'amizade@conference.'+host, Strophe.getNodeFromJid(jid));
 }
