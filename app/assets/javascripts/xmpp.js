@@ -22,17 +22,6 @@ Jabber.fn.isOwnMessage = function(message) {
   return (Strophe.getResourceFromJid(from) == myNode);
 }
 
-Jabber.fn.onAttach = function(status) {
-  if (status == Strophe.Status.DISCONNECTED) {
-    console.log('Disconnected.');
-  }
-  else if (status == Strophe.Status.ATTACHED) {
-    console.log('Strophe is attached.');
-  }
-  connection.send($pres().tree());
-  this.muc = new MucUi(connection, this.mucAddress, Strophe.getNodeFromJid(this.jid));
-}
-
 Jabber.fn.onMessage = function(message) {
   var text = $(message).find('body').text();
   var from = $(message).attr('from');
@@ -60,6 +49,16 @@ Jabber.fn.connect = function(jid, sid, rid, host) {
 
   // Strophe.log = function (lvl, msg) { console.log(msg); };
   this.jid = jid;
+
   this.mucAddress = 'amizade@conference.'+host;
-  connection.attach(jid, sid, rid, this.onAttach);
+  connection.attach(jid, sid, rid, function(status) {
+    if (status == Strophe.Status.DISCONNECTED) {
+      console.log('Disconnected.');
+    }
+    else if (status == Strophe.Status.ATTACHED) {
+      console.log('Strophe is attached.');
+    }
+  });
+
+  this.muc = new MucUi(connection, this.mucAddress, Strophe.getNodeFromJid(this.jid));
 }
