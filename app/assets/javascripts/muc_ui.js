@@ -226,8 +226,6 @@ MucUi.fn.presenceHandler = function(muc, nick, status, type) {
 
 var p;
 MucUi.fn.vcardHandler = function(stanza) {
-  console.log("-------VCARD----");
-  console.log(stanza);
   p = new Participant(jabber.jid);
   p.setVcard(stanza);
 }
