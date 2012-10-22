@@ -13,8 +13,11 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap.min
+//
 //= require strophe.min
 //= require strophe.muc
+//= require strophe.vcard
+//
 //= require linkify
 //= require moment.min
 //= require jquery.jscrollpane.min

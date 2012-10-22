@@ -50,7 +50,6 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   this.updateChatWindow();
 
   if (element != null || scrollBottom == true || isOwnMessage) {
-    console.log("Scrolling to bottom!");
     this.scrollBottom(animate);
   }
 }
@@ -223,6 +222,14 @@ MucUi.fn.presenceHandler = function(muc, nick, status, type) {
   } else if (type == gui.status.unavailable) {
     $status.addClass('offline-placeholder');
   }
+}
+
+var p;
+MucUi.fn.vcardHandler = function(stanza) {
+  console.log("-------VCARD----");
+  console.log(stanza);
+  p = new Participant(jabber.jid);
+  p.setVcard(stanza);
 }
 
 MucUi.fn.mucRosterHandler = function(stanza, muc, nick, text) {

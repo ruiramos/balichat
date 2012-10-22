@@ -125,7 +125,7 @@
   var gui = null;
 
   $(document).ready(function () {
-    $('.scroll-pane').jScrollPane({verticalGutter:0});
+    $('.scroll-pane').jScrollPane({verticalGutter:0, animateDuration:50});
     gui = new Ui();
 
     jabber = new Jabber();
