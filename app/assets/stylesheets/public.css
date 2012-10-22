@@ -7,7 +7,7 @@ label {font-size:0.9em;}
 .coming-soon {color:#bbb !important}
 
 /* Nav Bar */
-#header { height:40px; border-bottom:1px solid #e8e8e8; background:#333; padding-top:12px;}
+#header { height:40px; border-bottom:1px solid #fff; background:url('/assets/title-bg.png') repeat-x 0 0; padding-top:12px;}
 #header h1 { margin-top:-5px; }
 #header a.brand {float:left; display:block; color:#eee; font-size:0.75em; font-weight: normal}
 #header .settings-panel {float:left;}
@@ -20,9 +20,9 @@ label {font-size:0.9em;}
 .content-row, .topic-row {padding:0}
 .content-row {height:100%}
 .topic-row {position:relative;z-index:900;border-bottom:3px solid #aaa;-webkit-box-shadow:0 8px 6px -6px rgba(0,0,0,0.2);-moz-box-shadow:0 8px 6px -6px rgba(0,0,0,0.2);box-shadow:0 8px 6px -6px rgba(0,0,0,0.2)}
-.left-column {overflow: hidden;background:#eee;/*border-right: 3px solid #bbb;*/padding-left:15px;width: 183px;height: 100%;min-height: 100%}
-.chat-column {/*margin-left:0 !important;*/}
-.right-column {/*margin-left:0 !important;*/padding-right:15px; /*border-left: 3px solid #bbb;height:100%*/}
+.left-column {overflow: hidden;background:#eee;position:relative; left:1.28205128205128%;width: 183px;height: 100%;min-height: 100%}
+.chat-column {}
+.right-column {position:relative; right:1.28205128205128%;}
 
 /* Box */
 .box {margin:16px 0 32px;}
@@ -61,10 +61,10 @@ ul .pending {padding:1px 6px;margin:0 12px;background:#a6a6a6;border-radius:8px;
 /* ChatRoom */
 .chat-window {background:white;border-left: 3px solid #bbb;border-right: 3px solid #bbb;}
 .chat-muc-messages .row-fluid {padding:0 1px}
-h3 {padding:6px 0 2px 5px !important}
-h3.topic {margin:0;font-size:0.9em;color:#333;text-transform:uppercase;border:1px solid #fff;line-height:16px}
+h3.topic {margin:0;font-size:0.9em;color:#333;text-transform:uppercase;line-height:20px; padding:6px 6px 0;}
 h3.topic.editable:hover {border-bottom:1px dotted #ccc;cursor:text}
-h3.topic.edit input.topic {margin:0;text-transform:uppercase;color:#666;font-size:0.95em;font-weight:bold}
+h3.topic.edit {margin-top:-4px;}
+h3.topic.edit input.topic {margin:0;text-transform:uppercase;color:#666;font-size:0.95em;font-weight:bold;height:25px;min-height:25px;}
 h3.topic.edit a {text-transform:none;font-weight:bold}
 h3.topic span {font-style: italic}
 
