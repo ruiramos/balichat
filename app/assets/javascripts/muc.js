@@ -85,9 +85,8 @@ Muc.fn.joinHandler = function(ui, muc) {
           ui.mucRosterHandler(stanza, muc, nick, text);
         }
 
-        if (muc.status_handler) {
-          muc.status_handler(stanza);
-        }
+        // Get the user cvard
+        connection.vcard.get(ui.vcardHandler, $stanza.attr("from"));
 
         // If i received my own presence then show joins from here on!
         if (nick == Strophe.getNodeFromJid(jabber.jid)) {
