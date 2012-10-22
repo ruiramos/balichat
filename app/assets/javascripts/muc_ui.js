@@ -30,6 +30,7 @@ MucUi.fn = MucUi.prototype;
  */
 MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   var scrollBottom = true;
+  var animate = false;
 
   if (this.api.getPercentScrolledY() != 1) {
     scrollBottom = false;
@@ -38,13 +39,19 @@ MucUi.fn.appendToMuc = function(element, isOwnMessage) {
   if (element != null && $(element).find('.message').hasClass('old')) {
     $('#welcome-message').before(element);
   } else {
+    animate = true;
+    
+    // Scroll fast (don't animate) if the scroll is not 100% and is own message
+    if (isOwnMessage && this.api.getPercentScrolledY() != 1) animate = false;
+    
     $('.chat-muc-messages').append(element);
   }
 
   this.updateChatWindow();
 
   if (element != null || scrollBottom == true || isOwnMessage) {
-    this.scrollBottom();
+    console.log("Scrolling to bottom!");
+    this.scrollBottom(animate);
   }
 }
 
@@ -85,7 +92,7 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
     $element.find('.timestamp').text(moment(timestamp).format(this.timeFormat));
     $element.show();
 
-    if (jabber.isOwnMessage(message, nick)) {
+    if (jabber.isOwnMessage(message)) {
       $element.find('.message').addClass('own');
     }
   }
@@ -95,7 +102,7 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
     if ($(message).attr('old')) {
       $element.find('.message').addClass('old');
     }
-    this.appendToMuc($element, jabber.isOwnMessage(message, nick));
+    this.appendToMuc($element, jabber.isOwnMessage(message));
     this.lastMessageElement = $element;
   }
 
@@ -103,7 +110,7 @@ MucUi.fn.appendMessage = function(nick, message, timestamp) {
   else {
     var $newParagraph = jQuery("<p></p>").html(textReplaced).addClass('text');
     this.lastMessageElement.find('.text').last().after($newParagraph);
-    this.appendToMuc(null, jabber.isOwnMessage(message, nick));
+    this.appendToMuc(null, jabber.isOwnMessage(message));
   }
 
   if (!this.lastMessageElement.find('.message').hasClass('old')) {
@@ -174,8 +181,8 @@ MucUi.fn.updateChatWindow = function() {
   this.api.reinitialise();
 }
 
-MucUi.fn.scrollBottom = function() {
-  this.api.scrollToPercentY(100, false);
+MucUi.fn.scrollBottom = function(animate) {
+  this.api.scrollToPercentY(100, animate);
 }
 
 MucUi.fn.joinHandler = function(stanza, muc, nick, text) {

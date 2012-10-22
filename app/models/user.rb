@@ -30,9 +30,13 @@ class User < ActiveRecord::Base
   end
 
   def create_user_on_ejabberd
-    command = "#{JABBER[:ejabberdctl]} register #{self.jid} #{JABBER[:host]} #{self.jabber_password}"
-    ok = system(command)
-    raise "Error registering user (#{command})" if !ok
+    output = `sudo #{JABBER[:ejabberdctl]} register #{self.jid} #{JABBER[:host]} #{self.jabber_password}`
+
+    if output == "" or output =~ /successfully registered/
+      return true
+    else
+      raise "Error registering user (#{output})"
+    end
   end
 
 end

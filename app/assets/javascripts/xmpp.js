@@ -2,6 +2,7 @@ var Jabber = function() {
   this.BOSH_SERVICE = "/http-bind";
   this.connection = null;
   this.jid = null;
+  this.mucAddress = null;
 
   this.status = {
     online: 'online',
@@ -15,20 +16,10 @@ var Jabber = function() {
 
 Jabber.fn = Jabber.prototype;
 
-Jabber.fn.isOwnMessage = function(message, nick) {
+Jabber.fn.isOwnMessage = function(message) {
   var from = $(message).attr('from');
-
-  return (Strophe.getResourceFromJid(from) == nick);
-}
-
-Jabber.fn.onAttach = function(status) {
-  if (status == Strophe.Status.DISCONNECTED) {
-    console.log('Disconnected.');
-  }
-  else if (status == Strophe.Status.ATTACHED) {
-    console.log('Strophe is attached.');
-  }
-  connection.send($pres().tree());
+  var myNode = Strophe.getNodeFromJid(this.jid);
+  return (Strophe.getResourceFromJid(from) == myNode);
 }
 
 Jabber.fn.onMessage = function(message) {
@@ -48,17 +39,26 @@ Jabber.fn.sendPrivateMessage = function(jid, text) {
 Jabber.fn.connect = function(jid, sid, rid, host) {
   connection = new Strophe.Connection(this.BOSH_SERVICE);
   
-  //connection.rawInput = function (data) {
-  //  console.log('RAW_IN: ' + data);
-  //};
-  
-  //connection.rawOutput = function (data) {
-  //  console.log('SENT: ' + data);
-  //};
+  connection.rawInput = function (data) {
+    console.log('RAW_IN: ' + data);
+  };
+
+  connection.rawOutput = function (data) {
+    console.log('SENT: ' + data);
+  };
 
   // Strophe.log = function (lvl, msg) { console.log(msg); };
   this.jid = jid;
-  connection.attach(jid, sid, rid, this.onAttach);
 
-  this.muc = new MucUi(connection, 'amizade@conference.'+host, Strophe.getNodeFromJid(jid));
+  this.mucAddress = 'amizade@conference.'+host;
+  connection.attach(jid, sid, rid, function(status) {
+    if (status == Strophe.Status.DISCONNECTED) {
+      console.log('Disconnected.');
+    }
+    else if (status == Strophe.Status.ATTACHED) {
+      console.log('Strophe is attached.');
+    }
+  });
+
+  this.muc = new MucUi(connection, this.mucAddress, Strophe.getNodeFromJid(this.jid));
 }
