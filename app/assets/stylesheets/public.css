@@ -22,9 +22,9 @@ label {font-size:0.9em;}
 .topic-row {position:relative;z-index:900;border-bottom:3px solid #aaa;-webkit-box-shadow:0 8px 6px -6px rgba(0,0,0,0.2);
 -moz-box-shadow:0 8px 6px -6px rgba(0,0,0,0.2);box-shadow:0 8px 6px -6px rgba(0,0,0,0.2);
 background:url('/assets/topic-bg.png') repeat-x 0 0;}
-.left-column {overflow: hidden;background:#eee;position:relative; left:1.3%;width: 183px;height: 100%;min-height: 100%}
+.left-column {overflow: hidden;background:#eee;position:relative; left:1.6%;width: 183px;height: 100%;min-height: 100%}
 .chat-column {}
-.right-column {position:relative; right:1.3%;}
+.right-column {position:relative; right:1.6%;}
 
 /* Box */
 .box {margin:16px 0 32px;}
@@ -72,8 +72,8 @@ h3.topic span {font-style: italic}
 
 /* Messages */
 .message {overflow:auto;border-top:1px solid #ddd;background:white;padding:10px 0}
-.message.own {background:#f4f7fb;border-color:#cfdcef}
-.message.system {background:#FEFFF2;border-color:#E2E69A;padding-bottom:0}
+.message.own {background:#EAF1FA;border-color:#cfdcef}
+.message.system {background:#FEFFF2;border-color:#E2E69A;padding-bottom: 0;}
 .message.old {background:#fafafa;border-color:#ddd}
 
 .message-avatar {width:100%;}
@@ -87,7 +87,8 @@ h3.topic span {font-style: italic}
 
 .message.system .nick{color:#5E6302}
 .message.system .text{font-weight:normal;font-style:italic;color:#5E6302;font-family:Georgia;clear:none}
-.message.system .message-content span.timestamp {float:none;margin:0;font-weight:bold;font-size:0.9em;}
+.message.system .message-content span.timestamp {float:none;margin:0;font-weight:bold;font-size:0.9em;line-height:20px}
+
 .message.system a {color:#5E6302; font-weight: bold;}
 
 .message.system.user-joins {background:white;border-color:#D4F0D7}
