@@ -19,7 +19,7 @@
         <% for document in Document.where(chatroom: "amizade@conference.#{JABBER[:host]}") %>
         <li>
           <i class="icon-file"></i> 
-          <%= link_to document.filename, "http://balichat_dev.s3.amazonaws.com/#{document.remote_url}" %>
+          <%= link_to document.filename, "http://#{UPLOADS[:bucket]}.s3.amazonaws.com/#{document.remote_url}" %>
         </li>
         <% end %>
       </ul>
