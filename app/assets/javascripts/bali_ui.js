@@ -14,7 +14,7 @@ var BaliUi = function() {
   }
 
   // Controlls if the balichat window is focused or not.
-  this.windowFocus = false;
+  this.windowFocus = true;
 }
 
 BaliUi.fn = BaliUi.prototype;
@@ -68,9 +68,11 @@ BaliUi.fn.topicHandler = function() {
 BaliUi.fn.focusHandler = function() {
   var thisUi = this;
   $(window).focus(function() {
+    console.log("FOCUS");
     thisUi.windowFocus = true;
     thisUi.clearTitleBar();
   }).blur(function() {
+    console.log("NO FOCUS");
     thisUi.windowFocus = false;
   });
 }
@@ -79,12 +81,13 @@ BaliUi.fn.getActiveMuc = function() {
   return bali.getActiveMuc();
 }
 
-// Title Bar Management.
-BaliUi.fn.setTitleBar = function() {
+BaliUi.fn.updateTitleBar = function() {
+  //console.log("UPDATE TITLEBAR! "+this.windowFocus);
   if (!this.windowFocus) {
     var activeMuc = this.getActiveMuc();
     var unread = activeMuc.unreadMessages++;
     var room = activeMuc.roomName;
+    console.log("Nao ta focus, recebi msg! "+activeMuc.unreadMessages);
     document.title = "("+unread+") "+room;
   }
 }
@@ -92,7 +95,7 @@ BaliUi.fn.setTitleBar = function() {
 BaliUi.fn.clearTitleBar = function() {
   document.title = this.defaultTitle;
   var activeMuc = this.getActiveMuc();
-  activeMuc.unread_messages = 0;
+  activeMuc.unreadMessages = 0;
 }
 
 BaliUi.fn.sendChatMessage = function() {

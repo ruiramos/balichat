@@ -126,7 +126,11 @@ Muc.fn.handleMessage = function(msg) {
     var body = $(msg).find('body');
     if (body.length > 0) {
       if (delay.length == 0 && nick != this.myNick) {
-        this.ui.handleMessage(participant, body.text());
+        if (nick == null) {
+          this.ui.handleTopicBacklog(participant, subject.text());
+        } else {
+          this.ui.handleMessage(participant, body.text());
+        }
       }
       if (delay.length > 0) {
         var timestamp = delay.attr('stamp');

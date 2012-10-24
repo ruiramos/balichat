@@ -104,6 +104,8 @@ MucUi.fn.appendMessage = function(message) {
     message.buildAsParagraph();
   }
 
+  // TODO: this should be per muc (for unread on tabs also)
+  bali.ui.updateTitleBar();
   this.appendToMuc(message);
 }
 
