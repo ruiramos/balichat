@@ -140,6 +140,9 @@ Muc.fn.handleMessage = function(msg) {
         var timestamp = delay.attr('stamp');
         console.log("handleTimedMessage");
         console.log(msg);
+        // When getting backlog I can get messages from people that are not in
+        // the room anymore. In this case we have to create a temporary one.
+        participant = new Participant(from);
         this.ui.handleTimedMessage(participant, body.text(), timestamp);
       }
     }
