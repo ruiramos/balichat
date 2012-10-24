@@ -53,6 +53,7 @@ MucUi.fn.handleJoin = function(participant) {
 }
 
 MucUi.fn.handleTopicChange = function(participant, topic) {
+  var topic = Bali.escapeHtml(topic);
   var message = '<strong>'+participant.nick+'</strong> changed topic to: '+topic;
   var type = ChatNotification.types.topic;
   this.appendNotification(type, message);
@@ -60,6 +61,7 @@ MucUi.fn.handleTopicChange = function(participant, topic) {
 
 // TODO: each muc should have 1 topic!!!!!!
 MucUi.fn.handleTopicBacklog = function(participant, topic) {
+  var topic = Bali.escapeHtml(topic);
   $('.topic.editable').text(topic);
 }
 
