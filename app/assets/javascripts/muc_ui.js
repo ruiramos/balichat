@@ -9,8 +9,8 @@ var MucUi = function(muc) {
   this.participantList = $('#user-list-'+muc.roomName);
   this.topicDiv = $('#topic-'+muc.roomName);
 
-  var scrollDiv = $('#muc-'+muc.roomName);
-  this.scroll = scrollDiv.data('jsp');
+  //var scrollDiv = $('#muc-'+muc.roomName);
+  //this.scroll = scrollDiv.data('jsp');
 
   // The welcome message, used to append backlog before it.
   this.welcomeMessage = this.appendWelcome();
@@ -21,12 +21,8 @@ var MucUi = function(muc) {
 
 MucUi.fn = MucUi.prototype;
 
-MucUi.fn.updateChatWindow = function() {
-  this.scroll.reinitialise();
-}
-
 MucUi.fn.scrollBottom = function(animate) {
-  this.scroll.scrollToPercentY(30, animate);
+  //this.scroll.scrollToPercentY(30, animate);
 }
 
 MucUi.fn.handleMessage = function(participant, message) {
@@ -34,6 +30,9 @@ MucUi.fn.handleMessage = function(participant, message) {
 }
 
 MucUi.fn.handleTimedMessage = function(participant, message, timestamp) {
+  console.log(participant);
+  console.log(message);
+  console.log(timestamp);
   var chatMessage = new ChatMessage(this.muc, participant, message, timestamp);
   this.appendMessage(chatMessage);
 }
@@ -119,14 +118,14 @@ MucUi.fn.appendToMuc = function(entry) {
   var scrollBottom = true;
   var animate = true;
 
-  if (this.scroll.getPercentScrolledY() != 1) {
-    scrollBottom = false;
-  }
+  //if (this.scroll.getPercentScrolledY() != 1) {
+  //  scrollBottom = false;
+ // }
 
   // Scroll fast (don't animate) if the scroll is not 100% and is own message
-  if (entry.isOwnMessage() && this.scroll.getPercentScrolledY() != 1) {
-    animate = false;
-  }
+  //if (entry.isOwnMessage() && this.scroll.getPercentScrolledY() != 1) {
+  //  animate = false;
+ // }
 
   if (entry.isParagraph && this.lastEntry.isParagraph) {
     this.lastEntry.dom.after(entry.dom);
@@ -140,7 +139,7 @@ MucUi.fn.appendToMuc = function(entry) {
     }
   }
 
-  this.updateChatWindow();
+  //this.updateChatWindow();
 
   if (scrollBottom == true || entry.isOwnMessage()) {
     this.scrollBottom(animate);
