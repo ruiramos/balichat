@@ -1,3 +1,10 @@
+/* Copyright (c) 2012 Twintend (http://twintend.com)
+ *
+ * Main class of the application. This will have the xmpp client
+ * and top level operations like connect and disconnect. Is also
+ * the class from which you can access all the mucs, participants, etc.
+ *
+ */
 var Bali = function() {
   this.BOSH_SERVICE = "/http-bind";
   this.client = null;
