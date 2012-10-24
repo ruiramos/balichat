@@ -1,128 +1,174 @@
-var MucUi = function(connection, jid, nick) {
-  var muc = {}; // make muc an object from the start. Needed by muc.window_focused focus tracking.
-  var that = this;
-  var handlers = {};
+/* Copyright (c) 2012 Twintend (http://twintend.com)
+ *
+ * This is the class that manages this gui for one muc.
+ *
+ */
+var MucUi = function(muc) {
+  this.muc = muc;
 
-  this.timeFormat = "HH\\hmm";
+  this.participantList = $('#user-list-'+muc.roomName);
+  this.topicDiv = $('#topic-'+muc.roomName);
 
-  this.lastMessageFrom = "";
-  this.lastMessageElement = "";
+  var scrollDiv = $('#muc-'+muc.roomName);
+  this.scroll = scrollDiv.data('jsp');
 
-  this.roster = $('#user-list-'+Strophe.getNodeFromJid(jid));
-  this.topicDiv = $('#topic-'+Strophe.getNodeFromJid(jid));
+  // The welcome message, used to append backlog before it.
+  this.welcomeMessage = this.appendWelcome();
 
-  var scrollDiv = $('#muc-'+Strophe.getNodeFromJid(jid));
-  this.api = scrollDiv.data('jsp');
-
-  muc = new Muc(this, jid, nick);
-  muc.unread_messages = 0;
-
-  window.muc = muc;
-  return muc;
+  // Last chatMessage object. Which represents the last chatgroup message sent.
+  this.lastEntry = this.welcomeMessage;
 }
 
 MucUi.fn = MucUi.prototype;
 
-/**
- * Updates the muc message area with a new element. If called with just the second argument
- * it will just do the scrolling stuff, because we are adding something that is not
- * a chat row. This happens when adding new paragraph on existing message.
- */
-MucUi.fn.appendToMuc = function(element, isOwnMessage) {
-  var scrollBottom = true;
-  var animate = false;
-
-  if (this.api.getPercentScrolledY() != 1) {
-    scrollBottom = false;
-  }
-
-  if (element != null && $(element).find('.message').hasClass('old')) {
-    $('#welcome-message').before(element);
-  } else {
-    animate = true;
-    
-    // Scroll fast (don't animate) if the scroll is not 100% and is own message
-    if (isOwnMessage && this.api.getPercentScrolledY() != 1) animate = false;
-    
-    $('.chat-muc-messages').append(element);
-  }
-
-  this.updateChatWindow();
-
-  if (element != null || scrollBottom == true || isOwnMessage) {
-    this.scrollBottom(animate);
-  }
+MucUi.fn.updateChatWindow = function() {
+  this.scroll.reinitialise();
 }
 
-MucUi.fn.includeAsParagraph = function(message) {
-  var from = $(message).attr('from');
-  var old = $(message).attr('old');
-  var includeAsParagraph = true;
-  var lastSystem = $(document).find('.message-container').last().attr('id') != null;
+MucUi.fn.scrollBottom = function(animate) {
+  this.scroll.scrollToPercentY(30, animate);
+}
 
-  if (from != this.lastMessageFrom) {
-    includeAsParagraph = false;
-  }
+MucUi.fn.handleMessage = function(participant, message) {
+  this.handleTimedMessage(participant, message, moment());
+}
 
-  if (lastSystem && old == null) {
-    includeAsParagraph = false;
-  }
+MucUi.fn.handleTimedMessage = function(participant, message, timestamp) {
+  var chatMessage = new ChatMessage(this.muc, participant, message, timestamp);
+  this.appendMessage(chatMessage);
+}
 
-  return includeAsParagraph;
+MucUi.fn.handleLeave = function(participant) {
+  var message = '<strong>'+participant.nick+'</strong> left the room.';
+  var type = ChatNotification.types.leave;
+  this.appendNotification(type, message)
+  this.removeParticipant(participant);
+}
+
+MucUi.fn.handleJoin = function(participant) {
+  var message = '<strong>'+participant.nick+'</strong> joined the room.';
+  var type = ChatNotification.types.join;
+  this.appendNotification(type, message);
+  this.handleStartParticipant(participant);
+}
+
+MucUi.fn.handleTopicChange = function(participant, topic) {
+  var message = '<strong>'+participant.nick+'</strong> changed topic to: '+topic;
+  var type = ChatNotification.types.topic;
+  this.appendNotification(type, message);
+}
+
+// TODO: each muc should have 1 topic!!!!!!
+MucUi.fn.handleTopicBacklog = function(participant, topic) {
+  $('.topic.editable').text(topic);
+}
+
+MucUi.fn.appendWelcome = function() {
+  var message = 'Welcome to '+this.muc.roomName;
+  var type = ChatNotification.types.normal;
+  return this.appendNotification(type, message);
+}
+
+MucUi.fn.handlePresence = function(participant) {
+}
+
+MucUi.fn.removeParticipant = function(participant) {
+  var user = $('ul.users').find('li[title="'+participant.nick+'"]');
+  user.animate({height: 'toggle', opacity: 'toggle'}, 'slow', function() {
+    user.remove();
+  });
+}
+
+MucUi.fn.handleStartParticipant = function(participant) {
+  var list = this.participantList.find('ul.users');
+  var user = participant.dom;
+  user.hide();
+  list.append(user);
+  user.fadeIn('slow');
+}
+
+MucUi.fn.appendNotification = function(type, message) {
+  var not = new ChatNotification(this.muc, type, message, moment());
+  this.appendToMuc(not);
+
+  return not;
 }
 
 /**
  * Updates the muc message area with a new message.
  */
-MucUi.fn.appendMessage = function(nick, message, timestamp) {
-  var from = $(message).attr('from');
-  var text = $(message).find('body').text();
+MucUi.fn.appendMessage = function(message) {
+  message.text = this.doReplacements(message.text);
 
-  // Replace newlines with <br>
-  text = gui.insertBreaks(text);
+  if (this.includeAsParagraph(message)) {
+    message.buildAsParagraph();
+  }
 
-  // Replace links, youtube clips, etc.
-  textReplaced = this.doReplacements(text);
+  this.appendToMuc(message);
+}
 
-  if (this.includeAsParagraph(message) == false) {
-    var $element = this.makeNewMessage(timestamp);
-    $element.find('.nick').text(nick);
-    $element.find('.text').html(textReplaced);
-    $element.find('.timestamp').text(moment(timestamp).format(this.timeFormat));
-    $element.show();
+/**
+ * Updates the muc message area with a new entry. This entry can be one of two
+ * different classes: ChatMessage and ChatNotification.
+ */
+MucUi.fn.appendToMuc = function(entry) {
+  var scrollBottom = true;
+  var animate = true;
 
-    if (jabber.isOwnMessage(message)) {
-      $element.find('.message').addClass('own');
+  if (this.scroll.getPercentScrolledY() != 1) {
+    scrollBottom = false;
+  }
+
+  // Scroll fast (don't animate) if the scroll is not 100% and is own message
+  if (entry.isOwnMessage() && this.scroll.getPercentScrolledY() != 1) {
+    animate = false;
+  }
+
+  if (entry.isParagraph && this.lastEntry.isParagraph) {
+    this.lastEntry.dom.after(entry.dom);
+  } else if (entry.isParagraph && !this.lastEntry.isParagraph) {
+    this.lastEntry.dom.find('.text').last().after(entry.dom);
+  } else {
+    if (entry.isBacklog()) {
+      this.welcomeMessage.dom.before(entry.dom);
+    } else {
+      $('.chat-muc-messages').append(entry.dom);
     }
   }
-  
-  // Message from different jid of the last message
-  if (this.includeAsParagraph(message) == false) {
-    if ($(message).attr('old')) {
-      $element.find('.message').addClass('old');
+
+  this.updateChatWindow();
+
+  if (scrollBottom == true || entry.isOwnMessage()) {
+    this.scrollBottom(animate);
+  }
+
+  this.lastEntry = entry;
+}
+
+/*
+ * Check if the message is to be appended as new div or only paragraph of an old
+ * div.
+ */
+MucUi.fn.includeAsParagraph = function(message) {
+  var isParagraph = false;
+
+  if (this.lastEntry.participant) {
+    if (message.participant.nick == this.lastEntry.participant.nick) {
+      if (message.isBacklog() == this.lastEntry.isBacklog()) {
+        isParagraph = true;
+      }
     }
-    this.appendToMuc($element, jabber.isOwnMessage(message));
-    this.lastMessageElement = $element;
   }
 
-  // Message from the same user as the last one
-  else {
-    var $newParagraph = jQuery("<p></p>").html(textReplaced).addClass('text');
-    this.lastMessageElement.find('.text').last().after($newParagraph);
-    this.appendToMuc(null, jabber.isOwnMessage(message));
-  }
-
-  if (!this.lastMessageElement.find('.message').hasClass('old')) {
-    // Update titlebar if needed
-    gui.setTitleBar();
-  }
+  return isParagraph;
 }
 
 MucUi.fn.doReplacements = function(text) {
   var $container = $('<div/>');
+  var thisMucUi = this;
   var source = text;
   var hiddenClass = '';
-  if ($('#expand-embeds').attr("checked")!="checked") hiddenClass = 'noEmbedds';
+  if ($('#expand-embeds').attr("checked") != "checked") hiddenClass = 'noEmbedds';
 
   if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:vimeo.com)\//)) { // vimeo video embedd
     $container.append(text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" class="embedded '+hiddenClass+'" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));  
@@ -137,12 +183,12 @@ MucUi.fn.doReplacements = function(text) {
   } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(.*)(\.jpg|\.png|\.gif|\.bmp)/i)) { //image embedd
     var img = $("<img class='embedded "+hiddenClass+"' src='"+text+"'>");
     $(img).load(function() {
-      window.muc.ui.api.reinitialise();
-      window.muc.ui.api.scrollToBottom();
+      thisMucUi.scroll.reinitialise();
+      thisMucUi.scroll.scrollToBottom();
     });
 
     $container.append(img);
-    $container.append("<small class='link-source "+hiddenClass+"'>"+linkify(source)+"</small>");
+    $container.append('<small class="link-source '+hiddenClass+'">'+linkify(source)+'</small>');
   
   } else {
     $container.append(linkify(text));
@@ -151,95 +197,8 @@ MucUi.fn.doReplacements = function(text) {
   return $container;
 }
 
-MucUi.fn.makeNewMessage = function(timestamp) {
-  var $element = $('#empty-message').clone();
-  $element.removeAttr('id');
-  $element.removeClass('hide');
-
-  if (timestamp != null) {
-    $element.find('.timestamp').text(moment().format(this.timeFormat));
-  } else {
-    $element.find('.timestamp').text(moment(timestamp).format(this.timeFormat));
-  }
-
-  return $element;
-}
-
-MucUi.fn.appendNotification = function(text, type) {
-  var $element = this.makeNewMessage();
-  $element.attr('id', 'notification');
-  $element.find('.message').addClass("system").addClass(type);
-  $element.find('.nick').remove();
-  $element.find('.avatar-placeholder').remove();
-  $element.find('.text').html(text);
-
-  this.appendToMuc($element.first(), false);
-}
-
-MucUi.fn.updateChatWindow = function() {
-  this.api.reinitialise();
-}
-
-MucUi.fn.scrollBottom = function(animate) {
-  this.api.scrollToPercentY(100, animate);
-}
-
 MucUi.fn.joinHandler = function(stanza, muc, nick, text) {
   this.appendNotification("<strong>"+ nick + "</strong> joined the room.", gui.notifications.join);
-}
-
-MucUi.fn.leaveHandler = function(stanza, muc, nick, text) {
-  this.appendNotification("<strong>"+ nick + "</strong> left the room.", gui.notifications.leave);
-}
-
-MucUi.fn.historyHandler = function(stanza, muc, nick, message) {
-  var stamp = $(stanza).find('delay').attr('stamp');
-  var $stanza = $(stanza);
-  $stanza.attr('old', true);
-
-  this.appendMessage(nick, $stanza, stamp);
-  this.lastMessageFrom = $stanza.attr('from');
-}
-
-MucUi.fn.messageHandler = function(stanza, muc, nick, message) {
-  this.appendMessage(nick, stanza, moment().format("YYYY-MM-DDTHH:mm:ss"));
-  this.lastMessageFrom = $(stanza).attr('from');
-}
-
-MucUi.fn.presenceHandler = function(muc, nick, status, type) {
-  var $user = $('ul.users').find('li[title="'+nick+'"]');
-  var $status = $user.find('.img-polaroid');
-  var klass = 'online-placeholder';
-
-  $status.removeClass('online-placeholder');
-  $status.removeClass('away-placeholder');
-  $status.removeClass('offline-placeholder');
-
-  if (type == gui.status.away || type == gui.status.xa || type == gui.status.dnd) {
-    $status.addClass('away-placeholder');
-  } else if (type == gui.status.online) {
-    $status.addClass('online-placeholder');
-  } else if (type == gui.status.unavailable) {
-    $status.addClass('offline-placeholder');
-  }
-}
-
-var p;
-MucUi.fn.vcardHandler = function(stanza) {
-  p = new Participant(jabber.jid);
-  p.setVcard(stanza);
-}
-
-MucUi.fn.mucRosterHandler = function(stanza, muc, nick, text) {
-  var users = this.roster.find('ul.users');
-  var $user = $('#empty-user').clone();
-
-  $user.removeAttr('id');
-  $user.attr('title', nick);
-  $user.removeClass('hide');
-  $user.find('.user-name').text(nick);
-  $(users).append($user);
-  $user.show();
 }
 
 MucUi.fn.sendTopicNotification = function(nick, topic, printNotification) {
@@ -250,21 +209,4 @@ MucUi.fn.sendTopicNotification = function(nick, topic, printNotification) {
   }
 
   this.topicDiv.text(topic);
-}
-
-MucUi.fn.topicHistoryHandler = function(from, topic) {
-  var nick = Strophe.getResourceFromJid(from);
-  this.sendTopicNotification(nick, topic, false);
-}
-
-MucUi.fn.topicHandler = function(topic) {
-  var that = this;
-  topic.replace(/(.+) has set the subject to: (.+)/gi, function(topic, grp1, grp2) {
-    that.sendTopicNotification(grp1, grp2, true);
-  });
-}
-
-MucUi.fn.topicChangeHandler = function(from, topic) {
-  var nick = Strophe.getResourceFromJid(from);
-  this.sendTopicNotification(nick, topic, true);
 }

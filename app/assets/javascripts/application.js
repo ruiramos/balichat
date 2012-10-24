@@ -20,8 +20,10 @@
 //
 //= require linkify
 //= require moment.min
+//
 //= require jquery.jscrollpane.min
 //= require jquery.mousewheel
 //= require jquery.ui.widget
 //= require jquery.fileupload
+//
 //= require_tree .

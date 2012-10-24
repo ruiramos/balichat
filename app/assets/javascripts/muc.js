@@ -1,196 +1,210 @@
-var Muc = function(ui, jid, nick) {
-  this.ui = ui;  
-  this.jid = jid;
-  this.nick = nick;
+/* Copyright (c) 2012 Twintend (http://twintend.com)
+ *
+ * This is the class that manages one muc (Multi User Chat).
+ *
+ * The muc is identified by a jid address, (eg: room_name@conference.server.com)
+ * and all the participants will be resources of this jid
+ * (eg: room_name@conference.server.com/nickname).
+ *
+ */
+var Muc = function(client, jid) {
+  // The client Strophe connection
+  this.client = client;
 
-  this.createMucHandler();
-  this.showJoins = false; // used to know when the user stoped receiving history
+  this.jid = jid;
+  this.roomName = Strophe.getNodeFromJid(jid);
+
+  // Number of unread messages on this muc.
+  this.unreadMessages = 0;
+
+  // Array of Participant objects.
+  this.participants = [];
+
+  // Used to know when the user stoped receiving backlog, which is basically
+  // when the user receives his own presence stanza.
+  this.showJoins = false;
+
+  // When did we start joining this muc. This is usefull to know which messages
+  // are backlog without having to do much.
+  this.joinedTimeStamp = '';
+
+  // Add a Muc interface to this muc.
+  this.ui = new MucUi(this);
+
+  // Balichat client nick.
+  this.myNick = '';
+
+  // Balichat client participant.
+  this.me = null;
 }
 
 Muc.fn = Muc.prototype;
 
+// Joins the muc with given nickname.
+Muc.fn.join = function(nick) {
+  var thisMuc = this;
+  this.myNick = nick;
+  this.joinedTimeStamp = moment().format("YYYY-MM-DDTHH:mm:ss");
+  this.client.muc.join(this.jid, nick,
+    function(msg) {
+      if (thisMuc.handleMessage(msg)) {
+        return true;
+      }
+    },
+    function(pres) {
+      if (thisMuc.handlePresence(pres)) {
+        return true;
+      }
+    }
+  );
+}
+
+// Send a group message to the room and returns the unique id.
 Muc.fn.sendMessage = function(text) {
-  if(text=="btn") text=$('.chat-input-field').val();
-  var message = $msg({to: this.jid, from: jabber.jid, type: 'groupchat'}).c('body').t(text);
-  connection.send(message);
+  var id = this.client.muc.groupchat(this.jid, text);
+  this.ui.handleMessage(this.me, text);
+
+  return id;
+}
+
+Muc.fn.setTopic = function(text) {
+  text = Bali.escapeHtml(text);
+  this.client.muc.setTopic(this.jid, text);
+}
+
+Muc.fn.addParticipant = function(jid) {
+  var participant = this.getParticipant(jid);
+
+  if (participant == null) {
+    participant = new Participant(jid);
+    this.participants.push(participant);
+  }
+
+  return participant;
+}
+
+Muc.fn.removeParticipant = function(participant) {
+  var i = this.participants.indexOf(participant);
+  this.participants.splice(i,1);
+}
+
+Muc.fn.getParticipant = function(jid) {
+  var participant = null;
+
+  $.each(this.participants, function(i, p) {
+    if (p.jid === jid) {
+      participant = p;
+      return;
+    }
+  });
+
+  return participant;
+}
+
+Muc.fn.getParticipantByNick = function(nick) {
+  var participant;
+
+  $.each(this.participants, function(i, p) {
+    if (p.nick === nick) {
+      participant = p;
+      return;
+    }
+  });
+
+  return participant;
+}
+
+Muc.fn.handleMessage = function(msg) {
+  var type = $(msg).attr('type');
+  var from = $(msg).attr('from');
+  var delay = $(msg).find('delay');
+  var subject = $(msg).find('subject');
+  var nick = Strophe.getResourceFromJid(from);
+  var participant = this.getParticipantByNick(nick);
+
+  if (type == 'groupchat' && Strophe.getBareJidFromJid(from) == this.jid) {
+    var body = $(msg).find('body');
+    if (body.length > 0) {
+      if (delay.length == 0 && nick != this.myNick) {
+        this.ui.handleMessage(participant, body.text());
+      }
+      if (delay.length > 0) {
+        var timestamp = delay.attr('stamp');
+        this.ui.handleTimedMessage(participant, body.text(), timestamp);
+      }
+    }
+    else if (body.length == 0 && subject.length > 0) {
+      if (delay.length > 0) {
+        this.ui.handleTopicBacklog(participant, subject.text());
+      }
+      if (delay.length == 0) {
+        this.ui.handleTopicChange(participant, subject.text());
+      }
+    }
+  }
 
   return true;
 }
 
-Muc.fn.createMucHandler = function() { 
-  var muc = {
-    connection: connection, jid: this.jid, nick: this.nick,
-    occupants: {}
-  };
-  
-  connection.addHandler(this.presenceHandler(this.ui, muc), null, "presence", null, null, null);
-  connection.addHandler(this.joinHandler(this.ui, muc), null, "presence", null, null, null);
-  connection.addHandler(this.leaveHandler(this.ui, muc), null, "presence", null, null, null);
-  connection.addHandler(this.messageHandler(this.ui, muc), null, "message", "groupchat", null, null);
-  connection.addHandler(this.historyHandler(this.ui, muc), null, "message", "groupchat", null, null);
-  connection.addHandler(this.topicHistoryHandler(this.ui, muc), null, "message", "groupchat", null, null);
-  connection.addHandler(this.topicChangeHandler(this.ui, muc), null, "message", "groupchat", null, null);
-  // TODO: not done yet
-  //connection.addHandler(this.errorHandler(this.ui, muc), null, "presence", "error", null, null);
+Muc.fn.handlePresence = function(pres) {
+  var type = $(pres).attr('type');
+  var from = $(pres).attr('from');
+  var status = $(pres).find('show');
+  var nick = Strophe.getResourceFromJid(from);
+  var participant = this.getParticipantByNick(nick);
+  var newParticipant = false;
 
-  // Join the muc.
-  // Params: room, nick, msg_handler_cb, pres_handler_cb, roster_cb, password
-  connection.muc.join(this.jid, this.nick, null, null, null, null);
+  if (participant == null) {
+    participant = this.addParticipant(from);
+    newParticipant = true;
+  }
 
-  return muc;
-}
+  participant.setStatus(status.text());
 
-Muc.fn.presenceHandler = function(ui, muc) {
-  var that = this;
-  return function(stanza) {
-    var $stanza = $(stanza);
-    var nick = Strophe.getResourceFromJid($stanza.attr("from"));
-    if (Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
-      var status = $stanza.find("status")[0];
-      if (status) status = Strophe.getText(status);
+  // Error logging in
+  if (type === 'error') {
+    if ($(pres).find('error').attr('code') === '409') {
+      // TODO: login error!!!
+      return false;
+    }
+    return true;
+  }
 
-      var type = gui.status.online;
-      if ($stanza.attr("type") == "unavailable") {
-        type = gui.status.unavailable;
-      } else if ($stanza.find('show')) {
-        var show = $stanza.find('show').text();
-        if (show == 'chat') type = gui.status.chat;
-        if (show == 'away') type = gui.status.away;
-        if (show == 'xa') type = gui.status.xa;
-        if (show == 'dnd') type = gui.status.dnd;
+  // Detect nickname change.
+  if ($(pres).find('status').attr('code') === '303') {
+    var newNick = $(pres).find('item').attr('nick');
+    participant.changeNick(newNick);
+    this.ui.handleNickChange(participant, nick, newNick);
+    return true;
+  }
+
+  // Detect participant presence.
+  if (type === 'unavailable') {
+    this.ui.handleLeave(participant);
+    this.removeParticipant(participant);
+    return true;
+  }
+  else {
+    this.client.vcard.get(function(stanza) {
+      participant.setVcard(stanza);
+    }, participant.jid);
+
+    if (this.showJoins) {
+      if (newParticipant) {
+        this.ui.handleJoin(participant);
+      } else {
+        this.ui.handlePresence(participant);
       }
-
-      ui.presenceHandler(muc, nick, status, type);
+    } else {
+      this.ui.handleStartParticipant(participant);
     }
 
-    return true;
-  };
-}
-
-Muc.fn.joinHandler = function(ui, muc) {
-  var that = this;
-  return function(stanza) {
-    var $stanza = $(stanza);
-    var nick = Strophe.getResourceFromJid($stanza.attr("from"));
-    if ($stanza.attr("type") != "unavailable" && $stanza.attr("type") != "error"
-      && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
-      if (!muc.occupants[nick]) {
-        var text = $stanza.find("status")[0];
-        if (text) text = Strophe.getText(text);
-        muc.occupants[nick] = {};
-
-        if (that.showJoins == true) {
-          ui.joinHandler(stanza, muc, nick, text);
-        } else {
-          ui.mucRosterHandler(stanza, muc, nick, text);
-        }
-
-        // Get the user cvard
-        connection.vcard.get(ui.vcardHandler, $stanza.attr("from"));
-
-        // If i received my own presence then show joins from here on!
-        if (nick == Strophe.getNodeFromJid(jabber.jid)) {
-          that.showJoins = true;
-        }
-      }
+    // If i received my own presence then show joins from here on!
+    if (nick == this.myNick) {
+      this.showJoins = true;
+      this.me = participant;
     }
+  }
 
-    return true;
-  };
+  return true;
 }
-
-Muc.fn.leaveHandler = function(ui, muc) {
-  return function(stanza) {
-    var $stanza = $(stanza);
-    var nick = Strophe.getResourceFromJid($stanza.attr("from"));
-    if ($stanza.attr("type") == "unavailable" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
-      if (muc.occupants[nick]) {
-        var text = $stanza.find("status")[0];
-        if (text) text = Strophe.getText(text);
-        ui.leaveHandler(stanza, muc, nick, text);
-        muc.occupants[nick] = null;
-      }
-    }
-
-    return true;
-  };
-}
-
-Muc.fn.messageHandler = function(ui, muc) {
-  return function(stanza) {
-    var $stanza = $(stanza);
-    if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
-      var body = $stanza.find("body");
-      if (body.length > 0 && $stanza.find("delay").length == 0 && $stanza.find("subject").length == 0) {
-        ui.messageHandler(stanza, muc, Strophe.getResourceFromJid($stanza.attr("from")), Strophe.getText(body[0]));
-      }
-    }
-
-    return true;
-  };
-}
-
-Muc.fn.historyHandler = function(ui, muc) {
-  return function(stanza) {
-    var $stanza = $(stanza);
-    if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
-      var body = $stanza.find("body");
-      if (body.length > 0 && $stanza.find("delay").length > 0) {
-        ui.historyHandler(stanza, muc, Strophe.getResourceFromJid($stanza.attr("from")), Strophe.getText(body[0]));
-      }
-    }
-
-    return true;
-  };
-}
-
-Muc.fn.topicHistoryHandler = function(ui, muc) {
-  var that = this;
-  return function(stanza) {
-    var $stanza = $(stanza);
-    if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
-      var body = $stanza.find("body");
-      if (body.length == 0 && $stanza.find("delay").length > 0 && $stanza.find("subject").length > 0) {
-        ui.topicHistoryHandler($stanza.attr("from"), $stanza.find("subject").text());
-      }
-    }
-
-    return true;
-  };
-}
-
-Muc.fn.topicChangeHandler = function(ui, muc) {
-  var that = this;
-  return function(stanza) {
-    var $stanza = $(stanza);
-    if ($stanza.attr("type") == "groupchat" && Strophe.getBareJidFromJid($stanza.attr("from")) == muc.jid) {
-      var body = $stanza.find("body");
-      if (body.length == 0 && $stanza.find("delay").length == 0 && $stanza.find("subject").length > 0) {
-        ui.topicChangeHandler($stanza.attr("from"), $stanza.find("subject").text());
-      }
-    }
-
-    return true;
-  };
-}
-// TODO: not getting errors yet
-//Muc.fn.errorHandler = function(muc, callback) {
-//  return function (stanza) {
-//
-//    if (Strophe.getBareJidFromJid(stanza.getAttribute("from")) == muc.jid) {
-//      var e = stanza.getElementsByTagName("error");
-//      if (e.length > 0) {
-//        var err = null;
-//        Strophe.forEachChild(e[0], null, function (child) {
-//          if (child.getAttribute("xmlns") == "urn:ietf:params:xml:ns:xmpp-stanzas") {
-//            err = child.nodeName;
-//          }
-//        });
-//
-//        callback(stanza, muc, err);
-//      }
-//    }
-//
-//    return true;
-//  };
-//}

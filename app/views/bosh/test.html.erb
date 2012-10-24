@@ -59,18 +59,6 @@
             </div>
           </div>
         </div>
-
-        <div class="row-fluid message-container" id="welcome-message">
-          <div class="message system">
-            <div class="span1">&nbsp;</div>
-            <div class="span11">
-              <div class="message-content">
-                <p class="timestamp">Time</p>
-                <p class="text">Message</p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     
@@ -79,7 +67,7 @@
         <tbody>
           <tr>
             <td><%= text_area :input, '', class: 'chat-input-field', rows: 2 %></td>
-            <td class="btn-send-td"><%= link_to_function 'Send', 'gui.sendChatMessage("btn")', class: 'btn btn-inverse btn-send'%></td>
+            <td class="btn-send-td"><%= link_to_function 'Send', 'bali.ui.sendChatMessage()', class: 'btn btn-inverse btn-send'%></td>
           </tr>
         </tbody>
       </table>
@@ -121,28 +109,21 @@
 </div>
 
 <script type="text/javascript">
-  var jabber = null;
-  var gui = null;
+  var bali = null;
 
   $(document).ready(function () {
     $('.scroll-pane').jScrollPane({verticalGutter:0, animateDuration:50});
-    gui = new Ui();
 
-    jabber = new Jabber();
-    jabber.connect('<%= @jid %>', '<%= @sid %>', '<%= @rid %>', '<%= JABBER[:host] %>');
+    bali = new Bali();
+    bali.connect('<%= @jid %>', '<%= @sid %>', '<%= @rid %>', '<%= JABBER[:host] %>');
 
     // update chat-window size
     $(window).resize(function(){
       h = $(window).height()-170;
       $(".chat-window").css("height", h);
       $(".chat-window").css("width", $(".chat-column").css("width"));
-      window.muc.ui.api.reinitialise();
+      bali.getActiveMuc().ui.scroll.reinitialise();
     });
     $(window).resize();
-
-    // Welcome message
-    var mucName = Strophe.getNodeFromJid(window.muc.jid);
-    $('#welcome-message').find('.text').text('Welcome to '+mucName);
-    $('#welcome-message').find('.timestamp').text(moment().format(window.muc.ui.timeFormat));
   });
 </script>
