@@ -10,7 +10,7 @@ var Bali = function() {
   this.client = null;
   this.jid = null;
 
-  this.ui = new BaliUi(this);
+  this.ui = new BaliUi();
 
   // List of mucs where the client is participating
   this.mucList = [];
