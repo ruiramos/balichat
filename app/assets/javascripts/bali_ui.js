@@ -1,3 +1,9 @@
+/* Copyright (c) 2012 Twintend (http://twintend.com)
+ *
+ * The gui of the application. Here we have all the methods that deal with
+ * overall ui aspects like titlebar, chat input, etc.
+ *
+ */
 var BaliUi = function() {
   // Timeformat used for messages
   this.timeFormat = 'HH\\hmm';
