@@ -106,20 +106,20 @@ BaliUi.fn.pushTitleBarMessage = function() {
     var room = activeMuc.roomName;
     var found = false;
 
-    $(this.titleQueue).each(function(i, el){
+    $(this.titleQueue).each(function(i, el) {
       if(room == el.room){
         el.unread = unread;
         found = true;
         return;
     }});
-    if(!found){ 
+
+    if (!found) { 
       this.titleQueue.push({'room': room, 'unread':unread});
     }
 
-    if(!this.titleTimeout){
+    if (!this.titleTimeout) {
       this.titleTimeout = setInterval(function(){bali.ui.updateTitleBar();}, 1500);
     }
-    //document.title = "("+unread+") "+room;
   }
 }
 
@@ -129,6 +129,7 @@ BaliUi.fn.clearTitleBar = function() {
   this.titleTimeout = null;
   this.updateTitleBar();
   this.currentTitle = 0;
+
   var activeMuc = this.getActiveMuc();
   activeMuc.unreadMessages = 0;
 }
@@ -159,7 +160,7 @@ $(document).ready(function () {
   $('#alerts-tooltip').tooltip();
 
   // Handles file-info popup
-  $('.file-info').mouseover(function(){$('#file-info-tooltip').tooltip();})
+  $('.file-info').mouseover(function(){ $('#file-info-tooltip').tooltip() })
 
   $('#expand-embeds').change(function(){ bali.ui.expandEmbeds() });
 
