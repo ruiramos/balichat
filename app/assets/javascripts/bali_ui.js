@@ -13,8 +13,12 @@ var BaliUi = function() {
     unavailable: 'Offline'
   }
 
-  // Controlls if the balichat window is focused or not.
+  // Controls if the balichat window is focused or not.
   this.windowFocus = true;
+
+  this.titleQueue = [this.defaultTitle];
+  this.titleTimeout = null;
+  this.currentTitle = 0;
 }
 
 BaliUi.fn = BaliUi.prototype;
@@ -34,8 +38,9 @@ BaliUi.fn.expandEmbeds = function() {
 
 BaliUi.fn.submitTopic = function() {
   var text = $('input#topic').val();
+  var oldTopic = $('.topic.editable').text();
 
-  if (text.length > 0) {
+  if (text.length > 0 && text != oldTopic) {
     this.getActiveMuc().setTopic(text);
     $('.topic.editable').text(text);
   }
@@ -61,19 +66,21 @@ BaliUi.fn.topicHandler = function() {
       if (text.length) {
         thisUi.submitTopic();
       }
-    }
+    } else if(e.keyCode == 27) {  // esc, dismiss
+      $('.topic.edit').hide();
+      $(this).val($('.topic.editable').text());
+      $('.topic.editable').show();
+      $('.chat-input-field').focus();
+    }  
   });
 }
 
 BaliUi.fn.focusHandler = function() {
-  var thisUi = this;
   $(window).focus(function() {
-    console.log("FOCUS");
-    thisUi.windowFocus = true;
-    thisUi.clearTitleBar();
+    bali.ui.windowFocus = true;
+    bali.ui.clearTitleBar();
   }).blur(function() {
-    console.log("NO FOCUS");
-    thisUi.windowFocus = false;
+    bali.ui.windowFocus = false;
   });
 }
 
@@ -82,18 +89,46 @@ BaliUi.fn.getActiveMuc = function() {
 }
 
 BaliUi.fn.updateTitleBar = function() {
-  //console.log("UPDATE TITLEBAR! "+this.windowFocus);
+  nextTitleIndex = this.currentTitle % this.titleQueue.length;
+  if(typeof(this.titleQueue[nextTitleIndex]) === "string"){
+    newTopic = this.titleQueue[nextTitleIndex];}
+  else {
+    newTopic = "("+this.titleQueue[nextTitleIndex].unread+") "+this.titleQueue[nextTitleIndex].room;
+  }
+  document.title = newTopic;
+  this.currentTitle++;
+}
+
+BaliUi.fn.pushTitleBarMessage = function() {
   if (!this.windowFocus) {
     var activeMuc = this.getActiveMuc();
-    var unread = activeMuc.unreadMessages++;
+    var unread = ++activeMuc.unreadMessages;
     var room = activeMuc.roomName;
-    console.log("Nao ta focus, recebi msg! "+activeMuc.unreadMessages);
-    document.title = "("+unread+") "+room;
+    var found = false;
+
+    $(this.titleQueue).each(function(i, el){
+      if(room == el.room){
+        el.unread = unread;
+        found = true;
+        return;
+    }});
+    if(!found){ 
+      this.titleQueue.push({'room': room, 'unread':unread});
+    }
+
+    if(!this.titleTimeout){
+      this.titleTimeout = setInterval(function(){bali.ui.updateTitleBar();}, 1500);
+    }
+    //document.title = "("+unread+") "+room;
   }
 }
 
 BaliUi.fn.clearTitleBar = function() {
-  document.title = this.defaultTitle;
+  this.titleQueue = [this.defaultTitle];
+  clearInterval(this.titleTimeout);
+  this.titleTimeout = null;
+  this.updateTitleBar();
+  this.currentTitle = 0;
   var activeMuc = this.getActiveMuc();
   activeMuc.unreadMessages = 0;
 }
