@@ -9,7 +9,7 @@ var MucUi = function(muc) {
   this.participantList = $('#user-list-'+muc.roomName);
   this.topicDiv = $('#topic-'+muc.roomName);
 
-  //var scrollDiv = $('#muc-'+muc.roomName);
+  this.scrollDiv = $('#muc-'+muc.roomName);
   //this.scroll = scrollDiv.data('jsp');
 
   // The welcome message, used to append backlog before it.
@@ -21,8 +21,13 @@ var MucUi = function(muc) {
 
 MucUi.fn = MucUi.prototype;
 
-MucUi.fn.scrollBottom = function(animate) {
+MucUi.fn.scrollBottom = function(test, speed) {
+  var thisMucUi = this;
   //this.scroll.scrollToPercentY(30, animate);
+  console.log(this.scrollDiv);
+  this.scrollDiv.animate({
+    scrollBottom: thisMucUi.scrollDiv.scrollHeight + 20
+  }, speed);
 }
 
 MucUi.fn.handleMessage = function(participant, message) {
@@ -142,7 +147,7 @@ MucUi.fn.appendToMuc = function(entry) {
   //this.updateChatWindow();
 
   if (scrollBottom == true || entry.isOwnMessage()) {
-    this.scrollBottom(animate);
+    this.scrollBottom(animate, 600);
   }
 
   this.lastEntry = entry;
