@@ -10,7 +10,6 @@ var MucUi = function(muc) {
   this.topicDiv = $('#topic-'+muc.roomName);
 
   this.scrollDiv = $('#muc-'+muc.roomName);
-  //this.scroll = scrollDiv.data('jsp');
 
   // The welcome message, used to append backlog before it.
   this.welcomeMessage = this.appendWelcome();
@@ -23,8 +22,6 @@ MucUi.fn = MucUi.prototype;
 
 MucUi.fn.scrollBottom = function(test, speed) {
   var thisMucUi = this;
-  //this.scroll.scrollToPercentY(30, animate);
-  console.log(this.scrollDiv);
   this.scrollDiv.animate({
     scrollBottom: thisMucUi.scrollDiv.scrollHeight + 20
   }, speed);
@@ -143,8 +140,6 @@ MucUi.fn.appendToMuc = function(entry) {
       $('.chat-muc-messages').append(entry.dom);
     }
   }
-
-  //this.updateChatWindow();
 
   if (scrollBottom == true || entry.isOwnMessage()) {
     this.scrollBottom(animate, 600);
