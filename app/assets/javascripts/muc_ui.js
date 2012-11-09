@@ -20,11 +20,17 @@ var MucUi = function(muc) {
 
 MucUi.fn = MucUi.prototype;
 
-MucUi.fn.scrollBottom = function(test, speed) {
+MucUi.fn.scrollBottom = function(animate, speed) {
   var thisMucUi = this;
-  this.scrollDiv.animate({
-    scrollBottom: thisMucUi.scrollDiv.scrollHeight + 20
-  }, speed);
+  var scrollDown = $(thisMucUi.scrollDiv)[0].scrollHeight + 20;
+  if (animate == true) {
+    this.scrollDiv.animate({
+      scrollTop: scrollDown
+    }, speed);
+  }
+  else {
+    this.scrollDiv.scrollTop(scrollDown);
+  }
 }
 
 MucUi.fn.handleMessage = function(participant, message) {
@@ -32,9 +38,6 @@ MucUi.fn.handleMessage = function(participant, message) {
 }
 
 MucUi.fn.handleTimedMessage = function(participant, message, timestamp) {
-  console.log(participant);
-  console.log(message);
-  console.log(timestamp);
   var chatMessage = new ChatMessage(this.muc, participant, message, timestamp);
   this.appendMessage(chatMessage);
 }
@@ -112,6 +115,14 @@ MucUi.fn.appendMessage = function(message) {
   this.appendToMuc(message);
 }
 
+MucUi.fn.getPercentScrolled = function() {
+  var totalHeight = $(this.scrollDiv)[0].scrollHeight;
+  var totalScroll = this.scrollDiv.scroll().scrollTop() + this.scrollDiv.height();
+  var percent = (parseInt(totalScroll) * 100) / parseInt(totalHeight);
+
+  return percent;
+}
+
 /**
  * Updates the muc message area with a new entry. This entry can be one of two
  * different classes: ChatMessage and ChatNotification.
@@ -120,14 +131,19 @@ MucUi.fn.appendToMuc = function(entry) {
   var scrollBottom = true;
   var animate = true;
 
-  //if (this.scroll.getPercentScrolledY() != 1) {
-  //  scrollBottom = false;
- // }
+  if (this.getPercentScrolled() != 100) {
+    scrollBottom = false;
+  }
 
   // Scroll fast (don't animate) if the scroll is not 100% and is own message
-  //if (entry.isOwnMessage() && this.scroll.getPercentScrolledY() != 1) {
-  //  animate = false;
- // }
+  if (entry.isOwnMessage() && this.getPercentScrolled() != 100) {
+    animate = false;
+  }
+
+  // Don't animate on backlog
+  if (entry.isBacklog()) {
+    animate = false;
+  }
 
   if (entry.isParagraph && this.lastEntry.isParagraph) {
     this.lastEntry.dom.after(entry.dom);
@@ -142,7 +158,7 @@ MucUi.fn.appendToMuc = function(entry) {
   }
 
   if (scrollBottom == true || entry.isOwnMessage()) {
-    this.scrollBottom(animate, 600);
+    this.scrollBottom(animate, 100);
   }
 
   this.lastEntry = entry;
