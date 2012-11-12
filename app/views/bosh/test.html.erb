@@ -112,7 +112,7 @@
   var bali = null;
 
   $(document).ready(function () {
-    $('.scroll-pane').jScrollPane({verticalGutter:0, animateDuration:50});
+    //$('.scroll-pane').jScrollPane({verticalGutter:0, animateDuration:50});
 
     bali = new Bali();
     bali.connect('<%= @jid %>', '<%= @sid %>', '<%= @rid %>', '<%= JABBER[:host] %>');
@@ -122,7 +122,7 @@
       h = $(window).height()-170;
       $(".chat-window").css("height", h);
       $(".chat-window").css("width", $(".chat-column").css("width"));
-      bali.getActiveMuc().ui.scroll.reinitialise();
+      //bali.getActiveMuc().ui.scroll.reinitialise();
     });
     $(window).resize();
   });

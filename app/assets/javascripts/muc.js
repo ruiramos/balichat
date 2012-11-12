@@ -127,19 +127,13 @@ Muc.fn.handleMessage = function(msg) {
     if (body.length > 0) {
       if (delay.length == 0 && nick != this.myNick) {
         if (nick == null) {
-          console.log("handleTopicBacklog");
-          console.log(msg);
           this.ui.handleTopicBacklog(participant, subject.text());
         } else {
-          console.log("handleMessage");
-          console.log(msg);
           this.ui.handleMessage(participant, body.text());
         }
       }
       if (delay.length > 0) {
         var timestamp = delay.attr('stamp');
-        console.log("handleTimedMessage");
-        console.log(msg);
         // When getting backlog I can get messages from people that are not in
         // the room anymore. In this case we have to create a temporary one.
         participant = new Participant(from);
@@ -148,13 +142,9 @@ Muc.fn.handleMessage = function(msg) {
     }
     else if (body.length == 0 && subject.length > 0) {
       if (delay.length > 0) {
-        console.log("handleTopicBacklog");
-        console.log(msg);
         this.ui.handleTopicBacklog(participant, subject.text());
       }
       if (delay.length == 0) {
-        console.log("handleTopicChange");
-        console.log(msg);
         this.ui.handleTopicChange(participant, subject.text());
       }
     }

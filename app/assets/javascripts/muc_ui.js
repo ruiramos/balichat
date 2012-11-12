@@ -8,14 +8,7 @@ var MucUi = function(muc) {
 
   this.participantList = $('#user-list-'+muc.roomName);
   this.topicDiv = $('#topic-'+muc.roomName);
-
-<<<<<<< Updated upstream
-  var scrollDiv = $('#muc-'+muc.roomName);
-  this.scroll = scrollDiv.data('jsp');
-=======
   this.scrollDiv = $('#muc-'+muc.roomName);
-  //this.scroll = scrollDiv.data('jsp');
->>>>>>> Stashed changes
 
   // The welcome message, used to append backlog before it.
   this.welcomeMessage = this.appendWelcome();
@@ -26,22 +19,17 @@ var MucUi = function(muc) {
 
 MucUi.fn = MucUi.prototype;
 
-<<<<<<< Updated upstream
-MucUi.fn.updateChatWindow = function() {
-  this.scroll.reinitialise();
-}
-
-MucUi.fn.scrollBottom = function(animate) {
-  this.scroll.scrollToPercentY(30, animate);
-=======
-MucUi.fn.scrollBottom = function(test, speed) {
+MucUi.fn.scrollBottom = function(animate, speed) {
   var thisMucUi = this;
-  //this.scroll.scrollToPercentY(30, animate);
-  console.log(this.scrollDiv);
-  this.scrollDiv.animate({
-    scrollBottom: thisMucUi.scrollDiv.scrollHeight + 20
-  }, speed);
->>>>>>> Stashed changes
+  var scrollDown = $(thisMucUi.scrollDiv)[0].scrollHeight + 20;
+  if (animate == true) {
+    this.scrollDiv.animate({
+      scrollTop: scrollDown
+    }, speed);
+  }
+  else {
+    this.scrollDiv.scrollTop(scrollDown);
+  }
 }
 
 MucUi.fn.handleMessage = function(participant, message) {
@@ -126,6 +114,14 @@ MucUi.fn.appendMessage = function(message) {
   this.appendToMuc(message);
 }
 
+MucUi.fn.getPercentScrolled = function() {
+  var totalHeight = $(this.scrollDiv)[0].scrollHeight;
+  var totalScroll = this.scrollDiv.scroll().scrollTop() + this.scrollDiv.height();
+  var percent = (parseInt(totalScroll) * 100) / parseInt(totalHeight);
+
+  return percent;
+}
+
 /**
  * Updates the muc message area with a new entry. This entry can be one of two
  * different classes: ChatMessage and ChatNotification.
@@ -134,12 +130,17 @@ MucUi.fn.appendToMuc = function(entry) {
   var scrollBottom = true;
   var animate = true;
 
-  if (this.scroll.getPercentScrolledY() != 1) {
+  if (this.getPercentScrolled() != 100) {
     scrollBottom = false;
   }
 
   // Scroll fast (don't animate) if the scroll is not 100% and is own message
-  if (entry.isOwnMessage() && this.scroll.getPercentScrolledY() != 1) {
+  if (entry.isOwnMessage() && this.getPercentScrolled() != 100) {
+    animate = false;
+  }
+
+  // Don't animate on backlog
+  if (entry.isBacklog()) {
     animate = false;
   }
 
@@ -155,10 +156,8 @@ MucUi.fn.appendToMuc = function(entry) {
     }
   }
 
-  this.updateChatWindow();
-
   if (scrollBottom == true || entry.isOwnMessage()) {
-    this.scrollBottom(animate, 600);
+    this.scrollBottom(animate, 100);
   }
 
   this.lastEntry = entry;
