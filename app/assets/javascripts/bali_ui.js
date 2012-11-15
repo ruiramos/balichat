@@ -84,8 +84,9 @@ var BaliUi = (function() {
     },
 
     updateTitleBar: function() {
+      console.log('Updating titlebar');
       nextTitleIndex = currentTitle % titleQueue.length;
-      if (typeof(titleQueue[nextTitleIndex]) === "string") {
+      if (typeof(titleQueue[nextTitleIndex]) === 'string') {
         newTitle = titleQueue[nextTitleIndex];}
       else {
         newTitle = "("+titleQueue[nextTitleIndex].unread+") "+titleQueue[nextTitleIndex].room;
@@ -96,6 +97,7 @@ var BaliUi = (function() {
 
     pushTitleBarMessage: function() {
       if (!windowFocus) {
+        console.log('Pushing titleBarMessage');
         var activeMuc = Bali.getActiveMuc();
         var unread = ++activeMuc.unreadMessages;
         var room = activeMuc.roomName;
@@ -106,7 +108,8 @@ var BaliUi = (function() {
             el.unread = unread;
             found = true;
             return;
-        }});
+          }
+        });
 
         if (!found) { 
           titleQueue.push({'room': room, 'unread': unread});
