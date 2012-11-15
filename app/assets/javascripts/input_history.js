@@ -1,16 +1,16 @@
-var ChatHistory = function() {
+var InputHistory = function() {
   this.messages = [];
   this.limit = 20; // how many messages we store in history
   this.currentPosition = 0;
 }
 
-ChatHistory.fn = ChatHistory.prototype;
+InputHistory.fn = InputHistory.prototype;
 
-ChatHistory.fn.size = function() {
+InputHistory.fn.size = function() {
   return this.messages.length;
 }
 
-ChatHistory.fn.addMessage = function(text) {
+InputHistory.fn.addMessage = function(text) {
   var size = this.messages.push(text);
   if (size>this.limit) {
     this.messages.shift();
@@ -21,7 +21,7 @@ ChatHistory.fn.addMessage = function(text) {
   return this.messages;
 }
 
-ChatHistory.fn.getNext = function() {
+InputHistory.fn.getNext = function() {
   this.currentPosition++;
   
   if (this.currentPosition > this.size()-1) {
@@ -31,7 +31,7 @@ ChatHistory.fn.getNext = function() {
   return this.messages[this.currentPosition];
 }
 
-ChatHistory.fn.getPrevious = function() {
+InputHistory.fn.getPrevious = function() {
   this.currentPosition--;
 
   if (this.currentPosition < 0) {
