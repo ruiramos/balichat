@@ -113,7 +113,7 @@ BaliUi.fn.pushTitleBarMessage = function() {
     var found = false;
 
     $(this.titleQueue).each(function(i, el) {
-      if(room == el.room){
+      if (room == el.room) {
         el.unread = unread;
         found = true;
         return;
@@ -151,12 +151,28 @@ BaliUi.fn.sendChatMessage = function() {
   $('.chat-input-field').val('');
 }
 
+BaliUi.fn.updateInputWithHistory = function(text) {
+  if (text != "") {
+    $('.chat-input-field').val(text);
+    var pos = $('.chat-input-field').val().length-1;
+  }
+}
+
 $(document).ready(function () {
+  // Key press handling on the input field
   $('.chat-input-field').keydown(function(e) {
     if (e.keyCode == 13 && event.shiftKey) {
       return true;
     } else if (e.keyCode == 13) {
       bali.ui.sendChatMessage();
+      return false;
+    } else if (e.keyCode == 38) {
+      var message = bali.getActiveMuc().inputHistory.getPrevious();
+      bali.ui.updateInputWithHistory(message);
+      return false;
+    } else if (e.keyCode == 40) {
+      var message = bali.getActiveMuc().inputHistory.getNext();
+      bali.ui.updateInputWithHistory(message);
       return false;
     }
   });

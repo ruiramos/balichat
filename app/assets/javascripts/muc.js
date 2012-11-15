@@ -36,6 +36,9 @@ var Muc = function(client, jid) {
 
   // Balichat client participant.
   this.me = null;
+
+  // Input history
+  this.inputHistory = new InputHistory();
 }
 
 Muc.fn = Muc.prototype;
@@ -63,7 +66,8 @@ Muc.fn.join = function(nick) {
 Muc.fn.sendMessage = function(text) {
   var id = this.client.muc.groupchat(this.jid, text);
   this.ui.handleMessage(this.me, text);
-
+  this.inputHistory.addMessage(text);
+  
   return id;
 }
 
