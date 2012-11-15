@@ -32,7 +32,7 @@ var BaliUi = (function() {
         $('.embedded').show();
         $('small.link-source').removeClass('noEmbedds');
       }
-      Bali.getActiveMuc().ui.scrollToBottom();
+      Bali.getActiveMuc().ui.scrollBottom();
     },
 
     submitTopic: function() {

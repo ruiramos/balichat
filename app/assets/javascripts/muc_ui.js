@@ -201,7 +201,7 @@ MucUi.fn.doReplacements = function(text) {
   } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(.*)(\.jpg|\.png|\.gif|\.bmp)/i)) { //image embedd
     var img = $("<img class='embedded "+hiddenClass+"' src='"+text+"'>");
     $(img).load(function() {
-      thisMucUi.scrollToBottom();
+      thisMucUi.scrollBottom();
     });
 
     $container.append(img);
