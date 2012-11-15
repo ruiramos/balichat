@@ -33,9 +33,9 @@ ChatNotification.fn.buildDOMElement = function(type, text, timestamp) {
   el.removeClass('hide');
 
   if (timestamp != null) {
-    el.find('.timestamp').text(moment().format(bali.ui.timeFormat));
+    el.find('.timestamp').text(moment().format(BaliUi.timeFormat));
   } else {
-    el.find('.timestamp').text(moment(timestamp).format(bali.ui.timeFormat));
+    el.find('.timestamp').text(moment(timestamp).format(BaliUi.timeFormat));
   }
   el.find('.message').addClass('system').addClass(type)
   el.find('.nick').remove();

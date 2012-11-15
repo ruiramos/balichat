@@ -5,69 +5,66 @@
  * the class from which you can access all the mucs, participants, etc.
  *
  */
-var Bali = function() {
-  this.BOSH_SERVICE = "/http-bind";
-  this.client = null;
-  this.jid = null;
-
-  this.ui = new BaliUi();
+var Bali = (function() {
+  var BOSH_SERVICE = "/http-bind";
+  var client = null;
+  var jid = null;
 
   // List of mucs where the client is participating
-  this.mucList = [];
+  var mucList = [];
 
   // Set this to true to check all the sent and received stanzas on console.
-  this.debug = false
-};
+  var debug = false
+  
+  // Public methods
+  return {
+    isOwnMessage: function(message) {
+      var from = $(message).attr('from');
+      var myNode = Strophe.getNodeFromJid(jid);
+      
+      return (Strophe.getResourceFromJid(from) == myNode);
+    },
+    
+    getActiveMuc: function() {
+      var activeMuc = null;
+      $.each(mucList, function(i, m) {
+        // TODO: return the correct muc. for now return the only muc there is.
+        activeMuc = m;
+        return;
+      });
 
-Bali.fn = Bali.prototype;
+      return activeMuc;
+    },
 
-Bali.fn.isOwnMessage = function(message) {
-  var from = $(message).attr('from');
-  var myNode = Strophe.getNodeFromJid(this.jid);
-  return (Strophe.getResourceFromJid(from) == myNode);
-}
+    connect: function(jid, sid, rid, host) {
+      client = new Strophe.Connection(BOSH_SERVICE);
 
-Bali.fn.getActiveMuc = function() {
-  var activeMuc = null;
+      if (debug) {
+        this.client.rawInput = function (data) { console.log('RAW_IN: ' + data) };
+        this.client.rawOutput = function (data) { console.log('SENT: ' + data) };
+        // For extreme debug.
+        // Strophe.log = function (lvl, msg) { console.log(msg); };
+      }
 
-  $.each(this.mucList, function(i, m) {
-    // TODO: returning the correct muc. for now return the only muc there is.
-    activeMuc = m;
-    return;
-  });
+      this.jid = jid;
+      client.attach(jid, sid, rid, function(status) {
+        if (status == Strophe.Status.DISCONNECTED) {
+          console.log('Disconnected.');
+        }
+        else if (status == Strophe.Status.ATTACHED) {
+          console.log('Strophe is attached.');
+        }
+      });
 
-  return activeMuc;
-}
+      // TODO: join correct mucs
+      var amizadeMuc = new Muc(client, 'amizade@conference.'+host)
+      mucList.push(amizadeMuc);
+      amizadeMuc.join(Strophe.getNodeFromJid(jid));
+    },
 
-Bali.fn.connect = function(jid, sid, rid, host) {
-  this.client = new Strophe.Connection(this.BOSH_SERVICE);
-
-  if (this.debug) {
-    this.client.rawInput = function (data) { console.log('RAW_IN: ' + data) };
-    this.client.rawOutput = function (data) { console.log('SENT: ' + data) };
-    // For extreme debug.
-    // Strophe.log = function (lvl, msg) { console.log(msg); };
+    escapeHtml: function(text) {
+      return text.replace(/&/g,'&amp;').replace(/>/g,'&gt;').
+      replace(/</g,'&lt;').replace(/"/g,'&quot;');
+    }
   }
-
-  this.jid = jid;
-
-  this.client.attach(jid, sid, rid, function(status) {
-    if (status == Strophe.Status.DISCONNECTED) {
-      console.log('Disconnected.');
-    }
-    else if (status == Strophe.Status.ATTACHED) {
-      console.log('Strophe is attached.');
-    }
-  });
-
-  var amizadeMuc = new Muc(this.client, 'amizade@conference.'+host)
-  this.mucList.push(amizadeMuc);
-  amizadeMuc.join(Strophe.getNodeFromJid(jid));
-}
-
-Bali.escapeHtml = function(text) {
-  return text.replace(/&/g,'&amp;').
-              replace(/>/g,'&gt;').
-              replace(/</g,'&lt;').
-              replace(/"/g,'&quot;');
-}
+}());

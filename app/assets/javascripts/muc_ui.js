@@ -110,7 +110,7 @@ MucUi.fn.appendMessage = function(message) {
   }
 
   // TODO: this should be per muc (for unread on tabs also)
-  bali.ui.pushTitleBarMessage();
+  BaliUi.pushTitleBarMessage();
   this.appendToMuc(message);
 }
 

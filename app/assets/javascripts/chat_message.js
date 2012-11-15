@@ -42,9 +42,9 @@ ChatMessage.fn.buildAsDiv = function() {
   el.removeClass('hide');
 
   if (this.timestamp != null) {
-    el.find('.timestamp').text(moment().format(bali.ui.timeFormat));
+    el.find('.timestamp').text(moment().format(BaliUi.timeFormat));
   } else {
-    el.find('.timestamp').text(moment(this.timestamp).format(bali.ui.timeFormat));
+    el.find('.timestamp').text(moment(this.timestamp).format(BaliUi.timeFormat));
   }
 
   el.find('.nick').text(this.participant.nick);

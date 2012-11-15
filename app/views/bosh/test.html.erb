@@ -67,7 +67,7 @@
         <tbody>
           <tr>
             <td><%= text_area :input, '', class: 'chat-input-field', rows: 2 %></td>
-            <td class="btn-send-td"><%= link_to_function 'Send', 'bali.ui.sendChatMessage()', class: 'btn btn-inverse btn-send'%></td>
+            <td class="btn-send-td"><%= link_to_function 'Send', 'BaliUi.sendChatMessage()', class: 'btn btn-inverse btn-send'%></td>
           </tr>
         </tbody>
       </table>
@@ -109,20 +109,16 @@
 </div>
 
 <script type="text/javascript">
-  var bali = null;
-
   $(document).ready(function () {
     //$('.scroll-pane').jScrollPane({verticalGutter:0, animateDuration:50});
 
-    bali = new Bali();
-    bali.connect('<%= @jid %>', '<%= @sid %>', '<%= @rid %>', '<%= JABBER[:host] %>');
+    Bali.connect('<%= @jid %>', '<%= @sid %>', '<%= @rid %>', '<%= JABBER[:host] %>');
 
     // update chat-window size
     $(window).resize(function(){
       h = $(window).height()-170;
       $(".chat-window").css("height", h);
       $(".chat-window").css("width", $(".chat-column").css("width"));
-      //bali.getActiveMuc().ui.scroll.reinitialise();
     });
     $(window).resize();
   });
