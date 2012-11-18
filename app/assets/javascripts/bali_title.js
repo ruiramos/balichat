@@ -12,6 +12,9 @@ var BaliTitle = (function() {
   // Public methods
   return {
     update: function() {
+      console.log('Updating...');
+      console.log("CurrentTitle: "+currentTitle);
+      console.log("Queue length: "+titleQueue.length);
       nextTitleIndex = currentTitle % titleQueue.length;
       if (typeof(titleQueue[nextTitleIndex]) === 'string') {
         newTitle = titleQueue[nextTitleIndex];}
@@ -42,7 +45,7 @@ var BaliTitle = (function() {
         }
 
         if (!titleTimeout) {
-          titleTimeout = setInterval(function(){ updateTitleBar() }, 1500);
+          titleTimeout = setInterval(function(){ BaliTitle.update() }, 1500);
         }
       }
     },
