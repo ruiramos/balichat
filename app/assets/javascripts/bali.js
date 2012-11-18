@@ -14,7 +14,7 @@ var Bali = (function() {
   var mucList = [];
 
   // Set this to true to check all the sent and received stanzas on console.
-  var debug = false
+  var debug = false;
   
   // Public methods
   return {

@@ -5,7 +5,6 @@
  *
  */
 var BaliUi = (function() {
-  var defaultTitle = 'Balichat';
   var status = {
     online: 'Available',
     away: 'Away',
@@ -14,15 +13,16 @@ var BaliUi = (function() {
     chat: 'Free for chat',
     unavailable: 'Offline'
   }
+
   // Controls if the balichat window is focused or not.
   var windowFocus = true;
 
-  var titleQueue = [defaultTitle];
-  var titleTimeout = null;
-  var currentTitle = 0;
-
   return {
     'timeFormat': 'HH\\hmm',
+
+    isFocused: function() {
+      return windowFocus;
+    },
 
     expandEmbeds: function() {
       if ($('#expand-embeds').attr('checked') != 'checked') {
@@ -76,59 +76,11 @@ var BaliUi = (function() {
 
     focusHandler: function() {
       $(window).focus(function() {
-        BaliUi.windowFocus = true;
-        BaliUi.clearTitleBar();
+        windowFocus = true;
+        BaliTitle.clear();
       }).blur(function() {
-        BaliUi.windowFocus = false;
+        windowFocus = false;
       });
-    },
-
-    updateTitleBar: function() {
-      console.log('Updating titlebar');
-      nextTitleIndex = currentTitle % titleQueue.length;
-      if (typeof(titleQueue[nextTitleIndex]) === 'string') {
-        newTitle = titleQueue[nextTitleIndex];}
-      else {
-        newTitle = "("+titleQueue[nextTitleIndex].unread+") "+titleQueue[nextTitleIndex].room;
-      }
-      document.title = newTitle;
-      currentTitle++;
-    },
-
-    pushTitleBarMessage: function() {
-      if (!windowFocus) {
-        console.log('Pushing titleBarMessage');
-        var activeMuc = Bali.getActiveMuc();
-        var unread = ++activeMuc.unreadMessages;
-        var room = activeMuc.roomName;
-        var found = false;
-
-        $(titleQueue).each(function(i, el) {
-          if (room == el.room) {
-            el.unread = unread;
-            found = true;
-            return;
-          }
-        });
-
-        if (!found) { 
-          titleQueue.push({'room': room, 'unread': unread});
-        }
-
-        if (!titleTimeout) {
-          titleTimeout = setInterval(function(){ updateTitleBar() }, 1500);
-        }
-      }
-    },
-
-    clearTitleBar: function() {
-      titleQueue = [defaultTitle];
-      clearInterval(titleTimeout);
-      titleTimeout = null;
-      BaliUi.updateTitleBar();
-      currentTitle = 0;
-
-      Bali.getActiveMuc().unreadMessages = 0;
     },
 
     sendChatMessage: function() {
@@ -143,9 +95,7 @@ var BaliUi = (function() {
     },
 
     updateInputWithHistory: function(text) {
-      if (text != "") {
-        $('.chat-input-field').val(text);
-      }
+      $('.chat-input-field').val(text);
     }
   }
 }());

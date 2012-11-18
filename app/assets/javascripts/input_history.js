@@ -1,42 +1,59 @@
+/* Copyright (c) 2012 Twintend (http://twintend.com)
+ *
+ * Input history. Handles the history of the input text.
+ *
+ */
 var InputHistory = function() {
-  this.messages = [];
-  this.limit = 20; // how many messages we store in history
-  this.currentPosition = 0;
-}
-
-InputHistory.fn = InputHistory.prototype;
-
-InputHistory.fn.size = function() {
-  return this.messages.length;
-}
-
-InputHistory.fn.addMessage = function(text) {
-  var size = this.messages.push(text);
-  if (size>this.limit) {
-    this.messages.shift();
-    size = this.limit;
-  }
-  this.currentPosition = size;
-
-  return this.messages;
-}
-
-InputHistory.fn.getNext = function() {
-  this.currentPosition++;
+  var messages = [],
+      limit = 20, // how many messages we store in history
+      currentPosition = 0;
   
-  if (this.currentPosition > this.size()-1) {
-    this.currentPosition = 0;
-  }
+  return {
+    size: function() {
+      return messages.length;
+    },
 
-  return this.messages[this.currentPosition];
-}
+    addMessage: function(text) {
+      var size = messages.push(text);
+      if (size>limit) {
+        messages.shift();
+        size = this.limit;
+      }
+      currentPosition = size;
 
-InputHistory.fn.getPrevious = function() {
-  this.currentPosition--;
-
-  if (this.currentPosition < 0) {
-    this.currentPosition = this.size()-1;
-  }
+      return messages;
+    },
   
-  return this.messages[this.currentPosition];
+    /*
+     * Returns the next input in the history. You get it with ARROW UP key. So in
+     * practice it is the previous one (chronologically speaking).
+     *
+     */
+    getNext: function() {
+      currentPosition++;
+    
+      if (currentPosition > this.size()-1) {
+        currentPosition = this.size();
+        return '';
+      }
+
+      return messages[currentPosition];
+    },
+
+    /*
+     * Returns the next input in the history. You get it with ARROW DOWN key. So in
+     * practice it is the next one (chronologically speaking).
+     *
+     */
+    getPrevious: function() {
+      currentPosition--;
+
+      // If we reach the end we should not continue
+      if (currentPosition < 0) {
+        currentPosition = 0;
+      }
+
+      return messages[currentPosition];
+    }
+  }
 }
