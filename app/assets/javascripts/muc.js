@@ -185,7 +185,8 @@ Muc.fn.handlePresence = function(pres) {
   if ($(pres).find('status').attr('code') === '303') {
     var newNick = $(pres).find('item').attr('nick');
     participant.changeNick(newNick);
-    this.ui.handleNickChange(participant, nick, newNick);
+    // TODO: should we have this? Should the nick change?
+    //this.ui.handleNickChange(participant, nick, newNick);
     return true;
   }
 

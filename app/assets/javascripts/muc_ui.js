@@ -207,11 +207,26 @@ MucUi.fn.doReplacements = function(text) {
     $container.append(img);
     $container.append('<small class="link-source '+hiddenClass+'">'+linkify(source)+'</small>');
   
+  } else if (text.match(/@(.*)/g)) {
+    var match = text.match(/@(.*)/);
+    $container.append(text.replace(/@(.*)/g, this.replaceMention(match[1])));
   } else {
     $container.append(linkify(text));
   }
 
   return $container;
+}
+
+MucUi.fn.replaceMention = function(mention) {
+  var replaced = mention;
+  
+  $.each(this.muc.participants, function(i, participant) {
+    if (participant.nick == mention) {
+      replaced = '<span class="label label-info">'+participant.nick+'</span>'
+    }
+  });
+
+  return replaced;
 }
 
 MucUi.fn.joinHandler = function(stanza, muc, nick, text) {
