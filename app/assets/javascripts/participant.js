@@ -1,63 +1,74 @@
-function vCard() {
+var vCard = function() {
   this.familyName = "";
   this.givenName = "";
   this.photo = { MIME: null, binValue: null };
 }
 
-function Participant(jid) {
-  this.vcard = new vCard();
-  this.jid = jid;
-  this.nick = Strophe.getResourceFromJid(jid);
-  this.dom = this.buildDomElement();
-  this.status = 'unavailable';
-  this.setStatus(this.status);
-}
+var Participant = function(fullJid) {
+  var vcard = new vCard(),
+      jid = fullJid,
+      nick = Strophe.getResourceFromJid(jid),
+      domRoot = $('#empty-user').clone(),
+      status = 'unavailable';
 
-Participant.fn = Participant.prototype;
+  return {
+    setVcard: function(stanza) {
+      var vc = $(stanza).find('vCard');
+      vcard.familyName = $(vc).find('FN').text();
+      vcard.photo.MIME = $(vc).find('PHOTO').find('TYPE').text();
+      vcard.photo.binValue = $(vc).find('PHOTO').find('BINVAL').text();
 
-Participant.fn.setVcard = function(stanza) {
-  var vc = $(stanza).find('vCard');
+      if (vcard.photo.MIME != '' && vcard.photo.binValue != '') {
+        domRoot.find('.userimg').css('background', this.avatar());
+      }
+    },
 
-  this.vcard.familyName = $(vc).find('FN').text();
-  this.vcard.photo.MIME = $(vc).find('PHOTO').find('TYPE').text();
-  this.vcard.photo.binValue = $(vc).find('PHOTO').find('BINVAL').text();
-  if (this.vcard.photo.MIME != '' && this.vcard.photo.binValue != '') {
-    this.dom.find('.userimg').css('background', this.avatar());
-  }
-}
+    avatar: function() {
+      if (vcard.photo.binValue == null || vcard.photo.binValue == '') {
+        return 'url("/assets/default-avatar.png")';
+      } else {
+        var binValue = vcard.photo.binValue.replace(/\n/g, '');
+        return 'url("data:'+vcard.photo.MIME+';base64,'+binValue+'")';
+      }
+    },
+    
+    getJid: function() {
+      return jid;
+    },
 
-Participant.fn.avatar = function() {
-  if (this.vcard.photo.binValue == null || this.vcard.photo.binValue == '') {
-    return 'url("/assets/default-avatar.png")';
-  } else {
-    var binValue = this.vcard.photo.binValue.replace(/\n/g, '');
-    return 'url("data:'+this.vcard.photo.MIME+';base64,'+binValue+'")';
-  }
-}
+    getNick: function() {
+      return nick;
+    },
 
-Participant.fn.changeNick = function(newNick) {
-  this.nick = newNick;
-  this.jid = this.jid.replace(/\/\w+/, '/'+newNick);
-}
+    changeNick: function(newNick) {
+      nick = newNick;
+      jid = jid.replace(/\/\w+/, '/'+newNick);
+    },
 
-Participant.fn.buildDomElement = function(dom) {
-  var dom = $('#empty-user').clone();
+    buildDomElement: function() {
+      domRoot.removeAttr('id');
+      domRoot.attr('title', nick);
+      domRoot.removeClass('hide');
+      domRoot.find('.user-name').text(nick);
+      domRoot.show();
+    },
 
-  dom.removeAttr('id');
-  dom.attr('title', this.nick);
-  dom.removeClass('hide');
-  dom.find('.user-name').text(this.nick);
-  dom.show();
+    getDom: function() {
+      return domRoot;
+    },
 
-  return dom;
-}
+    setStatus: function(type) {
+      type = (type == '') ? 'online' : type;
 
-Participant.fn.setStatus = function(type) {
-  type = (type == '') ? 'online' : type;
+      domRoot.removeClass();
+      domRoot.addClass('user');
+      domRoot.addClass(type);
 
-  this.dom.removeClass();
-  this.dom.addClass('user');
-  this.dom.addClass(type);
+      status = type;
+    },
 
-  this.status = type;
+    getStatus: function() {
+      return status;
+    },
+  };
 }

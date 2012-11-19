@@ -42,14 +42,14 @@ MucUi.fn.handleTimedMessage = function(participant, message, timestamp) {
 }
 
 MucUi.fn.handleLeave = function(participant) {
-  var message = '<strong>'+participant.nick+'</strong> left the room.';
+  var message = '<strong>'+participant.getNick()+'</strong> left the room.';
   var type = ChatNotification.types.leave;
   this.appendNotification(type, message)
   this.removeParticipant(participant);
 }
 
 MucUi.fn.handleJoin = function(participant) {
-  var message = '<strong>'+participant.nick+'</strong> joined the room.';
+  var message = '<strong>'+participant.getNick()+'</strong> joined the room.';
   var type = ChatNotification.types.join;
   this.appendNotification(type, message);
   this.handleStartParticipant(participant);
@@ -57,7 +57,7 @@ MucUi.fn.handleJoin = function(participant) {
 
 MucUi.fn.handleTopicChange = function(participant, topic) {
   var topic = Bali.escapeHtml(topic);
-  var message = '<strong>'+participant.nick+'</strong> changed topic to: '+topic;
+  var message = '<strong>'+participant.getNick()+'</strong> changed topic to: '+topic;
   var type = ChatNotification.types.topic;
   this.appendNotification(type, message);
 }
@@ -78,7 +78,7 @@ MucUi.fn.handlePresence = function(participant) {
 }
 
 MucUi.fn.removeParticipant = function(participant) {
-  var user = $('ul.users').find('li[title="'+participant.nick+'"]');
+  var user = $('ul.users').find('li[title="'+participant.getNick()+'"]');
   user.animate({height: 'toggle', opacity: 'toggle'}, 'slow', function() {
     user.remove();
   });
@@ -86,7 +86,7 @@ MucUi.fn.removeParticipant = function(participant) {
 
 MucUi.fn.handleStartParticipant = function(participant) {
   var list = this.participantList.find('ul.users');
-  var user = participant.dom;
+  var user = participant.getDom();
   user.hide();
   list.append(user);
   user.fadeIn('slow');
@@ -171,7 +171,7 @@ MucUi.fn.includeAsParagraph = function(message) {
   var isParagraph = false;
 
   if (this.lastEntry.participant) {
-    if (message.participant.nick == this.lastEntry.participant.nick) {
+    if (message.participant.getNick() == this.lastEntry.participant.getNick()) {
       if (message.isBacklog() == this.lastEntry.isBacklog()) {
         isParagraph = true;
       }
@@ -181,11 +181,13 @@ MucUi.fn.includeAsParagraph = function(message) {
   return isParagraph;
 }
 
+// TODO: this should be extracted to a class!
 MucUi.fn.doReplacements = function(text) {
   var $container = $('<div/>');
   var thisMucUi = this;
   var source = text;
   var hiddenClass = '';
+
   if ($('#expand-embeds').attr("checked") != "checked") hiddenClass = 'noEmbedds';
 
   if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:vimeo.com)\//)) { // vimeo video embedd
@@ -207,9 +209,9 @@ MucUi.fn.doReplacements = function(text) {
     $container.append(img);
     $container.append('<small class="link-source '+hiddenClass+'">'+linkify(source)+'</small>');
   
-  } else if (text.match(/@(.*)/g)) {
-    var match = text.match(/@(.*)/);
-    $container.append(text.replace(/@(.*)/g, this.replaceMention(match[1])));
+  } else if (text.match(/@(\w)/g)) {
+    var match = text.match(/@(\w)/);
+    $container.append(text.replace(/@(\w)/g, this.replaceMention(match[1])));
   } else {
     $container.append(linkify(text));
   }
@@ -221,8 +223,8 @@ MucUi.fn.replaceMention = function(mention) {
   var replaced = mention;
   
   $.each(this.muc.participants, function(i, participant) {
-    if (participant.nick == mention) {
-      replaced = '<span class="label label-info">'+participant.nick+'</span>'
+    if (participant.getNick() == mention) {
+      replaced = '<span class="label label-info">'+participant.getNick()+'</span>'
     }
   });
 

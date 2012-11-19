@@ -18,7 +18,7 @@ var ChatMessage = function(muc, participant, text, timestamp) {
 ChatMessage.fn = ChatMessage.prototype;
 
 ChatMessage.fn.isOwnMessage = function() {
-  return this.muc.myNick === this.participant.nick;
+  return this.muc.myNick === this.participant.getNick();
 }
 
 ChatMessage.fn.isBacklog = function() {
@@ -47,7 +47,7 @@ ChatMessage.fn.buildAsDiv = function() {
     el.find('.timestamp').text(moment(this.timestamp).format(BaliUi.timeFormat));
   }
 
-  el.find('.nick').text(this.participant.nick);
+  el.find('.nick').text(this.participant.getNick());
   el.find('.text').html(this.text);
   el.find('.avatar-placeholder').css('background-image', this.participant.avatar())
 

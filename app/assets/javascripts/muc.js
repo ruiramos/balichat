@@ -81,6 +81,7 @@ Muc.fn.addParticipant = function(jid) {
 
   if (participant == null) {
     participant = new Participant(jid);
+    participant.buildDomElement();
     this.participants.push(participant);
   }
 
@@ -89,14 +90,14 @@ Muc.fn.addParticipant = function(jid) {
 
 Muc.fn.removeParticipant = function(participant) {
   var i = this.participants.indexOf(participant);
-  this.participants.splice(i,1);
+  this.participants.splice(i, 1);
 }
 
 Muc.fn.getParticipant = function(jid) {
   var participant = null;
 
   $.each(this.participants, function(i, p) {
-    if (p.jid === jid) {
+    if (p.getJid() === jid) {
       participant = p;
       return;
     }
@@ -109,7 +110,7 @@ Muc.fn.getParticipantByNick = function(nick) {
   var participant;
 
   $.each(this.participants, function(i, p) {
-    if (p.nick === nick) {
+    if (p.getNick() === nick) {
       participant = p;
       return;
     }
@@ -141,6 +142,7 @@ Muc.fn.handleMessage = function(msg) {
         // When getting backlog I can get messages from people that are not in
         // the room anymore. In this case we have to create a temporary one.
         participant = new Participant(from);
+        participant.buildDomElement();
         this.ui.handleTimedMessage(participant, body.text(), timestamp);
       }
     }
@@ -199,7 +201,7 @@ Muc.fn.handlePresence = function(pres) {
   else {
     this.client.vcard.get(function(stanza) {
       participant.setVcard(stanza);
-    }, participant.jid);
+    }, participant.getJid());
 
     if (this.showJoins) {
       if (newParticipant) {

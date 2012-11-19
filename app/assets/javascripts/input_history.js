@@ -5,7 +5,7 @@
  */
 var InputHistory = function() {
   var messages = [],
-      limit = 20, // how many messages we store in history
+      limit = 20, // total messages we store in muc history
       currentPosition = 0;
   
   return {
@@ -31,7 +31,8 @@ var InputHistory = function() {
      */
     getNext: function() {
       currentPosition++;
-    
+      
+      // If we reach the end we should show empty input.
       if (currentPosition > this.size()-1) {
         currentPosition = this.size();
         return '';
@@ -48,7 +49,7 @@ var InputHistory = function() {
     getPrevious: function() {
       currentPosition--;
 
-      // If we reach the end we should not continue
+      // If we reach the end we should not continue.
       if (currentPosition < 0) {
         currentPosition = 0;
       }
