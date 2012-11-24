@@ -11,11 +11,12 @@ $(function() {
       dataType: 'xml', // This is really important as s3 gives us back the url of the file in a XML document
       
       add: function (event, data) {
+        $('.progress').show();
         $.ajax({
           url: "/documents",
           type: 'POST',
           dataType: 'json',
-          data: {doc: {filename: data.files[0].name, chatroom: window.muc.jid}}, // send the file name to the server so it can generate the key param
+          data: {doc: {filename: data.files[0].name, chatroom: Bali.getActiveMuc().jid}},  // send the file name to the server so it can generate the key param
           async: false,
           success: function(data) {
             // Now that we have our data, we update the form so it contains all
@@ -55,6 +56,7 @@ $(function() {
         $('.progress').fadeOut(300, function() {
           $('.bar').css('width', 0)
         })
+        // generate message to the current room
       },
     })
   })

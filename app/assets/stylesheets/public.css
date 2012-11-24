@@ -109,6 +109,10 @@ h3.topic span {font-style: italic}
 .files i {}
 .files .files-info {margin-top:-1px; cursor: help;}
 .direct-upload {}
+.direct-upload input[type="file"]{ border:red; }
+.direct-upload .droplet{ padding:12px; background:#ffffdd; border:2px dashed #ccc; text-align: center; margin:12px 0; color:#444; }
+
+
 
 small.link-source {display:block;overflow:auto;font-size: 85%;display: block;line-height: 15px;min-height: 20px;
 opacity:0.7;background: url('/assets/link_icon.gif') 0 0 no-repeat;padding-left: 20px;}

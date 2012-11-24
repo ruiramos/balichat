@@ -146,7 +146,7 @@ Muc.fn.handleMessage = function(msg) {
         this.ui.handleTimedMessage(participant, body.text(), timestamp);
       }
     }
-    else if (body.length == 0 && subject.length > 0) {
+    else if (type = "topic" && body.length == 0 && subject.length > 0) {
       if (delay.length > 0) {
         this.ui.handleTopicBacklog(participant, subject.text());
       }
@@ -154,6 +154,11 @@ Muc.fn.handleMessage = function(msg) {
         this.ui.handleTopicChange(participant, subject.text());
       }
     }
+    else if (type = "upload" && body.length == 0 && subject.length > 0) {
+      if (delay.length == 0) {
+        this.ui.handleFileUpload(participant, subject.text());
+      }
+    }    
   }
 
   return true;

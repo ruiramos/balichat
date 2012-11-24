@@ -62,6 +62,12 @@ MucUi.fn.handleTopicChange = function(participant, topic) {
   this.appendNotification(type, message);
 }
 
+MucUi.fn.handleFileUpload = function(participant, filepath) {
+  var message = '<strong>'+participant.getNick()+'</strong> uploaded the file <a href="'+file.path+'" target="_blank">'+file.name+'</a>';
+  var type = ChatNotification.types.upload;
+  this.appendNotification(type, message);
+}
+
 // TODO: each muc should have 1 topic!!!!!!
 MucUi.fn.handleTopicBacklog = function(participant, topic) {
   var topic = Bali.escapeHtml(topic);

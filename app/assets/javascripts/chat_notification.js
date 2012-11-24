@@ -19,6 +19,7 @@ ChatNotification.types = {
   'join': 'user-joins',
   'leave': 'user-leaves',
   'topic': 'topic',
+  'upload': 'upload',
   'normal': ''
 }
 
