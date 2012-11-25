@@ -186,6 +186,60 @@ Strophe.addConnectionPlugin('muc', {
     return msgid;
   },
   /*Function
+  Parameters:
+  (String) room - The multi-user chat room name.
+  (String) nick - The nick name used in the chat room.
+  (STring) subject - The plaintext subject of this message
+  (String) message - The plaintext message to send to the room.
+  (String) html_message - The message to send to the room with html markup.
+  (String) type - "groupchat" for group chat messages o
+                  "chat" for private chat messages
+  Returns:
+  msgiq - the unique id used to send the message
+  */
+  
+  messageWithSubject: function(room, nick, subject, message, html_message, type) {
+    var msg, msgid, parent, room_nick;
+    room_nick = this.test_append_nick(room, nick);
+    type = type || (nick != null ? "chat" : "groupchat");
+    msgid = this._connection.getUniqueId();
+
+    msg = $msg({
+      to: room_nick,
+      from: this._connection.jid,
+      type: type,
+      id: msgid
+    });
+    if(subject != null){
+      msg.c("subject", {
+        xmlns: "jabber:client"
+      }).t(subject);
+    }
+    msg.c("body", {
+      xmlns: Strophe.NS.CLIENT
+    }).t(message);
+    msg.up();
+    if (html_message != null) {
+      msg.c("html", {
+        xmlns: Strophe.NS.XHTML_IM
+      }).c("body", {
+        xmlns: Strophe.NS.XHTML
+      }).h(html_message);
+      if (msg.node.childNodes.length === 0) {
+        parent = msg.node.parentNode;
+        msg.up().up();
+        msg.node.removeChild(parent);
+      } else {
+        msg.up().up();
+      }
+    }
+    msg.c("x", {
+      xmlns: "jabber:x:event"
+    }).c("composing");
+    this._connection.send(msg);
+    return msgid;
+  },
+  /*Function
   Convenience Function to send a Message to all Occupants
   Parameters:
   (String) room - The multi-user chat room name.
@@ -198,6 +252,19 @@ Strophe.addConnectionPlugin('muc', {
   groupchat: function(room, message, html_message) {
     return this.message(room, null, message, html_message);
   },
+  /*Function
+  Convenience Function to send a Message to all Occupants
+  Parameters:
+  (String) room - The multi-user chat room name.
+  (String) message - The plaintext message to send to the room.
+  (String) html_message - The message to send to the room with html markup.
+  Returns:
+  msgiq - the unique id used to send the message
+  */
+
+  notify: function(room, subject, message, html_message) {
+    return this.messageWithSubject(room, null, subject, message, html_message);
+  },  
   /*Function
   Send a mediated invitation.
   Parameters:

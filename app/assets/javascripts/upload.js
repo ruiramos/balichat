@@ -47,7 +47,9 @@ $(function() {
 
       success: function(data) {
         // Here we get the file url on s3 in an xml doc
-        var url = $(data).find('Location').text()
+        var url = $(data).find('Location').text().replace(/%2F/ig, "/");
+        var filename = url.split("/").pop();
+        window.Bali.getActiveMuc().sendNotification('notify', 'just uploaded <a href="'+url+'">'+filename+'</a>');
 
         $('#real_file_url').val(url) // Update the real input in the other form
       },
@@ -56,8 +58,7 @@ $(function() {
         $('.progress').fadeOut(300, function() {
           $('.bar').css('width', 0)
         })
-        // generate message to the current room
-      },
+      }
     })
   })
 })

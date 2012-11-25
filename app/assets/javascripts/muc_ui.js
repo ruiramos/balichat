@@ -62,9 +62,9 @@ MucUi.fn.handleTopicChange = function(participant, topic) {
   this.appendNotification(type, message);
 }
 
-MucUi.fn.handleFileUpload = function(participant, filepath) {
-  var message = '<strong>'+participant.getNick()+'</strong> uploaded the file <a href="'+file.path+'" target="_blank">'+file.name+'</a>';
-  var type = ChatNotification.types.upload;
+MucUi.fn.handleNotification = function(participant, subject, text) {
+  var message = '<strong>'+participant.getNick()+'</strong> '+text;
+  var type = ChatNotification.types.notification;
   this.appendNotification(type, message);
 }
 

@@ -76,6 +76,15 @@ Muc.fn.setTopic = function(text) {
   this.client.muc.setTopic(this.jid, text);
 }
 
+// Sends a notification message to the room and returns the unique id.
+Muc.fn.sendNotification = function(subject, text) {
+  var id = this.client.muc.notify(this.jid, subject, text);
+  this.ui.handleNotification(this.me, subject, text);
+  this.inputHistory.addMessage(text); // ?
+  
+  return id;
+}
+
 Muc.fn.addParticipant = function(jid) {
   var participant = this.getParticipant(jid);
 
@@ -146,7 +155,7 @@ Muc.fn.handleMessage = function(msg) {
         this.ui.handleTimedMessage(participant, body.text(), timestamp);
       }
     }
-    else if (type = "topic" && body.length == 0 && subject.length > 0) {
+    else if (body.length == 0 && subject.length > 0) {
       if (delay.length > 0) {
         this.ui.handleTopicBacklog(participant, subject.text());
       }
@@ -154,9 +163,9 @@ Muc.fn.handleMessage = function(msg) {
         this.ui.handleTopicChange(participant, subject.text());
       }
     }
-    else if (type = "upload" && body.length == 0 && subject.length > 0) {
+    else if (subject == "notify") {
       if (delay.length == 0) {
-        this.ui.handleFileUpload(participant, subject.text());
+        this.ui.handleNotification(participant, subject.text(), body.text());
       }
     }    
   }
