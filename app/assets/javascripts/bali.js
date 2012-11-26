@@ -32,7 +32,6 @@ var Bali = (function() {
         activeMuc = m;
         return;
       });
-
       return activeMuc;
     },
 
