@@ -12,7 +12,7 @@ var ChatMessage = function(muc, participant, text, timestamp) {
   this.timestamp = timestamp;
   this.isParagraph = false;
 
-  this.dom = this.buildAsDiv();
+  //this.dom = this.buildAsDiv();
 }
 
 ChatMessage.fn = ChatMessage.prototype;
@@ -61,5 +61,5 @@ ChatMessage.fn.buildAsDiv = function() {
 
   el.show();
 
-  return el;
+  this.dom = el;
 }

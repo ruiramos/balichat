@@ -49,7 +49,12 @@ $(function() {
         // Here we get the file url on s3 in an xml doc
         var url = $(data).find('Location').text().replace(/%2F/ig, "/");
         var filename = url.split("/").pop();
-        window.Bali.getActiveMuc().sendNotification('notify', 'just uploaded <a href="'+url+'">'+filename+'</a>');
+
+        if(url.match(/(?:^|\s)(https?:\/\/(?:www.)?(?:.*)(?:\.jpg|\.png|\.gif|\.bmp))/i)){
+          window.Bali.getActiveMuc().sendMessage(url);
+        } else {
+          window.Bali.getActiveMuc().sendNotification('notify', 'just uploaded <a href='+url+'>'+filename+'</a>');
+        }
 
         $('#real_file_url').val(url) // Update the real input in the other form
       },

@@ -6,7 +6,7 @@
 var ChatNotification = function(muc, type, text, timestamp) {
   this.muc = muc;
   this.type = type;
-  this.text = text.replace(/\n/, "<br>");
+  this.text = text;
   this.timestamp = timestamp;
   this.isParagraph = false;
 

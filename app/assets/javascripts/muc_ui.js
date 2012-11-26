@@ -99,9 +99,10 @@ MucUi.fn.handleStartParticipant = function(participant) {
 }
 
 MucUi.fn.appendNotification = function(type, message) {
+  //message = this.doReplacements(message);
   var not = new ChatNotification(this.muc, type, message, moment());
-  this.appendToMuc(not);
 
+  this.appendToMuc(not);
   return not;
 }
 
@@ -113,6 +114,8 @@ MucUi.fn.appendMessage = function(message) {
 
   if (this.includeAsParagraph(message)) {
     message.buildAsParagraph();
+  } else {
+    message.buildAsDiv();
   }
 
   // TODO: this should be per muc (for unread on tabs also)
@@ -176,7 +179,7 @@ MucUi.fn.appendToMuc = function(entry) {
 MucUi.fn.includeAsParagraph = function(message) {
   var isParagraph = false;
 
-  if (this.lastEntry.participant) {
+  if (this.lastEntry && this.lastEntry.participant) {
     if (message.participant.getNick() == this.lastEntry.participant.getNick()) {
       if (message.isBacklog() == this.lastEntry.isBacklog()) {
         isParagraph = true;
@@ -187,7 +190,7 @@ MucUi.fn.includeAsParagraph = function(message) {
   return isParagraph;
 }
 
-// TODO: this should be extracted to a class!
+// TODO: this should be extracted to a class! MALEMALEMAEL
 MucUi.fn.doReplacements = function(text) {
   var $container = $('<div/>');
   var thisMucUi = this;
@@ -196,24 +199,30 @@ MucUi.fn.doReplacements = function(text) {
 
   if ($('#expand-embeds').attr("checked") != "checked") hiddenClass = 'noEmbedds';
 
-  if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:vimeo.com)\//)) { // vimeo video embedd
-    $container.append(text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" class="embedded '+hiddenClass+'" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));  
+  if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:vimeo.com)\//im)) { // vimeo video embedd
+    $container.append(text.replace(/(?:^|\s)https?:\/\/(?:www.)?vimeo.com\/(\d*)(?:$|\s)/im,'<iframe src="http://player.vimeo.com/video/$1?title=1&amp;byline=1&amp;portrait=1" class="embedded '+hiddenClass+'" width="500" height="377" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'));  
     $container.append("<small class='link-source "+hiddenClass+"'>"+linkify(source)+"</small>");
 
 
-  } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:youtube.com)\//)) { // youtube video embedd
-    $container.append(text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" class="embedded '+hiddenClass+'" frameborder="0" allowfullscreen></iframe>'));
+  } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(?:youtube.com)\//im)) { // youtube video embedd
+    $container.append(text.replace(/(?:^|\s)https?:\/\/(?:www.)?youtube.com\/watch\?v=(.*)(?:$|\s)/im,'<iframe width="480" height="360" src="http://www.youtube.com/embed/$1" class="embedded '+hiddenClass+'" frameborder="0" allowfullscreen></iframe>'));
     $container.append("<small class='link-source "+hiddenClass+"'>"+linkify(source)+"</small>");
 
 
-  } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(.*)(\.jpg|\.png|\.gif|\.bmp)/i)) { //image embedd
-    var img = $("<img class='embedded "+hiddenClass+"' src='"+text+"'>");
+  } else if (text.match(/(?:^|\s)https?:\/\/(?:www.)?(.*)(\.jpg|\.png|\.gif|\.bmp)/im)) { //image embedd
+    result = text.match(/(.*)(?:^|\s)(https?:\/\/(?:www.)?(?:.*)(?:\.jpg|\.png|\.gif|\.bmp))(.*)/im);
+
+    var img = $("<img class='embedded "+hiddenClass+"' src='"+result[2]+"'>");
     $(img).load(function() {
       thisMucUi.scrollBottom();
     });
 
+
+    $container.append(result[1]);
     $container.append(img);
-    $container.append('<small class="link-source '+hiddenClass+'">'+linkify(source)+'</small>');
+    $container.append(result[3]);
+
+    $container.append('<small class="link-source '+hiddenClass+'">'+linkify(result[2])+'</small>');
   
   } else if (text.match(/@(\w)/g)) {
     var match = text.match(/@(\w)/);
